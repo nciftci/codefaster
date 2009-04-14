@@ -1,0 +1,37 @@
+<form name="form1" action="generate_html.php?action=continue_selection" method="post" >
+	<table border="1" cellpadding="5" cellspacing="5" id="fieldcheck">
+			<tr>
+			  <td>Nr.</td>
+			  <td>Field Name</td>
+			  <td>Type of field</td>
+			  <td>Listing (Yes/No)</td>
+			  <td>Required</td>
+              <td>Required Set</td>
+	  		</tr>
+      		<!-- BEGIN DYNAMIC BLOCK: dbitem -->
+
+			<tr>
+			<td>{NDBITEM}</td>
+			<td><strong>{DBITEM}</strong></td>
+			<td> <select name="items[{DBITEM}]"> 
+					<option value="hidden">Hidden Field</option>
+					<option value="textfield">Textfield</option>
+					<option value="textarea">Textarea</option>
+                    <option value="dropdown">Dropdown</option>
+					<option value="radio">Radio Buttons</option>
+					<option value="checkbox">Checkbox</option>                    
+					<option value="browse">Browse Field</option>
+				</select> </td>
+             <td>
+				 <input type="checkbox" name="listing[{DBITEM}]" id="listing" />
+             </td>
+			 <td><input type="checkbox" name="required[{DBITEM}]" id="required" /></td>  
+			 <td><input type="text" name="requiredset[{DBITEM}]" id="requiredset" /> (ex: email,min:20)</td> 
+		</tr>
+		<!-- END DYNAMIC BLOCK: dbitem -->
+	</table>
+  <input type="submit" name="Submit" value="Continue selection" class="button" />
+</form>
+<strong>HELP:</strong><br />
+- the PRIMARY KEY MUST be selected for listing.<br />
+- Required Set settings: <strong>textfield</strong>: minlength: 2, email: true, url: true, number:true, rangelength:[2,8] <strong>textarea</strong>: minlength: 20 <strong>file</strong>: accept:'docx?|txt|pdf', accept:true<br />

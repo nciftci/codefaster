@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{LANG_ADMIN} {CONF_SITE_NAME}</title>
+<meta http-equiv="Content-Type" content="text/html; charset={CONF_CHARSET}" />
+<meta name="ROBOTS" content="NOINDEX,NOFOLLOW" />
+<base href="{ADMIN_URL}">
+<script  type="text/javascript" src="{CONF_INDEX_URL}javascript/general_scripts.js"></script>
+<script  type="text/javascript" src="{CONF_INDEX_URL}javascript/jshandler.php?name=admin_firstpage&amp;lang={LANG}"></script>
+<script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-min.js"></script>
+<script type="text/javascript" src="{CONF_INDEX_URL}javascript/jqueryui/jquery-ui.js"></script>
+<script type="text/javascript" src="{CONF_INDEX_URL}javascript/jqueryui/jquery.cookie.js"></script>
+<link type="text/css" href="{CONF_INDEX_URL}css/admintool.css" rel="stylesheet" />
+<link type="text/css" href="{CONF_INDEX_URL}javascript/jqueryui/css/smoothness/jquery-ui.css" rel="stylesheet" />
+<body>
+<div id="page">
+<div id="header">
+  <div id="logo">
+    <h1 title="{CONF_SITE_NAME}">CONTROL PANEL {CONF_SITE_NAME}</h1>
+    <p><a href="{CONF_INDEX_URL}">{LANG_ADMIN_HOME}</a></p>
+  </div>
+</div>
+<div id="sidebar1">{BODY} </div>
+<div class="clear"></div>
+<div id="footer">
+  <script type="text/javascript">
+copyright=new Date();
+update=copyright.getFullYear();
+document.write("&copy; 1998-"+ update + " {COPYRIGHT}. All rights reserved.");
+</script>
+</div>
+</div>
+</body>
+</html>

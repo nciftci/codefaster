@@ -1,0 +1,87 @@
+     <p>This tool is designed in such a way to facilitate the creation of java and php classes in javabeans style. It is extremely useful in case you have a Mysql table and you would like to generate a class over this table which would have a constructor, saving (updating) and drop option, and to provide the possibility to enter and query internal variables assigned for each field of the table. The advantage this generator provides is generating a class scheleton which may be altered in the future. 
+        The disadvantage consists in reduced applicability as it is useful in case the first field is set as Primary Key. </p>
+      <p><strong> NEW in 1.2.0:</strong><br>
+        - We have added the possibility to use not only PRIMARY KEY, but to be able to send a whole WHERE to a class.<br>
+        - Undo module (history), you can save your steps into a history table and use it as backup.</p>
+        
+        <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td valign="top"><br>
+      <form action="generate_code.php" method="post">
+        <table width="749" border="0" cellpadding="3" cellspacing="3">
+          <tr> 
+            <td width="28%" valign="top"><div align="right">Developer name </div></td>
+            <td width="72%"><input name="author" type="text">
+              (ex. John Smith) </td>
+          </tr>
+          <tr> 
+            <td width="28%" valign="top"><div align="right">Project name </div></td>
+            <td width="72%"><input name="projectname" type="text">
+              (ex. Rating Script) </td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">CLASS name </div></td>
+            <td><input name="name" type="text">
+              (ex. classProduct) </td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">VARIABLE name </div></td>
+            <td><input name="varname" type="text">
+              (ex. cp) </td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">Type</div></td>
+            <td>php4 
+              <input name="type" type="radio" value="php" checked>
+              php5 
+              <input type="radio" name="type" value="php5">
+              <!--java
+        		<input type="radio" name="type" value="java" />	-->
+               </td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">DB fields </div></td>
+            <td><input name="fieldnames" type="text" id="fieldnames" size="50"> 
+              <br>
+              (id;item;itemid;votes; (<strong>first is unique ID</strong>))</td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">Functions name </div></td>
+            <td><input name="funct_name" type="text" id="funct_name" size="50"> 
+              <br>
+              (ex. ID;Item;ItemID;Votes)</td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">DB Table </div></td>
+            <td><input name="table" type="text" id="table"> <br>
+              (database table name: ex. product) </td>
+          </tr>
+          <tr> 
+            <td valign="top"><div align="right">History(undo) Table </div></td>
+            <td><input name="history_table" type="text" id="history_table"> <br>
+              (ex. undo_table; leave empty to disable undo function) </td>
+          </tr>
+          <tr> 
+            <td colspan="2"><div align="center"> 
+                <input type="submit" name="Submit" value="Submit" class="button">
+              </div></td>
+          </tr>
+        </table>
+      </form>
+
+<p><strong>Developer name:</strong> is the name of the developer&nbsp; - it will be displayed in the header of the source file. <BR>
+          <strong>Project name:</strong> is the name of the project - it will be displayed in the header of the source file. <BR>
+          <strong>CLASS name:</strong> is the name of the class - the name conventions have to be taken into consideration, specific for each language (in java Class, in php class or Class) The name is important when naming a file as the source file will be named <BR>
+  Class.java (having the same form as the name of the class or cls_class.php in php.<BR>
+  <strong>VARIABLE name:</strong> the name of the variable is important as a "usage code" is generated, as&nbsp;sample code inserted at the beginning of the source. This may be pasted eventually in the source where this class is applied.<BR>
+  <strong>TYPE: </strong>the type of the generated source.<BR>
+  <strong>DB fields:</strong> is the list of the table field names. Rules: the first field has to be set as Primary Key, the fields are separates by ;.<BR>
+  <strong>Functions name:</strong> the list has to be similar with the fields one. Thus functions will be generated: getId, setId in case the first field is id in the fields list and Id in this one.<BR>
+  <strong>DB Table:</strong> the name of the table.<br>
+  <strong>Generate from sql:</strong> the code, which would you like to generate begin from a create table command.<br />
+  <strong>History(undo) Table:</strong> If you want to enable the history function in the code, you just put the name of the table, this will generate the table name structure and the functions in the code and enable it.<br>
+  </p>
+	</td>
+    <td width="170" align="center" valign="top"></td>
+  </tr>
+</table>

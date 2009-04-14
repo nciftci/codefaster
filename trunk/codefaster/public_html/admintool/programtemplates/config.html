@@ -1,0 +1,25 @@
+<fieldset>
+<legend>{LANG_CONF_TITLE}</legend>
+<form name="form" method="post" action="{ADMIN_URL}config.php?action=submit">
+  <table width="100%" border="0" cellpadding="2" cellspacing="5">
+    <tr>
+      <th>{LANG_CONF_NAME}</th>
+      <th>{LANG_CONF_VALUE}</th>
+      <th>&nbsp;</th>
+    </tr>
+    <!-- BEGIN DYNAMIC BLOCK: conf_list -->
+    <tr>
+      <td >{CONF_DESCRIPTION}</td>
+      <td >{CONF_VALUE}</td>
+      <td><a href="javascript:;" onClick="MM_openBrWindow('{CONF_INDEX_URL}admintool/config_example.php?configid={CONF_ID}','configexample','scrollbars=yes,width=500,height=500')">{LANG_CONF_EXAMPLE}</a></td>
+    </tr>
+    <!-- END DYNAMIC BLOCK: conf_list -->
+  </table>
+  <div style="text-align:center">
+<input name="nr_rows" type="hidden" value="{NR_ROWS}">
+      <input name="Submit" type="submit" value="{LANG_ADMIN_SUBMIT}" class="button"><br />
+    <a href="{ADMIN_URL}config.php?action=index" >{LANG_ADMIN_GOBACK}</a>
+  </div>
+</form>
+</fieldset>
+{MESSAGE}
