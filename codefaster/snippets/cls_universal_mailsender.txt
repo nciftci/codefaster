@@ -1,0 +1,28 @@
+		$to = "";
+		$subject = "";
+		$headers = "";
+		$subject = "";
+
+		$subject = $all_url_vars['subject'];
+
+		$univMail= new UniversalMailSender("2");
+		// setting up the to address
+		if($all_url_vars["multiaddress"]==0)
+			$univMail->setToAddress(EMAIL_INREG, EMAIL_NAME);
+		else
+		{
+		// if is comming to multiaddress, get from select menu.
+			$addresses = explode("#",MULTIADDRESS);
+			$temp = explode("|",$addresses[$all_url_vars["multiaddress"]-1]);
+			$univMail->setToAddress($temp[1], $temp[0]);
+		}
+		// setting up from address
+		$univMail->setFromAddress($from, $from);
+		// setting up subject
+		$univMail->setSubject($subject);
+		// setting up from text message if the type is text message
+		$univMail->setTextMessage($message);
+		// setting up from text message if the type is html message
+		$univMail->setHtmlMessage($message);
+		// sending the mail; returns an error message
+		$ok=$univMail->SendMail();

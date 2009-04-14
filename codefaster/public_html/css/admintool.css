@@ -1,0 +1,340 @@
+/* 
+Here you can edit the page properties, like margins from top, left, right.
+Default font style, size and text align.
+Of course you can add other styles if you want.
+*/
+html, body, #page { height: 100%; }
+ 
+body > #page {
+	height: auto;
+	min-height: 100%; }
+ 
+body {
+	font:100%/1.25 Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0; }
+ 
+#page-body {
+	margin:0 auto;
+	padding-top:10px;
+	width:auto; }
+ 
+/* columns */
+#sidebar1,#content {
+	display: inline;
+	float:left;
+	margin-left:10px; }
+ 
+#sidebar1 {
+	font-size:12px;
+	width:200px; }
+ 
+#content { width:auto; }
+ 
+/* header part of the admin */
+#header {
+	background: #FD4717 url(../images/admin/header-bg.jpg) repeat-x;
+	height: 130px; }
+ 
+	#header p {
+		font-size: 10px;
+		margin: 5px;
+		text-align:right;
+		text-transform: uppercase; }
+ 
+	#header a {
+		color:#fff;
+		text-decoration:none; }
+ 
+#logo {
+	background: url(../images/admin/header-logo.jpg) no-repeat;
+	height: 100%;
+	margin-top: 0px; }
+ 
+	#logo h1 {
+		position:absolute;
+		text-indent: -5000px; }
+ 
+/***** Headings *****/
+h1, h2, h3, h4, h5, h6 {
+	font-weight:normal;
+	margin:0;
+	padding:0; }
+ 
+h1 {
+	font-size:2em;
+	letter-spacing:-1px;
+	padding:30px 0 25px 0; }
+ 
+h2 {
+	font-size:1.5em;
+	letter-spacing:-1px;
+	padding:20px 0; }
+ 
+h3 {
+	font-size:1em;
+	font-weight:bold; }
+ 
+/***** Common Formatting *****/
+p {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: 0.925em; }
+ 
+p, ul, ol {
+	margin:0;
+	padding:0 0 1.25em 0; }
+ 
+ul, ol { padding:0 0 1.25em 2.5em; }
+ 
+blockquote {
+	margin:1.25em;
+	padding:1.25em 1.25em 0 1.25em; }
+ 
+small { font-size:0.85em; }
+ 
+img { border:0; }
+ 
+sup {
+	bottom:0.3em;
+	position:relative;
+	vertical-align:baseline; }
+ 
+sub {
+	bottom:-0.2em;
+	position:relative;
+	vertical-align:baseline; }
+ 
+acronym, abbr {
+	color:#990000;
+	cursor:help; }
+
+th {
+	background: #FE4818 url(../images/admin/header-bg_small.jpg) repeat-x top;
+	text-align:left; 
+	height: 60px; } 
+/***** FORM ELEMENTS *****/
+/* 
+Forms element like input field, select field, textarea can be set here.
+We used only to force Font family and size.
+If you wish, you can edit background, 
+*/
+form {
+	margin:0;
+	padding:0;
+	/*display:inline;*/ }
+ 
+	form div { padding: 10px; }
+ 
+	form .button {
+		background-color: #FD5520;
+		border: 2px solid #F4380A;
+		color: #FFF;
+		font-size: 1.2em;
+		padding: 2px 12px;
+		text-transform: uppercase; 
+		float:right; }
+ 
+input, select, textarea { }
+ 
+textarea {
+	line-height:1.25;
+	width:100%; }
+ 
+fieldset {
+	border-top: 2px solid #F4380A;
+	border: none;
+	padding:15px;
+	width: 100%; }
+ 
+legend {
+	font-size:1.4em;
+	font-weight:bold;
+	padding:15px; }
+ 
+label {
+	cursor:pointer;
+	display: block;
+	float: left;
+	width: 125px; }
+ 
+/* 
+Links can be edited here. 
+*/
+/***** Links *****/
+a, a:link, a:visited {
+	color:#000;
+	text-decoration:none; }
+ 
+a:hover { text-decoration:underline; }
+ 
+/* 
+We setup here all images border to 0 
+*/
+img { border: none; }
+ 
+/* Columns */
+#column1 {
+	padding:10px 0 0 20px;
+	width:280px; }
+ 
+#column2 { padding:10px 0 0 20px; }
+ 
+#column3 { padding:10px 0 0 0; }
+ 
+#configmenu ul {
+	list-style: none;
+	margin: 0;
+	padding-left: 20px; }
+ 
+#configmenu li {
+	background-image: url(../images/admin/bullet.gif);
+	background-position: 0 0.45em;
+	background-repeat: no-repeat;
+	line-height: 1.6;
+	list-style: none;
+	padding:0px 0px 0px 20px; }
+ 
+/* Listing module - cls_listing */
+#listingtable {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:1em; }
+ 
+	#listingtable table { margin-top:10px; }
+ 
+	#listingtable table, #listingtable tr, #listingtable td, #listingtable th {
+		border: #FE4818 1px solid;
+		border-collapse:collapse;
+		padding:5px 5px;
+		text-align:right; }
+ 
+	#listingtable td .bodytext {
+		padding:0;
+		width:24px; }
+		
+	#listingtable th {
+	background: #FE4818 url(../images/admin/header-bg_small.jpg) repeat-x top;
+	text-align:left; 
+	height: 50px; } 
+
+fieldset div { width:650px;}		 
+/* Footer */
+#footer {
+	clear:both;
+	font-size: 10px;
+	height: 50px;
+	margin-top: -50px; /* negative value of footer height */
+	position: relative;
+	text-align: center; }
+ 
+	#footer a {
+		color:#999;
+		text-decoration:none;
+		text-transform:uppercase; }
+ 
+		#footer a:hover { text-decoration:underline; }
+ 
+/***** Global Classes *****/
+.clear { clear:both; }
+ 
+/* CLEAR FIX*/
+.clearfix:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden; }
+ 
+.clearfix { display: inline-block; }
+ 
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%; }
+ 
+.clearfix { display: block; }
+ 
+/* End hide from IE-mac */
+/* Simple floats, align etc to use. */
+.float-left { float:left; }
+ 
+.float-right { float:right; }
+ 
+.text-left { text-align:left; }
+ 
+.text-right { text-align:right; }
+ 
+.text-center { text-align:center; }
+ 
+.text-justify { text-align:justify; }
+ 
+.bold { font-weight:bold; }
+ 
+.italic { font-style:italic; }
+ 
+.underline { border-bottom:1px solid; }
+ 
+.highlight { background:#ffc; }
+ 
+.img-left {
+	float:left;
+	margin:4px 10px 4px 0; }
+ 
+.img-right {
+	float:right;
+	margin:4px 0 4px 10px; }
+ 
+.nopadding { padding:0; }
+ 
+.noindent {
+	margin-left:0;
+	padding-left:0; }
+ 
+.nobullet {
+	list-style-image:none;
+	list-style:none; }
+ 
+.nobr { display:none; }
+ 
+/***** messages for error, success, warning and help *****/
+.mHelp {
+	background-image: url(../images/icons/lightbulb_48.png);
+	background-position: 0.1em;
+	background-repeat: no-repeat;
+	background: #ffffff;
+	border: #ccc 2px solid;
+	font-size:1.2em;
+	margin: 5px;
+	min-height: 50px;
+	padding-left: 50px; }
+ 
+.mInfo {
+	background-image: url(../images/icons/accepted_48.png);
+	background-position: 0.1em;
+	background-repeat: no-repeat;
+	background: #ffffff;
+	border: #009933 2px solid;
+	font-size:1.2em;
+	margin: 5px;
+	min-height: 50px;
+	padding-left: 50px; }
+ 
+.mWarning {
+	background-image: url(../images/icons/warning_48.png);
+	background-position: 0.1em;
+	background-repeat: no-repeat;
+	background: #ffffff;
+	border: #CC9901 2px solid;
+	font-size:1.2em;
+	margin: 5px;
+	min-height: 50px;
+	padding-left: 50px; }
+ 
+.mError {
+	background-image: url(../images/icons/cancel_48.png);
+	background-position: 0.1em;
+	background-repeat: no-repeat;
+	background: #ffffff;
+	border: #cc0000 2px solid;
+	font-size:1.2em;
+	margin: 5px;
+	min-height: 50px;
+	padding-left: 50px; }
+ 

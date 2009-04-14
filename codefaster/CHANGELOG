@@ -1,0 +1,5 @@
+1.2.0
+
+- possibility to use not only PRIMARY KEY, but to be able to send a whole WHERE to a class.
+- UNDO module, history save/delete/redo
+- Java deprechated
