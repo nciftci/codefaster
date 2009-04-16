@@ -2,7 +2,7 @@
 include("config.inc.php");
 include_once(INCLUDE_LANGUAGE_PATH.$LANG.".inc.php");
 include_once(INCLUDE_PATH."connection.php");
-include_once(INDEX_PATH."cls_fast_template.php");
+include_once(INCLUDE_PATH."cls_fast_template.php");
 include_once(INCLUDE_PATH."cls_string.php");
 require_once("product.common.php");
 
