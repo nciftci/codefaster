@@ -32,12 +32,12 @@
 			header: "h3",
 			clearStyle: true
 		});
-		//we add a new click to each group		
-		$("h3.ui-accordion-header", accordion_click).each(function(index) { 
-			$(this) 
-			.click(function() { 
+		//we add a new click to each group
+		$("h3.ui-accordion-header", accordion_click).each(function(index) {
+			$(this)
+			.click(function() {
 				$.cookie('accordion_activate',index);
-			}); 
+			});
 		});
 		//set the current accordion
 		$('#accordion').accordion('activate', parseInt($.cookie('accordion_activate')));
@@ -46,20 +46,20 @@
 		// Tabs
 		$('#tabs').tabs();
 
-		// Dialog			
+		// Dialog
 			$('#dialog').dialog({
 				autoOpen: false,
 				width: 600,
 				buttons: {
-						"Ok": function() { 
-							$(this).dialog("close"); 
-						}, 
-						"Cancel": function() { 
-							$(this).dialog("close"); 
-						} 
+						"Ok": function() {
+							$(this).dialog("close");
+						},
+						"Cancel": function() {
+							$(this).dialog("close");
+						}
 					}
 				});
-				
+
 				// Dialog Link
 				$('#dialog_link').click(function(){
 					$('#dialog').dialog('open');
@@ -70,24 +70,24 @@
 				$('#datepicker').datepicker({
 					inline: true
 				});
-				
+
 				// Slider
 				$('#slider').slider({
 					range: true,
 					values: [17, 67]
 				});
-				
+
 				// Progressbar
 				$("#progressbar").progressbar({
-					value: 20 
+					value: 20
 				});
-				
+
 				//hover states on the static widgets
 				$('#dialog_link, ul#icons li').hover(
-					function() { $(this).addClass('ui-state-hover'); }, 
+					function() { $(this).addClass('ui-state-hover'); },
 					function() { $(this).removeClass('ui-state-hover'); }
 				);
-				
+
 			});
 </script>
 </head>

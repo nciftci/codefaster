@@ -15,11 +15,11 @@ if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) @ob_start("ob_gzhand
 else @ob_start();
 define("DB_USR", "root");//INST_USR
 define("DB_PWD", "");//INST_PWD - 123456
-define("DB_NAME", "test");//INST_NAME
+define("DB_NAME", "generator");//INST_NAME
 define("DB_HOST", "localhost");//INST_HOST
 
 // define your database informations
-define("DB_PREFIX", "cg_");
+define("DB_PREFIX", "");
 
 // define where you index.php URL is, usually is http://www.yourdomain.com/
 // always use ENDING SLASH
