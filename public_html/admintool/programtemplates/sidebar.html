@@ -1,0 +1,16 @@
+<!-- IFDEF: SIDEBAR_EXIST -->
+<!-- BEGIN DYNAMIC BLOCK: sideex -->
+<div class="sidebar_{MODULE_NAME}">
+	<h3><a href=\"#\">{MODULE_NAME}</a></h3>
+    <ul>
+       <li><a href="{ADMIN_URL}">{LANG_1111}</a></li>
+	<li><a href="{ADMIN_URL}">{LANG_1111}</a></li>
+    <!-- IFDEF: EXTRA_MODULE -->
+    {EXTRA_MODULE}
+    <!-- ELSE -->
+	<!-- ENDIF -->
+    </ul>
+</div>
+<!-- END DYNAMIC BLOCK: sideex -->
+<!-- ELSE -->
+<!-- ENDIF -->
