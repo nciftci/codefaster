@@ -1,20 +1,21 @@
 <div class="text-right">
-<fieldset>
+  <fieldset>
   <legend>{LANG_ADMIN_AUTHENTICATION}</legend>
   <form name="formlogin" method="post" action="{ADMIN_URL}login.php?action=login">
     <label>{LANG_ADMIN_LOGIN}
-      <input name="userid" type="text" id="userid" size="20">
+    <input name="userid" type="text" id="userid" size="20">
     </label>
     <br />
     <label>{LANG_ADMIN_PASSWORD}
-      <input name="password" type="password" id="password" size="20">
+    <input name="password" type="password" id="password" size="20">
     </label>
-    <br class="nobr" />
-    <input name="Submit" type="submit" id="Submit" value="{LANG_ADMIN_SUBMIT}" class="button">
     <br />
-    <a href="{ADMIN_URL}password_recovery.php" ><br />
-    {LANG_ADMIN_PASSWORD_RECOVERY}</a>
+    <br />
+    <br />
+    <br />
+    <a href="{ADMIN_URL}password_recovery.php" title="{LANG_ADMIN_PASSWORD_RECOVERY}"> {LANG_ADMIN_PASSWORD_RECOVERY}</a>
+    <input name="Submit" type="submit" id="Submit" value="{LANG_ADMIN_SUBMIT}" class="button">
   </form>
   <strong>{MESSAGE}</strong>
-</fieldset>
+  </fieldset>
 </div>
