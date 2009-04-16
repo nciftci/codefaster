@@ -1,19 +1,29 @@
 <?php
+/**
+*
+* @author - Elteto Zoltan
+* @desc - class for creating the menu (sidebar) in the admin page.
+* @vers - 1.0
+*/
 class Sidebar{
-	var $table_name;
+	protected $table_name;
 	
-	
-	function Sidebar($table_name='modules'){
-		
+	public function Sidebar($table_name='modules'){
 		$this->table_name=$table_name;
-		
 	}
 	
-	function getSideBar(){
+	/**
+	*
+	* @author - Elteto Zoltan
+	* @desc - get the sidebar from table
+	* @vers - 1.0
+	*/
+	public function getSideBar(){
 		
 	$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 	$ft->define(array("main"=>"sidebar.html"));
 	
+	// only show if is available
 	$SQL = "SELECT * FROM `".DB_PREFIX.$this->table_name."` WHERE availability=1  ORDER BY `position` ASC";
 	$retid = mysql_query($SQL);
 	if (!$retid) { echo( mysql_error()); }
@@ -43,6 +53,7 @@ class Sidebar{
 			$ft->assign("LANG_ADMIN_ADD",LANG_ADMIN_ADD);
 			$ft->assign("LANG_ADMIN_LIST",LANG_ADMIN_LIST);
 			
+			// could be extra details what admin want to show. This is in extra_menu field.
 			if(!empty($extra_menu[$i]))
 			{
 				$ft->assign("ISEXTRA_MENU",1);
@@ -53,16 +64,11 @@ class Sidebar{
 			
 			$ft->parse ( "SIDEEX", ".sideex" );
 		}
-		
-	
 	}
 	$ft->multiple_assign_define ( "LANG_" );
 	$ft->multiple_assign_define ( "CONF_" );
 	$ft->parse ( "mainContent", "main" );
-	return $ft->fetch ( "mainContent" );		
-
+	return $ft->fetch ( "mainContent" );
 	}
-	
-
 }
 ?>
