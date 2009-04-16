@@ -138,8 +138,8 @@ foreach ( $fields as $field ) {
 				$fielddata = "<input name='{$field}' id='{$field}' type='hidden' value='#_" . strtoupper ( $field ) . "_#' />";
 				break;
 			case 'radio' :
-				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"1\" type=\"radio\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_" . "VERIF_" . $strupperfield . "_#\" $class_value #_SELECTEDRD_" . strtoupper ( $field ) . "_1_# />#_LANG_YES_#";
-				$fielddata .= "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"0\" type=\"radio\" #_SELECTEDRD_" . strtoupper ( $field ) . "_0_# />#_LANG_NO_#" . $divend;
+				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"1\" type=\"radio\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_" . "VERIF_" . $strupperfield . "_#\" $class_value #_SELECTEDRD_" . strtoupper ( $field ) . "_1_# />#_LANG_ADMIN_".$NAMEUPPER."_YES_#";
+				$fielddata .= "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"0\" type=\"radio\" #_SELECTEDRD_" . strtoupper ( $field ) . "_0_# />#_LANG_ADMIN_".$NAMEUPPER."_NO_#" . $divend;
 				break;
 			case 'dropdown' :
 				//TODO size="5" multiple="multiple"
@@ -184,9 +184,8 @@ foreach ( $fields as $field ) {
 		$fthtml->assign ( "PROJECT_BASE_FILENAME_LOWER", strtolower ( $session->get ( "name" ) ) );
 		$fthtml->assign ( "PROJECT_NAME_HTML", "#_LANG_ADMIN_" . $NAMEUPPER . "_" . $NAMEUPPER . "_#" ); // fieldset name
 		$fthtml->assign ( "PROJECT_NAME_HELP", "#_LANG_ADMIN_" . $NAMEUPPER . "_HELP_" . $NAMEUPPER . "_#" ); //help legend 
-		$fthtml->assign ( "PROJECT_GO", "#_LANG_ADMIN_SUBMIT_#" ); //button "#_LANG_ADMIN_" . $NAMEUPPER . "_GO_#"
+		$fthtml->assign ( "PROJECT_GO", "#_LANG_ADMIN_SUBMIT_#" ); //button for GO - SUBMIT
 		$fthtml->assign ( "CONF_INDEX_URL", "#_CONF_INDEX_URL_#" ); //full URL for some elements like Javascript CSS etc.
-		//$fthtml->assign("CONTENT",               "\n<!-- IF##DEF: LISTING -->\n#_CONTENT_#\n<!-- EL##SE -->\n"); //content for listing
 		$fthtml->assign ( "CONTENTEND", "\n<!-- END##IF -->\n" ); //content for listing
 		$fthtml->parse ( "FORMELEMENTS", ".formelements" );
 	
