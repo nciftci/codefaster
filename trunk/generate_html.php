@@ -239,7 +239,7 @@ if ($action == "continue_selection") {
 
 //TODO: insert into modules maybe not here...
 $str = "LANG_ADMIN_" . $NAMEUPPER . "_" . $NAMEUPPER;
-$SQLTOPRINT = "INSERT INTO `modules` (`module_name` ,`availability` ,`position`) VALUES ( '$str', '1', '0') ON DUPLICATE KEY UPDATE `module_name`= '$str';";
+$SQLTOPRINT = "INSERT INTO `modules` (`module_name` ,`availability` ,`position`,`filename` ,`extra_menu`) VALUES ( '$str', '1', '0','{$NAME}.php','') ON DUPLICATE KEY UPDATE `module_name`= '$str';";
 
 /// show the links at the end of the job.
 $ft->assign ( "LINKS", "

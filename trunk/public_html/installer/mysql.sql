@@ -38,6 +38,8 @@ CREATE TABLE `modules` (
   `module_name` varchar(60) collate utf8_bin default NULL, 
   `availability` tinyint(1) default '0',  
   `position` tinyint(2) default '0',
+  `filename` varchar(100) NOT NULL,
+  `extra_menu` text NOT NULL,
   PRIMARY KEY  (`module_id`),
   UNIQUE KEY `module_name` (`module_name`)    
 ) ENGINE=MyISAM; 
@@ -52,4 +54,3 @@ CREATE TABLE `history` (
 `valid` tinyint(4) DEFAULT NULL,
 PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
-
