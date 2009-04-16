@@ -1,8 +1,5 @@
 <?php
 global $LANG;
-//$tempnewstype = $LANG."_name";
-//$tempfaqtype = $LANG."_name";
-//$tempproduct = $LANG."_title";
 	$SQL = "SELECT * FROM `".DB_PREFIX."modules` ORDER BY `position` ASC";
 	$retid = mysql_query($SQL);
 	if (!$retid) { echo( mysql_error()); }
@@ -12,46 +9,21 @@ global $LANG;
 		$module_id[$i] = $row["module_id"];
 		$module_name[$i] = $row["module_name"];
 		$availability[$i] = $row["availability"];
+		$filename[$i] = $row["filename"];
+		$extra_menu[$i] = $row["extra_menu"];
 		$i++;
 	}while ($row = mysql_fetch_array($retid));
 	$nrmodules = $i;
 
 $sidebar_start = "<div id=\"accordion\">";
-$sidebar_1="
-			<div>
-				<h3><a href=\"#\">".LANG_ADMIN_TESTPRODUCT_TESTPRODUCT."</a></h3>
+$sidebar_[$i]="
+			<div class=\"".$sidebar_[$i]."\">
+				<h3><a href=\"#\">".$module_name[$i]."</a></h3>
                 <ul>
-                <li><a href=\"".ADMIN_URL."testproduct.php\">- Add new product(s)</a></li>
-				<li><a href=\"".ADMIN_URL."testproduct.php?do=list\">- List/Modify/Delete product(s)</a></li>
+                <li><a href=\"".ADMIN_URL . $filename.".php\">".LANG_1111."</a></li>
+				<li><a href=\"".ADMIN_URL . $filename.".php?do=list\">".LANG_1111."</a></li>
                 </ul>
 			</div>
-";
-$sidebar_2="
-			<div>
-				<h3><a href=\"#\">".LANG_ADMIN_TESTPRODUCT_TESTPRODUCT."2</a></h3>
-                <ul>
-                <li><a href=\"".ADMIN_URL."testproduct1.php\">- Add new product(s)</a></li>
-				<li><a href=\"".ADMIN_URL."testproduct1.php?do=list\">- List/Modify/Delete product(s)</a></li>
-                </ul>
-			</div>
-";
-$sidebar_3="
-			<div>
-				<h3><a href=\"#\">".LANG_ADMIN_TESTPRODUCT."3</a></h3>
-                <ul>
-                <li><a href=\"".ADMIN_URL."testproduct.php\">- Add new product(s)</a></li>
-				<li><a href=\"".ADMIN_URL."testproduct.php?do=list\">- List/Modify/Delete product(s)</a></li>
-                </ul>
-			</div>
-";
-$sidebar_4="
-			<div>
-				<h3><a href=\"#\">".LANG_ADMIN_TESTPRODUCT."4</a></h3>
-                <ul>
-                <li><a href=\"".ADMIN_URL."testproduct.php\">- Add new product(s)</a></li>
-				<li><a href=\"".ADMIN_URL."testproduct.php?do=list\">- List/Modify/Delete product(s)</a></li>
-                </ul>
-			</div> 
 ";
 
 $sidebar_end = "</div>";
