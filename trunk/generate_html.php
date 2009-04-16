@@ -250,7 +250,7 @@ $ft->assign ( "LINKS", "
 	<li>USER HOME PAGE <a href='public_html/{$NAME}.php/{$NAME}/1/' target='_blank'><strong>{$NAME}.php/{$NAME}/1/</strong></a></li>
 	<li>HTML FILE USER {$NAME}.html</li>
 	<li>XML FILE <a href='schema/{$NAME}.xml' target='_blank'><strong>{$NAME}.xml</strong></a></li>
-	<li><strong>Don't forget to INSERT the following SQL line:</strong><br /><code>{$SQLTOPRINT}</code></li>
+	<li><strong>Don't forget to INSERT the following SQL line (add prefix if you need):</strong><br /><code>{$SQLTOPRINT}</code></li>
 " );
 
 $ft->parse ( "BODY", array ("content", "main" ) );
