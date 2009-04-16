@@ -1,0 +1,68 @@
+<?php
+class Sidebar{
+	var $table_name;
+	
+	
+	function Sidebar($table_name='modules'){
+		
+		$this->table_name=$table_name;
+		
+	}
+	
+	function getSideBar(){
+		
+	$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
+	$ft->define(array("main"=>"sidebar.html"));
+	
+	$SQL = "SELECT * FROM `".DB_PREFIX.$this->table_name."` WHERE availability=1  ORDER BY `position` ASC";
+	$retid = mysql_query($SQL);
+	if (!$retid) { echo( mysql_error()); }
+	$i=0;
+	if ($row = mysql_fetch_array($retid))
+	do{
+		$module_id[$i] = $row["module_id"];
+		$module_name[$i] = $row["module_name"];
+		$availability[$i] = $row["availability"];
+		$filename[$i] = $row["filename"];
+		$extra_menu[$i] = $row["extra_menu"];
+		$i++;
+	}while ($row = mysql_fetch_array($retid));
+	$nrmodules = $i;
+	
+	if($nrmodules==0){
+		$ft->assign("SIDEBAR_EXIST",0);
+	}else{
+		$ft->assign("SIDEBAR_EXIST",1);
+		$ft->define_dynamic ( "sideex", "main" );	
+		
+		for($i=0;$i<$nrmodules;$i++)
+		{
+			$ft->assign("MODULE_NAME",$module_name[$i]);
+			$ft->assign("FILENAME",$filename[$i]);
+			$ft->assign("ADMIN_URL",ADMIN_URL);
+			$ft->assign("LANG_ADMIN_ADD",LANG_ADMIN_ADD);
+			$ft->assign("LANG_ADMIN_LIST",LANG_ADMIN_LIST);
+			
+			if(!empty($extra_menu[$i]))
+			{
+				$ft->assign("ISEXTRA_MENU",1);
+				$ft->assign("EXTRA_MENU",$extra_menu[$i] );
+			}
+			else 
+			$ft->assign("ISEXTRA_MENU",0);
+			
+			$ft->parse ( "SIDEEX", ".sideex" );
+		}
+		
+	
+	}
+	$ft->multiple_assign_define ( "LANG_" );
+	$ft->multiple_assign_define ( "CONF_" );
+	$ft->parse ( "mainContent", "main" );
+	return $ft->fetch ( "mainContent" );		
+
+	}
+	
+
+}
+?>
