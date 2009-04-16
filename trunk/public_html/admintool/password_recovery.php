@@ -2,7 +2,7 @@
 	include_once("../config.inc.php");
 	include_once(INCLUDE_PATH.'cls_session.php');
 	$sess = new MYSession();
-	include_once(INDEX_PATH."cls_fast_template.php");
+	include_once(INCLUDE_PATH."cls_fast_template.php");
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".inc.php");
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".admintool.inc.php");
 	include_once(INCLUDE_PATH."connection.php");
