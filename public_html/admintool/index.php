@@ -9,37 +9,39 @@ PROJECT: Test Product
 ======================================
 */
 
-include_once("../config.inc.php");
-include_once(INCLUDE_PATH."cls_fast_template.php");
-include_once(INCLUDE_LANGUAGE_PATH.$LANG.".inc.php");
-include_once(INCLUDE_LANGUAGE_PATH.$LANG.".admintool.inc.php");
-include_once(INCLUDE_PATH."connection.php");
-include_once(INCLUDE_PATH."sidebar.inc.php");
+include_once ("../config.inc.php");
+include_once (INCLUDE_PATH . "cls_fast_template.php");
+include_once (INCLUDE_LANGUAGE_PATH . $LANG . ".inc.php");
+include_once (INCLUDE_LANGUAGE_PATH . $LANG . ".admintool.inc.php");
+include_once (INCLUDE_PATH . "connection.php");
+include_once (INCLUDE_PATH . "cls_sidebar.php");
 
-$stringutil = new String("nope");
-$all_url_vars = array();
-$all_url_vars = $stringutil->parse_all();
-
-/**
-* @author   - Test Developer
-* @desc     - autentication will be called here
-* @vers     - 1.0
-**/
-$util=new Util();
-$util->check_authentification();
+$stringutil = new String ( "nope" );
+$all_url_vars = array ();
+$all_url_vars = $stringutil->parse_all ();
 
 /**
-* @desc     - Call of Fast Template, with PATH from defines.inc.php
-**/
-$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
-$ft->define(array("main"=>"template_index.html","content"=>"index.html"));
+ * @author   - Test Developer
+ * @desc     - autentication will be called here
+ * @vers     - 1.0
+ **/
+$util = new Util ( );
+$util->check_authentification ();
 
+/**
+ * @desc     - Call of Fast Template, with PATH from defines.inc.php
+ **/
+$ft = new FastTemplate ( ADMIN_TEMPLATE_CONTENT_PATH );
+$ft->define ( array ("main" => "template_index.html", "content" => "index.html" ) );
 
 // static part
-$ft->multiple_assign_define("LANG_");
-$ft->multiple_assign_define("CONF_");
-$ft->assign("SIDEBAR",$sidebar);
-$ft->parse("BODY", array("content","main"));
-$ft->showDebugInfo(ERROR_DEBUG);
-$ft->FastPrint();
+$ft->multiple_assign_define ( "LANG_" );
+$ft->multiple_assign_define ( "CONF_" );
+
+$sb = new Sidebar ( );
+
+$ft->assign ( "SIDEBAR", $sb->getSideBar () );
+$ft->parse ( "BODY", array ("content", "main" ) );
+$ft->showDebugInfo ( ERROR_DEBUG );
+$ft->FastPrint ();
 ?>

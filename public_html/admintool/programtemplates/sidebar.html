@@ -1,15 +1,17 @@
+<div id="accordion">
 <!-- IFDEF: SIDEBAR_EXIST -->
 <!-- BEGIN DYNAMIC BLOCK: sideex -->
-<div class="sidebar_{MODULE_NAME}">
+<div>
 	<h3><a href=\"#\">{MODULE_NAME}</a></h3>
     <ul>
-       <li><a href="{ADMIN_URL}">{LANG_1111}</a></li>
-	<li><a href="{ADMIN_URL}">{LANG_1111}</a></li>
-    <!-- IFDEF: EXTRA_MODULE -->
-    {EXTRA_MODULE}
+       <li><a href="{ADMIN_URL}{FILENAME}">{LANG_ADMIN_ADD}</a></li>
+	<li><a href="{ADMIN_URL}{FILENAME}?do=list">{LANG_ADMIN_LIST}</a></li>
+    <!-- IFDEF: ISEXTRA_MENU -->
+    {EXTRA_MENU}
     <!-- ELSE -->
 	<!-- ENDIF -->
     </ul>
 </div>
 <!-- END DYNAMIC BLOCK: sideex -->
 <!-- ENDIF -->
+</div>

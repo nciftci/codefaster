@@ -16,6 +16,8 @@ define("LANG_ADMIN_NODATA","The table is empty. No data are returned.");
 define("LANG_ADMIN_CONFIRMDELETE","Are you sure you want to delete?");
 define("LANG_ADMIN_ACTIVATE","Activate");
 define("LANG_ADMIN_DEACTIVATE","Deactivate");
+define("LANG_ADMIN_ADD","Add");
+define("LANG_ADMIN_LIST","List");
 
 /****** AUTENTICATION *****/
 define("LANG_ADMIN_AUTHENTICATION","Authentification");

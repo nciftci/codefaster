@@ -23,7 +23,7 @@ $configType = (isset($_SERVER['SERVER_NAME']) & in_array($_SERVER['SERVER_NAME']
 
 			define("DB_USR", "root"); //
 			define("DB_PWD", ""); //
-			define("DB_NAME", "grafx");
+			define("DB_NAME", "generator");
 			define("DB_HOST", "localhost");
 			define("CONF_INDEX_URL", "http://localhost/PHP-JAVA-Class-code-generator/trunk/public_html/");
 

@@ -1,6 +1,6 @@
 <?php
 global $LANG;
-	$SQL = "SELECT * FROM `".DB_PREFIX."modules` ORDER BY `position` ASC";
+	$SQL = "SELECT * FROM `".DB_PREFIX."modules` WHERE availability=1 ORDER BY `position` ASC";
 	$retid = mysql_query($SQL);
 	if (!$retid) { echo( mysql_error()); }
 	$i=0;
