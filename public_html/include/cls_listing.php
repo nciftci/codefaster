@@ -91,7 +91,7 @@
 		}
 		function listPages() {
 			$limited=$this->sql." limit ".$this->offset." , ".$this->limit;
-			$this->rs=mysql_query($limited) or die($limited);
+			$this->rs=mysql_query($limited) or die(mysql_error());
 			
 			if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
 				return false;
