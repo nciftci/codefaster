@@ -1,8 +1,8 @@
 <?php
 
 include_once ("./config.inc.php");
-include_once (INDEX_PATH . "public_html/config.inc.php");
-include_once (INDEX_PATH . "public_html/include/connection.php");
+//include_once (INDEX_PATH . "public_html/config.inc.php");
+//include_once (INDEX_PATH . "public_html/include/connection.php");
 include_once (INCLUDE_PATH . "cls_xml.php");
 include_once (INCLUDE_PATH . "cls_fast_template.php");
 include_once (INCLUDE_PATH . "cls_beautify.php");
