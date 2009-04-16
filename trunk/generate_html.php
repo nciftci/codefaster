@@ -69,11 +69,6 @@ if ($action == "continue_selection") {
 	$ft->define_dynamic ( "dbitem", "content" );
 }
 
-//TODO: insert into modules maybe not here...
-$str = "LANG_ADMIN_" . $NAMEUPPER . "_" . $NAMEUPPER;
-$SQL = "INSERT INTO `generator`.`modules` (`module_name` ,`availability` ,`position`) VALUES ( '$str', '1', '0') ON DUPLICATE KEY UPDATE `module_name`= '$str'";
-$retid = @mysql_query ( $SQL );
-
 $k = 0;
 
 foreach ( $fields as $field ) {
@@ -242,6 +237,10 @@ if ($action == "continue_selection") {
 	$session->set ( "items", $items );
 }
 
+//TODO: insert into modules maybe not here...
+$str = "LANG_ADMIN_" . $NAMEUPPER . "_" . $NAMEUPPER;
+$SQLTOPRINT = "INSERT INTO `modules` (`module_name` ,`availability` ,`position`) VALUES ( '$str', '1', '0') ON DUPLICATE KEY UPDATE `module_name`= '$str';";
+
 /// show the links at the end of the job.
 $ft->assign ( "LINKS", "
 	<li>CLASS cls_{$NAME}.php</li>
@@ -251,6 +250,7 @@ $ft->assign ( "LINKS", "
 	<li>USER HOME PAGE <a href='public_html/{$NAME}.php/{$NAME}/1/' target='_blank'><strong>{$NAME}.php/{$NAME}/1/</strong></a></li>
 	<li>HTML FILE USER {$NAME}.html</li>
 	<li>XML FILE <a href='schema/{$NAME}.xml' target='_blank'><strong>{$NAME}.xml</strong></a></li>
+	<li><strong>Don't forget to INSERT the following SQL line:</strong><br /><code>{$SQLTOPRINT}</code></li>
 " );
 
 $ft->parse ( "BODY", array ("content", "main" ) );
