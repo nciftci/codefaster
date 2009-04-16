@@ -21,7 +21,7 @@ if (!isset($_SESSION['session_lang'])) {
     $session_lang=$_SESSION['session_lang'];
 }
 include_once(INCLUDE_PATH . "connection.php");
-include_once(INDEX_PATH . "cls_fast_template.php");
+include_once(INCLUDE_PATH . "cls_fast_template.php");
 $NEWLANG = $session_lang;
 include_once(INCLUDE_LANGUAGE_PATH . $NEWLANG . ".inc.php");
 
@@ -48,7 +48,7 @@ $all_url_vars['{FUNC_NAME1ELEMENT}'] = (int) ($all_url_vars['{FUNC_NAME1ELEMENT}
 if ( empty($all_url_vars['{FUNC_NAME1ELEMENT}']) ) header("Location: ".CONF_INDEX_URL."error.php");
                
 $ft = new FastTemplate(TEMPLATE_PATH);
-$ft -> define(array("main" => "template_index.html", "content" => "{VARR}.html"));
+$ft -> define(array("main" => "template_index.html", "content" => "{FILENAME}"));
 
 //$stringutil->cleanDescription2(...) We need to see how to Clean the text ... this function do it
 //but dunno if is OK to call also on INT, so we need to detect which is INT and which is text.
