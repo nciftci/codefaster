@@ -14,7 +14,6 @@ include_once(INCLUDE_PATH . "connection.php");
 include_once(INCLUDE_PATH . "cls_fast_template.php");
 include_once(INCLUDE_LANGUAGE_PATH . $LANG . ".inc.php");
 include_once(INCLUDE_LANGUAGE_PATH . $LANG . ".admintool.inc.php");
-include_once (INCLUDE_PATH . "cls_sidebar.php");
 
 $stringutil   = new String();
 
@@ -219,11 +218,6 @@ default:
     // for example if you need a dropdown, you will need to call it here. 
 }
    
-
-//sidebar
-$sb = new Sidebar ( );
-
-$ft->assign ( "SIDEBAR", $sb->getSideBar () );
 
 // static part
 $ft->assign("TITLE_TAG","");
