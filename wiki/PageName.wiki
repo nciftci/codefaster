@@ -1,5 +1,5 @@
 = Basic Info =
-    * [Serve_Requirements]
+    * [Server_Requirements]
     * [License_Agreement]
     * [Change_Log]
     * [Credits]
