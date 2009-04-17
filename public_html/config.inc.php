@@ -1,5 +1,5 @@
 <?php
-if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) @ob_start("ob_gzhandler"); 
+if (@substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) @ob_start("ob_gzhandler"); 
 else @ob_start();
 
 $configType = (isset($_SERVER['SERVER_NAME']) & in_array($_SERVER['SERVER_NAME'], array('127.0.0.1', 'localhost'))) ? 'development' : 'production';
@@ -23,7 +23,7 @@ $configType = (isset($_SERVER['SERVER_NAME']) & in_array($_SERVER['SERVER_NAME']
 
 			define("DB_USR", "root"); //
 			define("DB_PWD", ""); //
-			define("DB_NAME", "generator");
+			define("DB_NAME", "codefaster");
 			define("DB_HOST", "localhost");
 			define("CONF_INDEX_URL", "http://localhost/PHP-JAVA-Class-code-generator/trunk/public_html/");
 
