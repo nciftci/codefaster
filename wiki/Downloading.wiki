@@ -1,0 +1,4 @@
+= Downloading =
+
+You may download from our website, [http://www.grafxsoftware.com/download.php http://www.grafxsoftware.com/download.php] or from here [http://code.google.com/p/codefaster/downloads/list Google] or SVN build.
+Here you will always have the latest build.
