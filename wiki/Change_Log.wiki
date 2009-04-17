@@ -1,4 +1,4 @@
-= Change_Log = 
+= Change Log = 
 
 == Version Beta 1.0 ==
 
