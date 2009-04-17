@@ -25,7 +25,6 @@ $(function() {
 <!-- END DYNAMIC BLOCK: fckelements -->
 });
 </script>
-
 <!-- IF##DEF: LISTING -->
 #_CONTENT_#
 <!-- START Pagination -->
@@ -36,7 +35,6 @@ $(function() {
 	   #_LANG_PAGINATION_TOTAL_# #_PAGINATION_TOTAL_VALUE_#
 	  </div>
   <!-- END##IF -->
-
   <!-- IF##DEF: PAGINATION_FIRST -->
     <div class="pagfirst">
 	  <a href="#_LINK_FIRST_#">
@@ -44,7 +42,6 @@ $(function() {
 	  </a>
 	  </div>
   <!-- END##IF -->
-
    <!-- IF##DEF: PAGINATION_PREV -->
     <div class="pagprevisious">
 	  <a href="#_LINK_PREV_#">
@@ -55,9 +52,6 @@ $(function() {
 	  </a>
 	  </div>
   <!-- END##IF -->
-
-
-
   <!-- BEGIN DYN##AMIC BLOCK: rowpag -->
       <div class="pagname">
 	  <a href="#_LINK_#">
@@ -69,8 +63,6 @@ $(function() {
 	  </a>
 	  </div>
   <!-- END DYN##AMIC BLOCK: rowpag -->
-
-
   <!-- IF##DEF: PAGINATION_NEXT -->
     <div class="pagnext">
 	  <a href="#_LINK_NEXT_#">
@@ -82,7 +74,6 @@ $(function() {
 	  </a>
 	  </div>
   <!-- END##IF -->
-
   <!-- IF##DEF: PAGINATION_LAST -->
     <div class="paglast">
 	  <a href="#_LINK_LAST_#">
@@ -97,6 +88,7 @@ $(function() {
 <fieldset>
 <legend>{PROJECT_NAME_HTML}</legend>
 <div class="mHelp">{PROJECT_NAME_HELP}</div>
+#_ERROR_#
 <form action="{PROJECT_BASE_FILENAME_LOWER}.php?do=save" method="post" name="form_{PROJECT_BASE_FILENAME}" id="form_{PROJECT_BASE_FILENAME}" class="cmxform">
 <!-- BEGIN DYNAMIC BLOCK: formelements -->
 {FORMELEMENT}
