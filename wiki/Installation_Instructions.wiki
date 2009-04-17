@@ -12,6 +12,6 @@ Finally, in the same folder you can save your own tables that are created.
 
 After the database data are set and entered the default settings from the SQL files, you can use the generator.
 
-Ex: *http://www.yourdomain.com/generator/* and in the end the generated files will be at *http://www.yourdomain.com/generator/public_html/*
+Ex: * http://www.yourdomain.com/generator/ * and in the end the generated files will be at * http://www.yourdomain.com/generator/public_html/ *
 
 After the testing all the content will be moved from public_html/ to http://www.yourdomain.com/ and the configuration file will be reconfigured and the site will be functional. Of course do not expect that the site will be fully functional, you still will need to do some programming :-)
