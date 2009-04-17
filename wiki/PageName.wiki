@@ -1,0 +1,15 @@
+====== Basic Info ======
+    * [[Server Requirements]]
+    * [[License Agreement]]
+    * [[Change Log]]
+    * [[Credits]]
+
+====== Installation ======
+    * [[Downloading]]
+    * [[Installation Instructions]]
+    * [[Upgrading from an Previous Version]]
+
+====== Introduction ======
+    * [[Getting Started]]
+    * [[CodeFaster at a Glance]]
+    * [[Supported Features]]
