@@ -1,15 +1,15 @@
 = Basic Info =
-    * [Server Requirements]
-    * [License Agreement]
-    * [Change Log]
+    * [Serve_Requirements]
+    * [License_Agreement]
+    * [Change_Log]
     * [Credits]
 
 = Installation =
     * [Downloading]
-    * [Installation Instructions]
-    * [Upgrading from an Previous Version]
+    * [Installation_Instructions]
+    * [Upgrading_from_an_Previous_Version]
 
 = Introduction =
-    * [Getting Started]
-    * [CodeFaster at a Glance]
-    * [Supported Features]
+    * [Getting_Started]
+    * [CodeFaster_at_a_Glance]
+    * [Supported_Features]
