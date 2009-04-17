@@ -21,5 +21,5 @@ After this step every file will be generated at its location, the administration
 There are also launching links.
 
 More important is that in public_html/languages/filename.txt all the ADMIN and USER variables have been generated for the language file.
-This has to be opened and added, the ADMIN ones (LANG_ADMIN_*) to the en.admintool.inc.php file and the user ones to en.inc.php.
+This has to be opened and added, the ADMIN ones (LANG_ADMIN_) to the en.admintool.inc.php file and the user ones to en.inc.php.
 Normally the texts have to be edited, the generator generates only the name of the file for an easy recognition of the variables.
