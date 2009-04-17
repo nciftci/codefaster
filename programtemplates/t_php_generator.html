@@ -136,6 +136,14 @@ case "mod":
      **/ 
 	$ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
 	if(!empty($all_url_vars["{FUNC_NAME1ELEMENT}"]))
+    
+    if($_SESSION["err"])
+    $ft->assign("ERROR","<div class=\"mError\">".$_SESSION["err"]."</div>");
+   
+   	// TODO: here we need to add REQUIRED only to assign it. NOT ALL.
+    $ft->assign("NAME",$_SESSION["name"]);
+	$ft->assign("SHORTDESCRIPTION",$_SESSION["shortdescription"]);
+    
 	{
 		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]); 
 		<!-- BEGIN DYNAMIC BLOCK: get_elements -->
@@ -173,42 +181,68 @@ case "save":
 	  * @desc     - When you save an item, will be inserted into database all the fields value.
 	  * @vers     - 1.0
 	  **/ 
-     	$ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
-		if(empty($all_url_vars["{FUNC_NAME1ELEMENT}"]))
-			// value is empty, new items will be INSERTed
-            {VARR} = new {CLS}(0);
-		else 
-        	// value have ID, all data will be UDPATEd
-			{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]);
-		<!-- BEGIN DYNAMIC BLOCK: set_elements -->
-		<!-- IFDEF: ISHIDDEN_SAVE -->
-		{VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
-        <!-- ENDIF --> 
-         <!-- IFDEF: ISRADIO_SAVE -->
-		{VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
-		<!-- ENDIF -->  
-        <!-- IFDEF: ISCHECKBOX_SAVE -->
-		{VARR}->set{FORM_ELEMS}(isset($all_url_vars["{FORM_ELEMS}"])?1:0);
-        <!-- ENDIF --> 
-        <!-- IFDEF: ISDROPDOWN_SAVE -->
-		{VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
-        <!-- ENDIF --> 
-        <!-- IFDEF: ISTEXTFIELD_SAVE -->
-		{VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
-        <!-- ENDIF --> 
-        <!-- IFDEF: ISTEXTAREA_SAVE -->
-		{VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
-        <!-- ENDIF --> 
-        <!-- IFDEF: ISBROWSE_SAVE -->
-        if(!empty($all_url_vars["{FORM_ELEMS}"]))
-			{VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
-        <!-- ENDIF --> 
-		<!-- END DYNAMIC BLOCK: set_elements -->
-		{VARR}->save();
-        // TODO: add a return message if file upload not succeed or any other message can happening
-        // on error return to modify on success only to listing.
-		header("Location: ".$_SERVER['PHP_SELF']."?do=list");
-        exit;
+      
+      // TODO: We need here to give back the errors. You can customize it. Ex: check if email, via a function (class).
+		$err=0;
+		if(empty($all_url_vars["XXX"]))
+			$err=LANG_ERROR_MESSAGE;
+		if (empty($all_url_vars["XXX1"]))
+			$err=LANG_ERROR_MESSAGE1;
+		if(!empty($err))
+            {
+            	// TODO: Here we need to give back ALL variables from SESSION + ERR.
+                <!-- BEGIN DYNAMIC BLOCK: XXX -->
+                $_SESSION["{FORM_ELEMS}"]=$all_url_vars["{FORM_ELEMS}"];
+                <!-- END DYNAMIC BLOCK: XXX -->                
+                $_SESSION["err"]=$err;
+                header("Location: ACTIVEURLHERE");	
+            }
+		else
+            {			      
+            $ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
+            if(empty($all_url_vars["{FUNC_NAME1ELEMENT}"]))
+                // value is empty, new items will be INSERTed
+                {VARR} = new {CLS}(0);
+            else 
+                // value have ID, all data will be UDPATEd
+                {VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]);
+            <!-- BEGIN DYNAMIC BLOCK: set_elements -->
+            <!-- IFDEF: ISHIDDEN_SAVE -->
+            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            <!-- ENDIF --> 
+             <!-- IFDEF: ISRADIO_SAVE -->
+            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            <!-- ENDIF -->  
+            <!-- IFDEF: ISCHECKBOX_SAVE -->
+            {VARR}->set{FORM_ELEMS}(isset($all_url_vars["{FORM_ELEMS}"])?1:0);
+            <!-- ENDIF --> 
+            <!-- IFDEF: ISDROPDOWN_SAVE -->
+            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            <!-- ENDIF --> 
+            <!-- IFDEF: ISTEXTFIELD_SAVE -->
+            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            <!-- ENDIF --> 
+            <!-- IFDEF: ISTEXTAREA_SAVE -->
+            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            <!-- ENDIF --> 
+            <!-- IFDEF: ISBROWSE_SAVE -->
+            if(!empty($all_url_vars["{FORM_ELEMS}"]))
+                {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            <!-- ENDIF --> 
+            <!-- END DYNAMIC BLOCK: set_elements -->
+            {VARR}->save();
+            
+            // TODO: ADD HERE ALL 
+            unset($_SESSION["err"]);
+			<!-- BEGIN DYNAMIC BLOCK: XXXXXX -->
+            unset($_SESSION["{FORM_ELEMS}"]);
+			<!-- END DYNAMIC BLOCK: XXXXXX -->
+            
+            // TODO: add a return message if file upload not succeed or any other message can happening
+            // on error return to modify on success only to listing.
+            header("Location: ".$_SERVER['PHP_SELF']."?do=list");
+            exit;
+            }//end else
      break;
 default:
 	$ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
