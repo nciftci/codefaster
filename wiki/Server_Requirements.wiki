@@ -1,0 +1,4 @@
+=Server Requirements=
+
+  * [http://www.php.net PHP] version 4.3.2 or newer.
+  * A Database is required for most web application programming. Current supported databases are [http://www.mysql.com MySQL] (4.1+) or newer.
