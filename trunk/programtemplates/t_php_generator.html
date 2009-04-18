@@ -184,18 +184,19 @@ case "save":
       
       // TODO: We need here to give back the errors. You can customize it. Ex: check if email, via a function (class).
 		$err=0;
-		if(empty($all_url_vars["XXX"]))
+        
+		<!-- BEGIN DYNAMIC BLOCK: langerrformelements -->
+        if(empty($all_url_vars["{FORM_ELEMS}"]))
 			$err=LANG_ERROR_MESSAGE;
-		if (empty($all_url_vars["XXX1"]))
-			$err=LANG_ERROR_MESSAGE1;
+        <!-- END DYNAMIC BLOCK: langerrformelements -->
+            
 		if(!empty($err))
             {
-            	// TODO: Here we need to give back ALL variables from SESSION + ERR.
-                <!-- BEGIN DYNAMIC BLOCK: XXX -->
+                <!-- BEGIN DYNAMIC BLOCK: errformelements -->
                 $_SESSION["{FORM_ELEMS}"]=$all_url_vars["{FORM_ELEMS}"];
-                <!-- END DYNAMIC BLOCK: XXX -->                
+                <!-- END DYNAMIC BLOCK: errformelements -->                
                 $_SESSION["err"]=$err;
-                header("Location: ACTIVEURLHERE");	
+                header("Location: ".$_SERVER['HTTP_REFERER']);	
             }
 		else
             {			      
@@ -232,11 +233,10 @@ case "save":
             <!-- END DYNAMIC BLOCK: set_elements -->
             {VARR}->save();
             
-            // TODO: ADD HERE ALL 
             unset($_SESSION["err"]);
-			<!-- BEGIN DYNAMIC BLOCK: XXXXXX -->
+			<!-- BEGIN DYNAMIC BLOCK: unsetformelements -->
             unset($_SESSION["{FORM_ELEMS}"]);
-			<!-- END DYNAMIC BLOCK: XXXXXX -->
+			<!-- END DYNAMIC BLOCK: unsetformelements -->
             
             // TODO: add a return message if file upload not succeed or any other message can happening
             // on error return to modify on success only to listing.
