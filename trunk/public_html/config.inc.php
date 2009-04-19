@@ -9,11 +9,11 @@ $configType = (isset($_SERVER['SERVER_NAME']) & in_array($_SERVER['SERVER_NAME']
         case 'production':
             error_reporting(0);
 
-            define('DB_HOST',        'INST_HOST');
-            define('DB_USER',        'INST_USER');
-            define('DB_PASSWORD',    'INST_PASS');
-            define('DB_NAME',        'INST_DB');
-			define("CONF_INDEX_URL", "INST_URL");//INST_URL
+            define("DB_HOST",        "INST_HOST");
+            define("DB_USR",         "INST_USER");
+            define("DB_PWD",    	 "INST_PASS");
+            define("DB_NAME",        "INST_DB");
+			define("CONF_INDEX_URL", "INST_URL");
             
             break;
 
