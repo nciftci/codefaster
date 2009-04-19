@@ -6,12 +6,12 @@ After launching the genetor page, URL/generator/ on the first page you need to e
 
 The data from SQL will be automatically generated at the next step.
 
-{{:phpft:tableread.png|}}
+{http://www.grafxsoftware.com/publ_images/codefaster/tableread.png}
 
 The next step is selecting from the available fields each what type it is. 
 It is important for the PRIMARY KEY to be the first, and default to be selected. The remaining fields have to selected from  the menu, you can select or deselect them (in the administration part) and whether there are compulsory fields (from administration).
 
-{{:phpft:choosefieldtype.png|}}
+{http://www.grafxsoftware.com/publ_images/codefaster/choosefieldtype.png}
 
 At the next step, if you have selected the texting, you can specify an editor and the type of the editor, basic or advanced.
 In the same screen, you have to select what classes should be included. The programming is made so it works in PHP4 and PHP5, we chose to use the __autoload function, in the futire we will implement this solution also, after excluding the PHP4 support.
