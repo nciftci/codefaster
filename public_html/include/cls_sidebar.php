@@ -47,7 +47,7 @@ class Sidebar{
 		
 		for($i=0;$i<$nrmodules;$i++)
 		{
-			$ft->assign("MODULE_NAME",$module_name[$i]);
+			$ft->assign("MODULE_NAME",constant($module_name[$i]));
 			$ft->assign("FILENAME",$filename[$i]);
 			$ft->assign("ADMIN_URL",ADMIN_URL);
 			$ft->assign("LANG_ADMIN_ADD",LANG_ADMIN_ADD);
