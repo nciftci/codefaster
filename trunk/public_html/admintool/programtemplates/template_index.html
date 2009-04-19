@@ -20,7 +20,6 @@
 
 <link type="text/css" href="{CONF_INDEX_URL}javascript/jqueryui/css/smoothness/jquery-ui.css" rel="stylesheet" />
 <link type="text/css" href="{CONF_INDEX_URL}javascript/jquery-validate/css/screen.css" rel="stylesheet" />
-<link href="{CONF_INDEX_URL}css/listing.css" rel="stylesheet" type="text/css" />
 <link type="text/css" href="{CONF_INDEX_URL}css/admintool.css" rel="stylesheet" />
 <link type="text/css" href="{CONF_INDEX_URL}css/pagination.css" rel="stylesheet" />
 <script type="text/javascript">
@@ -43,51 +42,6 @@
 		$('#accordion').accordion('activate', parseInt($.cookie('accordion_activate')));
 		$.cookie('accordion_activate', null);
 
-		// Tabs
-		$('#tabs').tabs();
-
-		// Dialog
-			$('#dialog').dialog({
-				autoOpen: false,
-				width: 600,
-				buttons: {
-						"Ok": function() {
-							$(this).dialog("close");
-						},
-						"Cancel": function() {
-							$(this).dialog("close");
-						}
-					}
-				});
-
-				// Dialog Link
-				$('#dialog_link').click(function(){
-					$('#dialog').dialog('open');
-					return false;
-				});
-
-				// Datepicker
-				$('#datepicker').datepicker({
-					inline: true
-				});
-
-				// Slider
-				$('#slider').slider({
-					range: true,
-					values: [17, 67]
-				});
-
-				// Progressbar
-				$("#progressbar").progressbar({
-					value: 20
-				});
-
-				//hover states on the static widgets
-				$('#dialog_link, ul#icons li').hover(
-					function() { $(this).addClass('ui-state-hover'); },
-					function() { $(this).removeClass('ui-state-hover'); }
-				);
-
 			});
 </script>
 </head>
@@ -99,9 +53,14 @@
     <p><a href="index.php">{LANG_ADMIN_HOME}</a> | <a href="config.php?action=index">{LANG_ADMIN_CONFIG_PAGE}</a> | <a href="login.php">{LANG_ADMIN_LOG_OFF}</a></p>
   </div>
 </div>
+<div class="clear"></div>
 <div id="page-body">
-  <div id="sidebar1">{SIDEBAR}</div>
-  <div id="content">{BODY}</div>
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td valign="top" id="sidebar1">{SIDEBAR}</td>
+    <td valign="top" id="content">{BODY}</td>
+  </tr>
+</table>
 </div>
 <div class="clear"></div>
 <div id="footer">
