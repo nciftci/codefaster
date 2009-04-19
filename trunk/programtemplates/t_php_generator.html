@@ -141,9 +141,9 @@ case "mod":
     $ft->assign("ERROR","<div class=\"mError\">".$_SESSION["err"]."</div>");
    
    	// TODO: here we need to add REQUIRED only to assign it. NOT ALL.
-    $ft->assign("NAME",$_SESSION["name"]);
-	$ft->assign("SHORTDESCRIPTION",$_SESSION["shortdescription"]);
-    
+                <!-- BEGIN DYNAMIC BLOCK: errmodformelements -->
+                $ft->assign("{FORM_ELEMSUPPER}",$_SESSION["{FORM_ELEMS}"]);
+                <!-- END DYNAMIC BLOCK: errmodformelements -->     
 	{
 		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]); 
 		<!-- BEGIN DYNAMIC BLOCK: get_elements -->
@@ -186,8 +186,8 @@ case "save":
 		$err=0;
         
 		<!-- BEGIN DYNAMIC BLOCK: langerrformelements -->
-        if(empty($all_url_vars["{FORM_ELEMS}"]))
-			$err=LANG_ERROR_MESSAGE;
+        if(empty($all_url_vars["{FORM_ELEMS_REQ}"]))
+			$err=LANG_ADMIN_{PROJECT_BASE_FILENAME_UPPER}_VERIF_{FORM_ELEMS_REQ_UPPER};
         <!-- END DYNAMIC BLOCK: langerrformelements -->
             
 		if(!empty($err))
