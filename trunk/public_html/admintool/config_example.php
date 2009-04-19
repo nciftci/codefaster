@@ -1,24 +1,10 @@
 <?php
-/*
-##################     CWB  PRO   ########################
-############################################################
-CWB  PRO		      	Version 1.0
-Writed by               GraFX (webmaster@grafxsoftware.com)
-Created 03/01/03        Last Modified $Date: 2006-10-11 14:16:49 +0300 (Wed, 11 Oct 2006) $
-Scripts Home:           http://www.grafxsoftware.com
-############################################################
-File name               config.php
-File purpose            Configuration Script
-File created by         GraFX (webmaster@grafxsoftware.com)
-############################################################
-*/// $Id: config.php 5501 2006-10-11 11:16:49Z iborbely $
+
 	include_once("../config.inc.php");
 	include_once(INCLUDE_PATH."cls_fast_template.php");
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".inc.php");
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".admintool.inc.php");
 	include_once(INCLUDE_PATH."connection.php");
-	include_once(INCLUDE_ADMIN_PATH."sidebar.inc.php");
-	
 
 	$util=new Util();
 	$util->check_authentification();
@@ -53,7 +39,6 @@ File created by         GraFX (webmaster@grafxsoftware.com)
 
 	$ft->multiple_assign_define("CONF_");
 	$ft->multiple_assign_define("LANG_");
-	$ft->assign("SIDEBAR",$sidebar);
 	$ft->parse("mainContent", "main");
 	$ft->showDebugInfo(ERROR_DEBUG);
 	$ft->FastPrint("mainContent");
