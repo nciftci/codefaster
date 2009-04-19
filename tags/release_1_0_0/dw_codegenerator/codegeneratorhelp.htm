@@ -1,0 +1,146 @@
+<!-- MENU-LOCATION=NONE -->
+<!DOCTYPE HTML SYSTEM "-//Macromedia//DWExtension layout-engine 5.0//dialog">
+<html>
+<head>
+<title>PHP/Java CLASS Generator </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META NAME="ROBOTS" CONTENT="ALL">
+<META NAME="CREATOR" CONTENT="GraFX Software Solutions - www.grafxsoftware.com">
+<style type="text/css">
+<!--
+.style1 {font-size: 18px}
+-->
+</style>
+</head>
+<script language="JavaScript" type="text/JavaScript" >
+function canAcceptCommand(){
+ return(true);
+};
+function hexval(x){
+  var hex="0123456789ABCDEF";
+  var x1=((x-x%16)/16);
+  var x2=x%16;
+  var result=""+hex[x1]+""+hex[x2];
+  return(result);
+};
+
+function cs(input){
+  var result="";
+  var i=0;
+  for (i=0;i<input.length;i++){
+  	result+="%"+hexval(input.charCodeAt(i));
+  };
+  return(result);
+};
+
+
+function isDOMRequired() {
+	return false;
+}
+
+function objectTag(){
+	getcode();
+};
+
+function getcode(){
+	var send="";
+
+	var numedezv=cs(document.form.numedezv.value);
+	var numeproiect=cs(document.form.numeproiect.value);
+	var nume=cs(document.form.nume.value);
+	var numevar=cs(document.form.numevar.value);
+	var tipul="";
+	if (document.form.tipul[0].checked) tipul="php";
+		else tipul="java";
+	var numecampuri=cs(document.form.numecampuri.value);
+	var numefunctii=cs(document.form.numefunctii.value);
+	var numebd=cs(document.form.numebd.value);
+
+	send+="numedezv"+"="+numedezv;
+	send+="&"+"numeproiect"+"="+numeproiect;
+	send+="&"+"nume"+"="+nume;
+	send+="&"+"numevar"+"="+numevar;
+	send+="&"+"tipul"+"="+tipul;
+	send+="&"+"numecampuri"+"="+numecampuri;
+	send+="&"+"numefunctii"+"="+numefunctii;
+	send+="&"+"numebd"+"="+numebd;
+	send+="&Submit=Submit";
+
+	var result="";
+	result=MMHttp.postText("http://www.grafxsoftware.com/demo/code_generator/generate_code.php",send,"application/x-www-form-urlencoded").data;
+	var filename=dreamweaver.browseForFileURL("save");
+
+	if (filename.length<2){
+		close();
+
+		return;
+	};
+
+	//alert(filename);
+	//alert(result);
+
+	DWfile.write(filename,result);
+	dreamweaver.openDocument(filename);
+	close();
+};
+
+</script>
+
+<body>
+<form action="http://www.grafxsoftware.com/demo/code_generator/generate_code.php" method="post" enctype="multipart/form-data" name="form">
+        <table width="650" border="0" cellpadding="3" cellspacing="3">
+          <tr>
+            <td colspan="2"><div align="center"><span class="style1">PHP/Java class Generator </span> </div>
+            <div align="center"></div></td>
+          </tr>
+          <tr>
+            <td colspan="2">This tool is designed in such a way to facilitate the creation of java and php classes in javabeans style. It is extremely useful in case you have a Mysql table and you would like to generate a class over this table which would have a constructor, saving (updating) and drop option, and to provide the possibility to enter and query internal variables assigned for each field of the table.<br>
+              The advantage this generator provides is generating a class scheleton which may be altered in the future.
+The disadvantage consists in reduced applicability as it is useful in case the first field is set as Primary Key. <SPAN class=text>
+            </SPAN></td>
+          </tr>
+          <tr>
+            <td width="28%" valign="top"><div align="right"><strong>Developer name </strong></div></td>
+            <td width="72%">              (ex. John Smith)  is the name of the developer&nbsp; - it will be displayed in the header of the source file</td>
+          </tr>
+          <tr>
+            <td width="28%" valign="top"><div align="right"><strong>Project name </strong></div></td>
+            <td width="72%">              (ex. Rating Script) is the name of the project - it will be displayed in the header of the source file</td>
+          </tr>
+          <tr>
+            <td valign="top"><div align="right"><strong>CLASS name </strong></div></td>
+            <td>              (ex. classProduct)  is the name of the class - the name conventions have to be taken into consideration, specific for each language (in java Class, in php class or Class) The name is important when naming a file as the source file will be named Class.java (having the same form as the name of the class or cls_class.php in php.</td>
+          </tr>
+          <tr>
+            <td valign="top"><div align="right"><strong>VARIABLE name </strong></div></td>
+            <td>              (ex. cp) the name of the variable is important as a "usage code" is generated, as&nbsp;sample code inserted at the beginning of the source. This may be pasted eventually in the source where this class is applied.</td>
+          </tr>
+          <tr>
+            <td valign="top"><div align="right"><strong>Type</strong></div></td>
+            <td>
+              (the type of the generated source)</td>
+          </tr>
+          <tr>
+            <td valign="top"><div align="right"><strong>DB fields </strong></div></td>
+            <td>(id;#item;itemid;votes; (<strong>first is unique ID</strong>, #
+              text))  - is the list of the table field names. Rules: the first field has to be set as Primary Key, the fields are separates by ; and the ones string types (varchar, string, data) have a # at the beginning.<BR>
+Functions name: the list has to be similar with the fields one. Rules: it is recommended to be the same as the precedent list but without # and with capitalisation. Thus functions will be generated: getId, setId in case the first field is id in the fields list and Id in this one.</td>
+          </tr>
+          <tr>
+            <td valign="top"><div align="right"><strong>Functions name </strong></div></td>
+            <td>(ex. ID;Item;ItemID;Votes) - the name of the function.</td>
+          </tr>
+          <tr>
+            <td valign="top"><div align="right"><strong>DB Table </strong></div></td>
+            <td>(database table name: ex. product) - the name of the table.</td>
+          </tr>
+          <tr>
+            <td colspan="2"><div align="center">
+             <!--   <input type="submit" name="Submit" value="Submit" onclick="getcode()"> -->
+1998-2004 Copyright <a href="http://www.grafxsoftware.com/">GraFX Software Solutions </a><br>
+</div></td>
+          </tr>
+  </table>
+</form>
+</body>
+</html>

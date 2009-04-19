@@ -1,0 +1,35 @@
+<form action="start.php" method="post" name="code_generator">
+	<input type="hidden" name="action" value="add" />
+  	<table border="0" cellpadding="3" cellspacing="3">
+   		<tr>
+      		<td valign="top">
+				<div align="right">
+        			<p>Create table source<br />only one table</p>
+        			<p>Write in textarea <br />the create table <br />command. </p>
+				</div>
+      		</td>            
+      		<td>
+				<textarea name="table" rows="20" cols="60">CREATE TABLE `product` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  `descriptionshort` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `categoryid` int(8) NOT NULL,
+  `isthisreal` tinyint(1) NOT NULL,
+  `termsagree` tinyint(1) NOT NULL,
+  `fileupload` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+);</textarea>
+	<br />
+	</td>
+   	</tr>
+		<tr>
+			<td colspan="2">
+				<div align="center">
+                	<input type="submit" name="Submit" value="Submit" class="button">
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

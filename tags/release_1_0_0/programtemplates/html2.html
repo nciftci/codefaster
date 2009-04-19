@@ -1,0 +1,42 @@
+<form name="form1" action="generate_html.php?action=generate_html" method="post" >
+  <table>
+    <!-- BEGIN DYNAMIC BLOCK: dbitem -->
+    <tr>
+      <td>{NDBITEM}</td>
+      <td><strong>{DBITEM}</strong></td>
+      <td> {ITEMSELECT} 
+    </tr>
+    <!-- END DYNAMIC BLOCK: dbitem -->
+  </table>
+  <table>
+    <!-- BEGIN DYNAMIC BLOCK: clsuse -->
+    <tr>
+      <td>{NDBITEM}</td>
+      <td><strong>{CLSITEM}</strong></td>
+      <td> {CLSITEMCHECKBOX} 
+    </tr>
+    <!-- END DYNAMIC BLOCK: clsuse -->
+  </table>
+  <p>Select from the list the ACTIVE (yes/no) field, if your table have it. 
+    <select name="active_select" id="active_select">
+      <option value="" selected="selected">Select one of the field as active (optional)</option>
+      <!-- BEGIN DYNAMIC BLOCK: dbactivelisting -->
+      <option value="{ITEMACTIVE}">{ITEMACTIVE}</option>
+      <!-- END DYNAMIC BLOCK: dbactivelisting -->
+    </select>
+    <br />
+  Hint: in some case you have in the table a field where you can activate or deactivate your item. This field will be in the listed items to activate/deactivate easier.</p>
+  <p>
+    <input type="checkbox" name="mods[ftp]" value="Ftp">
+    FTP Module (cls_ftp.php)<br />
+    <input type="checkbox" name="mods[captcha]" value="Captcha">
+    Captcha Module (cls_captcha.php)<br />
+    <input type="checkbox" name="mods[mailsender]" value="UniversalMailsender">
+    Mailsender module (cls_universal mailsender.php) <br />
+    <input type="checkbox" name="mods[imagecreation]" value="ImageCreation">
+    Image Creation (cls_imagecreation.php) <br />
+    <input type="checkbox" name="mods[calendar]" value="Calendar">
+    Calendar Module (cls_calendar.php) <br />
+    <input type="submit" name="Submit" value="Submit" class="button" />
+  </p>
+</form>
