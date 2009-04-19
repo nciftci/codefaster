@@ -291,7 +291,7 @@ if ($action == "continue_selection") {
 
 //Write the module SQL insert.
 //TODO: to write directly in the database
-$str = "LANG_ADMIN_" . $NAMEUPPER . "_" . $NAMEUPPER;
+$str = "LANG_ADMIN_" . $NAMEUPPER ;
 $SQLTOPRINT = "INSERT INTO `modules` (`module_name` ,`availability` ,`position`,`filename` ,`extra_menu`) VALUES ( '$str', '1', '0','{$NAME}.php','') ON DUPLICATE KEY UPDATE `module_name`= '$str';";
 
 /// show the links at the end of the job.
@@ -414,6 +414,7 @@ if ($action == "generate_html") {
 	$ftphp->assign ( "NAME", $name );
 	$ftphp->assign ( "CLASSVAR", $classvar );
 	$ftphp->assign ( "PROJECT_NAME", $projectname );
+	$ftphp->assign ( "PROJECT_BASE_FILENAME_UPPER", $NAMEUPPER );
 	$ftphp->assign ( "PROJECT_BASE_FILENAME", $session->get ( "name" ) );
 	$ftphp->assign ( "PROJECT_NAME_HTML", "#_LANG_ADMIN_HELP_" . strtoupper ( $field ) . "_#" ); // fieldset name
 	$ftphp->assign ( "SELECT_WHAT", $select_what );
@@ -435,9 +436,12 @@ if ($action == "generate_html") {
 	$ftphp->define_dynamic ( "set_elements", "main" );
 	$ftphp->define_dynamic ( "formelements", "main_user" );
 	$ftphp->define_dynamic ( "errformelements", "main" );
+	$ftphp->define_dynamic ( "errmodformelements", "main" );
 	$ftphp->define_dynamic ( "unsetformelements", "main" );
 	$ftphp->define_dynamic ( "langerrformelements", "main" );
-	
+	// for required fields in PHP error.
+	$tmp_required=$session->get ( "required" );
+
 	foreach ( $items as $key => $it ) {
 		if ($it == "hidden" || $it == "checkbox" || $it == "radio" || $it == "select") {
 			$ftphp->assign ( "FUNC_NAME", $key );
@@ -448,16 +452,24 @@ if ($action == "generate_html") {
 			$ftphp->assign ( "IS" . strtoupper ( $it2 ), ($it2 == $it) ? 1 : 0 );
 			$ftphp->assign ( "IS" . strtoupper ( $it2 ) . "_SAVE", ($it2 == $it) ? 1 : 0 );
 		}
+		// for required fields in PHP error.
+		if(isset($tmp_required[$key])){
 		
+		$ftphp->assign ( "FORM_ELEMS_REQ", $key );
+		$ftphp->assign ( "FORM_ELEMS_REQ_UPPER",strtoupper ( $key ));
+		$ftphp->parse ( "LANGFORMELEMENTS", ".langerrformelements" );
+		}
+
 		$ftphp->assign ( "FORM_ELEMS", $key );
 		$ftphp->assign ( "FORM_ELEMSUPPER", strtoupper ( $key ) );
-		
+		//$ftphp->assign ( "FORM_ELEMUPPER", strtoupper ( $field ) );
 		$ftphp->parse ( "GET_ELEMENTS", ".get_elements" );
 		$ftphp->parse ( "SET_ELEMENTS", ".set_elements" );
 		$ftphp->parse ( "FORMELEMENTS", ".formelements" );
 		$ftphp->parse ( "ERRFORMELEMENTS", ".errformelements" );
+		$ftphp->parse ( "ERRMODFORMELEMENTS", ".errmodformelements" );
 		$ftphp->parse ( "UNSETFORMELEMENTS", ".unsetformelements" );
-		$ftphp->parse ( "UNSETFORMELEMENTS", ".langerrformelements" );
+		
 	}
 	
 	$ftphp->parse ( "BODY", array ("main" ) );
