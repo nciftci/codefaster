@@ -11,7 +11,9 @@ $ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 $ft->define(array("main"=>"template_firstpage.html", "content"=>"error.html"));
 
 $ft->assign("ERROR_MESSAGE", $all_url_vars['message']);
-
+//sidebar
+$sb = new Sidebar ( );
+$ft->assign ( "SIDEBAR", $sb->getSideBar () );
 $ft->multiple_assign_define("LANG_");
 $ft->multiple_assign_define("CONF_");
 $ft->parse("BODY", array("content","main"));

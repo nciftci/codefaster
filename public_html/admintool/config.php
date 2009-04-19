@@ -17,7 +17,6 @@ File created by         GraFX (webmaster@grafxsoftware.com)
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".inc.php");
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".admintool.inc.php");
 	include_once(INCLUDE_PATH."connection.php");
-	include_once(INCLUDE_PATH."sidebar.inc.php");
 
 	$util=new Util();
 	$util->check_authentification();
@@ -42,7 +41,9 @@ if ($all_url_vars['action']=="index")
 
 	$ft->assign("ADMIN_URL", ADMIN_URL);
 	$ft->assign("INDEX_PATH", INDEX_PATH);
-	$ft->assign("SIDEBAR",$sidebar);
+	//sidebar
+	$sb = new Sidebar ( );
+	$ft->assign ( "SIDEBAR", $sb->getSideBar () );
 	$ft->multiple_assign_define("LANG_");
 	$ft->multiple_assign_define("CONF_");
 	$ft->parse("BODY", array("content","main"));
@@ -120,7 +121,9 @@ else if ($all_url_vars['action']=="form")
 	}
 	$ft->assign("INDEX_PATH", INDEX_PATH);
 	$ft->clear_dynamic("conf_list");
-	$ft->assign("SIDEBAR",$sidebar);
+	//sidebar
+	$sb = new Sidebar ( );
+	$ft->assign ( "SIDEBAR", $sb->getSideBar () );
 	$ft->multiple_assign_define("LANG_");
 	$ft->multiple_assign_define("CONF_");
 	$ft->parse("BODY", array("content","main"));
