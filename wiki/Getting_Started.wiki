@@ -14,7 +14,7 @@ It is important for the PRIMARY KEY to be the first, and default to be selected.
 http://www.grafxsoftware.com/publ_images/codefaster/choosefieldtype.png
 
 At the next step, if you have selected the texting, you can specify an editor and the type of the editor, basic or advanced.
-In the same screen, you have to select what classes should be included. The programming is made so it works in PHP4 and PHP5, we chose to use the __autoload function, in the futire we will implement this solution also, after excluding the PHP4 support.
+In the same screen, you have to select what classes should be included. The programming is made so it works ONLY in PHP5, we chose to use the __autoload function.
 
 After this step every file will be generated at its location, the administration files in public_html/admintool/filename.php public_html/admintool/programtemplates/filename.html, the class in public_html/cls_filename.php and the user files in public_html/filename.php si public_html/programtemplates/filename.html
 
