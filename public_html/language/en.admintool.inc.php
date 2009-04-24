@@ -1,6 +1,7 @@
 <?php
 @include ("en.extra.inc.php");
 @include ("en.pagination.inc.php");
+@include ("en.upload.inc.php");
 
 /****** DEFAULT *****/
 define("LANG_ADMIN","Administrator Panel");
