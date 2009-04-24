@@ -14,11 +14,10 @@ Scripts Home:           http://www.grafxsoftware.com
 include_once("./config.inc.php");
 include_once(INCLUDE_PATH."cls_fast_template.php");
 include_once(INCLUDE_PATH."cls_string.php");
-include_once(INCLUDE_PATH."cls_beautify.php");
 include_once(INCLUDE_PATH."cls_session.php");
+include_once(INCLUDE_PATH."PhpBeautifier.inc.php");
 
 $session      = new MYSession();
-$beautifier   = new Beautify();
 $stringutil   = new String();
 $all_url_vars = $stringutil->parse_all();
 // basic values
@@ -468,45 +467,22 @@ $session->set("date",        date("Y:m:d"));
 $session->set("variable",    $all_url_vars['varname']);
 $session->set("tablename",   $all_url_vars['table']);
 
-//header("content-type: application/stream");
-//header("content-disposition: attachment; filename=".$all_url_vars['classname']);
+$result_php=$ft->fetch("BODY");
 
-$result_php=trim(str_replace("\n\n\n\n\n","\n",$ft->fetch("BODY")));
-$result_php=$beautifier->get_beautify_php($result_php);
-
-/*
-$tmpfilename=@tempnam(sys_get_temp_dir(),"class_generator_");
-$handle = @fopen($tmpfilename, "w");
-if ($handle){	
-	@fwrite($handle, $result_php);
-	@fclose($handle);
-
-	$outfilename="$tmpfilename.out";
-	$tmp=@system("./beautifier/phpCB  --space-after-if --space-after-switch --space-after-while --space-before-start-angle-bracket --space-after-end-angle-bracket --one-true-brace-function-declaration --glue-amperscore --change-shell-comment-to-double-slashes-comment --force-large-php-code-tag --extra-padding-for-case-statement --force-true-false-null-contant-lowercase --align-equal-statements --comment-rendering-style PHPDoc --equal-align-position 50 --padding-char-count 4 $tmpfilename > '$outfilename'",$return);
-	@unlink($tmpfilename);
-	if ($return==0) {
-		$result_php=$tmp;
-		$outhandle = @fopen($outfilename, "r");
-		if ($outhandle){
-			$result_php=fread($outhandle,filesize($outfilename));
-			fclose($outhandle);
-		};
-		@unlink($outfilename);
-	};
-};
- */
 $fp = fopen(GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']), 'w');
-//trebuie scris aici ...
-//$fps = fopen(GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']), 'w');
-print_r($fp);
+
 if ($fp){
 	fwrite($fp, $result_php);
 	fclose($fp);
+	
+	$beautify = new PhpBeautifier();
+	$beautify -> tokenSpace = true;//put space between tokens
+	$beautify -> blockLine = true;//put empty lines between blocks of code (if, while etc)
+	//$beautify -> optimize = true;//optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
+	$beautify -> file( GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']), GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']));
 	// write phps
 	//fwrite($fps, $result_php);
 	//fclose($fps);	
 };
-//print $result_php;
-
 header('Location: generate_html.php');
 ?>

@@ -14,12 +14,11 @@ include_once ("./config.inc.php");
 //include_once (INDEX_PATH . "public_html/include/connection.php");
 include_once (INCLUDE_PATH . "cls_xml.php");
 include_once (INCLUDE_PATH . "cls_fast_template.php");
-include_once (INCLUDE_PATH . "cls_beautify.php");
 include_once (INCLUDE_PATH . "cls_string.php");
 include_once (INCLUDE_PATH . "cls_session.php");
+include_once (INCLUDE_PATH . "PhpBeautifier.inc.php");
 
 $stringutil = new String ( );
-$beautifier = new Beautify ( );
 $session = new MYSession ( );
 $xml = new Xml ( );
 
@@ -29,10 +28,10 @@ $action = $all_url_vars ["action"];
 $items = $all_url_vars ['items'];
 
 /**
-* @author   - Kiss Szilard
-* @desc     - 
-* @vers     - 1.0
-**/
+ * @author   - Kiss Szilard
+ * @desc     - 
+ * @vers     - 1.0
+ **/
 $functions = $session->get ( "functions", $functions );
 $fields = $session->get ( "fields", $fields );
 $projectname = $session->get ( "projectname" );
@@ -42,19 +41,19 @@ $name = $session->get ( "name" );
 $classvar = $session->get ( "classvar" );
 
 /**
-* @author   - Valics Lehel
-* @desc     - Lower and upper the project name (projectname field). 
-* @ex       - testproduct, TESTPRODUCT
-* @vers     - 1.0
-**/
+ * @author   - Valics Lehel
+ * @desc     - Lower and upper the project name (projectname field). 
+ * @ex       - testproduct, TESTPRODUCT
+ * @vers     - 1.0
+ **/
 $NAME = strtolower ( $session->get ( "name" ) );
 $NAMEUPPER = strtoupper ( $session->get ( "name" ) );
 
 /**
-* @author   - Pavel 
-* @desc     - Validation rules, LANG variables for ADMIN
-* @vers     - 1.0
-**/
+ * @author   - Pavel 
+ * @desc     - Validation rules, LANG variables for ADMIN
+ * @vers     - 1.0
+ **/
 $_validation_rules = array ('mix' => "#_LANG_ADMIN_VALIDATION_MIN_#", 'max' => "#_LANG_ADMIN_VALIDATION_MAX_#", 'mixlength' => "#_LANG_ADMIN_VALIDATION_MINLENGTH_#", 'maxlength' => "#_LANG_ADMIN_VALIDATION_MAXLENGTH_#", 'email' => "#_LANG_ADMIN_VALIDATION_EMAIL_#", 'required' => "#_LANG_ADMIN_VALIDATION_REQUIRED_#" );
 
 if (empty ( $fields )) {
@@ -98,10 +97,10 @@ if ($action == "continue_selection") {
 
 $k = 0;
 /**
-* @author   - Kiss Szilard, Valics Lehel, Elteto Zoltan, Pavel, Paul Nasca
-* @desc     - Starting to create the form for the ADMIN
-* @vers     - 1.0
-**/
+ * @author   - Kiss Szilard, Valics Lehel, Elteto Zoltan, Pavel, Paul Nasca
+ * @desc     - Starting to create the form for the ADMIN
+ * @vers     - 1.0
+ **/
 foreach ( $fields as $field ) {
 	$ft->assign ( "NDBITEM", $k );
 	$ft->assign ( "DBITEM", $field );
@@ -132,17 +131,17 @@ foreach ( $fields as $field ) {
 			$requiredsets [] = "required";
 			// By marking up abbreviations you can give useful information to browsers, 
 			// spellcheckers, screen readers, translation systems and search-engines.
-			$abbr_value = "<abbr title='#_LANG_ADMIN_{$NAMEUPPER}_REQUIRED_#'>*</abbr>"; 
+			$abbr_value = "<abbr title='#_LANG_ADMIN_{$NAMEUPPER}_REQUIRED_#'>*</abbr>";
 		}
 		
 		$validate_rules = array ();
 		$validate_messages = array ();
 		
 		/**
-		* @author   - Pavel
-		* @desc     - Create the required message and classes fot the jQuery form.
-		* @vers     - 1.0
-		**/
+		 * @author   - Pavel
+		 * @desc     - Create the required message and classes fot the jQuery form.
+		 * @vers     - 1.0
+		 **/
 		if ($requiredsets) {
 			foreach ( $requiredsets as $requiredset ) {
 				list ( $rule, $condition ) = explode ( ":", trim ( $requiredset ) );
@@ -180,8 +179,8 @@ foreach ( $fields as $field ) {
 			
 			// generate form radio button element	
 			case 'radio' :
-				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"1\" type=\"radio\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_" . "VERIF_" . $strupperfield . "_#\" $class_value #_SELECTEDRD_" . strtoupper ( $field ) . "_1_# />#_LANG_ADMIN_".$NAMEUPPER."_YES_#";
-				$fielddata .= "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"0\" type=\"radio\" #_SELECTEDRD_" . strtoupper ( $field ) . "_0_# />#_LANG_ADMIN_".$NAMEUPPER."_NO_#" . $divend;
+				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"1\" type=\"radio\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_" . "VERIF_" . $strupperfield . "_#\" $class_value #_SELECTEDRD_" . strtoupper ( $field ) . "_1_# />#_LANG_ADMIN_" . $NAMEUPPER . "_YES_#";
+				$fielddata .= "<input name=\"" . $field . "\" id=\"" . $field . "\" value=\"0\" type=\"radio\" #_SELECTEDRD_" . strtoupper ( $field ) . "_0_# />#_LANG_ADMIN_" . $NAMEUPPER . "_NO_#" . $divend;
 				break;
 			
 			// generate form dropdown element	
@@ -226,7 +225,7 @@ foreach ( $fields as $field ) {
 		}
 		// end form elements
 		
-		
+
 		$fthtml->assign ( "FORMELEMENT", $fielddata ); // in a DYNAMIC BLOCK will generate all the form data. t_html_generator.html
 		//$fthtml->assign ( "FIELDNAME", $field ); //seems not used anymore, lower case fieldnames.
 		//$fthtml->assign ( "LANG_FIELDNAME", "#_LANG_ADMIN_" . $NAMEUPPER . "_" . strtoupper ( $field ) . "_#" );
@@ -242,7 +241,7 @@ foreach ( $fields as $field ) {
 		$fthtml->assign ( "CONTENTEND", "\n<!-- END##IF -->\n" ); //content for listing
 		$fthtml->parse ( "FORMELEMENTS", ".formelements" );
 	
-	} elseif ($action == "continue_selection") {//on step 3 the editor choose and radion button. TODO: choose button radio name
+	} elseif ($action == "continue_selection") { //on step 3 the editor choose and radion button. TODO: choose button radio name
 		switch ($item) {
 			case 'hidden' :
 				$data = "";
@@ -291,7 +290,7 @@ if ($action == "continue_selection") {
 
 //Write the module SQL insert.
 //TODO: to write directly in the database
-$str = "LANG_ADMIN_" . $NAMEUPPER ;
+$str = "LANG_ADMIN_" . $NAMEUPPER;
 $SQLTOPRINT = "INSERT INTO `modules` (`module_name` ,`availability` ,`position`,`filename` ,`extra_menu`) VALUES ( '$str', '1', '0','{$NAME}.php','') ON DUPLICATE KEY UPDATE `module_name`= '$str';";
 
 /// show the links at the end of the job.
@@ -312,10 +311,10 @@ $ft->FastPrint ();
 if ($action == "generate_html") {
 	
 	/**
-	* @author   - Elteto Zoltan
-	* @desc     - Parse the #_SOMETHING_# to replace with {SOMETHING} and generate the HTML files
-	* @vers     - 1.0
-	**/
+	 * @author   - Elteto Zoltan
+	 * @desc     - Parse the #_SOMETHING_# to replace with {SOMETHING} and generate the HTML files
+	 * @vers     - 1.0
+	 **/
 	$fp = fopen ( GEN_ADMIN_PRGTEMPLATES_PATH . $NAME . '.html', 'w' );
 	if ($fp) {
 		$fthtml->parse ( "MAIN", array ("main" ) );
@@ -326,7 +325,7 @@ if ($action == "generate_html") {
 		fwrite ( $fp, $outhtml );
 		fclose ( $fp );
 	}
-
+	
 	$fp = fopen ( GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html", 'w' );
 	if ($fp) {
 		$fthtml->define_dynamic ( "user_formelements", "main_user" );
@@ -344,19 +343,26 @@ if ($action == "generate_html") {
 		$outhtmluser = str_replace ( "#_", "{", $outhtmluser );
 		$outhtmluser = str_replace ( "_#", "}", $outhtmluser );
 		$outhtmluser = str_replace ( "##", "", $outhtmluser );
-		fwrite ( $fp, $beautifier->beautify_html ( $outhtmluser ) );
-		//fwrite($fp, $outhtmluser);	
+		fwrite ( $fp, $outhtmluser );
 		fclose ( $fp );
-	}// end HTML generation
+		
+		$beautify = new PhpBeautifier ( );
+		$beautify->tokenSpace = true; //put space between tokens
+		$beautify->blockLine = true; //put empty lines between blocks of code (if, while etc)
+		//$beautify -> optimize = true;//optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
+		$beautify->file ( GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html", GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html" );
 	
+	} // end HTML generation
+	
+
 	$select_what = "";
 	$listing = $session->get ( "listing" );
 	
 	/**
-	* @author   - Elteto Zoltan
-	* @desc     - 
-	* @vers     - 1.0
-	**/
+	 * @author   - Elteto Zoltan
+	 * @desc     - 
+	 * @vers     - 1.0
+	 **/
 	if (! empty ( $listing )) {
 		//active_select
 		// if we have an active member selected juts put it at the end of the listing
@@ -370,7 +376,7 @@ if ($action == "generate_html") {
 			$tmp_fld = $listing;
 		
 		$select_what = implode ( ', ', array_keys ( $listing ) );
-
+		
 		$flds = "array(";
 		foreach ( $tmp_fld as $key => $it ) {
 			$flds .= '"#_LANG_ADMIN_' . $NAMEUPPER . "_" . strtoupper ( $key ) . '_#",';
@@ -383,10 +389,10 @@ if ($action == "generate_html") {
 	}
 	
 	/**
-	* @author   - Pavel
-	* @desc     - Include to autoload some classes but commented out.
-	* @vers     - 1.0
-	**/	
+	 * @author   - Pavel
+	 * @desc     - Include to autoload some classes but commented out.
+	 * @vers     - 1.0
+	 **/
 	//__autload
 	$otherinclude = "";
 	
@@ -400,10 +406,10 @@ if ($action == "generate_html") {
 	}
 	
 	/**
-	* @author   - Elteto Zoltan, Valics Lehel
-	* @desc     - Generate the PHP files
-	* @vers     - 1.0
-	**/
+	 * @author   - Elteto Zoltan, Valics Lehel
+	 * @desc     - Generate the PHP files
+	 * @vers     - 1.0
+	 **/
 	$ftphp = new FastTemplate ( TEMPLATE_PATH );
 	$ftphp->define ( array ("main" => "t_php_generator.html", "main_user" => "t_php_user_generator.html" ) );
 	
@@ -440,8 +446,8 @@ if ($action == "generate_html") {
 	$ftphp->define_dynamic ( "unsetformelements", "main" );
 	$ftphp->define_dynamic ( "langerrformelements", "main" );
 	// for required fields in PHP error.
-	$tmp_required=$session->get ( "required" );
-
+	$tmp_required = $session->get ( "required" );
+	
 	foreach ( $items as $key => $it ) {
 		if ($it == "hidden" || $it == "checkbox" || $it == "radio" || $it == "select") {
 			$ftphp->assign ( "FUNC_NAME", $key );
@@ -453,13 +459,13 @@ if ($action == "generate_html") {
 			$ftphp->assign ( "IS" . strtoupper ( $it2 ) . "_SAVE", ($it2 == $it) ? 1 : 0 );
 		}
 		// for required fields in PHP error.
-		if(isset($tmp_required[$key])){
-		
-		$ftphp->assign ( "FORM_ELEMS_REQ", $key );
-		$ftphp->assign ( "FORM_ELEMS_REQ_UPPER",strtoupper ( $key ));
-		$ftphp->parse ( "LANGFORMELEMENTS", ".langerrformelements" );
+		if (isset ( $tmp_required [$key] )) {
+			
+			$ftphp->assign ( "FORM_ELEMS_REQ", $key );
+			$ftphp->assign ( "FORM_ELEMS_REQ_UPPER", strtoupper ( $key ) );
+			$ftphp->parse ( "LANGFORMELEMENTS", ".langerrformelements" );
 		}
-
+		
 		$ftphp->assign ( "FORM_ELEMS", $key );
 		$ftphp->assign ( "FORM_ELEMSUPPER", strtoupper ( $key ) );
 		//$ftphp->assign ( "FORM_ELEMUPPER", strtoupper ( $field ) );
@@ -469,7 +475,7 @@ if ($action == "generate_html") {
 		$ftphp->parse ( "ERRFORMELEMENTS", ".errformelements" );
 		$ftphp->parse ( "ERRMODFORMELEMENTS", ".errmodformelements" );
 		$ftphp->parse ( "UNSETFORMELEMENTS", ".unsetformelements" );
-		
+	
 	}
 	
 	$ftphp->parse ( "BODY", array ("main" ) );
@@ -479,8 +485,15 @@ if ($action == "generate_html") {
 	$outphp = str_replace ( "_#", "}", $outphp );
 	
 	if ($fp = fopen ( GEN_ADMIN_PATH . $NAME . ".php", 'w' )) {
-		fwrite ( $fp, $beautifier->get_beautify_php ( $outphp ) );
+		fwrite ( $fp,  $outphp  );
 		fclose ( $fp );
+		
+		$beautify = new PhpBeautifier ( );
+		$beautify->tokenSpace = true; //put space between tokens
+		$beautify->blockLine = true; //put empty lines between blocks of code (if, while etc)
+		//$beautify->optimize = true; //optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
+		$beautify->file ( GEN_ADMIN_PATH . $NAME . ".php", GEN_ADMIN_PATH . $NAME . ".php" );
+	
 	}
 	
 	$ftphp->parse ( "BODY", array ("main_user" ) );
@@ -495,10 +508,10 @@ if ($action == "generate_html") {
 	}
 	
 	/**
-	* @author   - Pavel
-	* @desc     - XML Generation, SCHEMA fles
-	* @vers     - 1.0
-	**/	
+	 * @author   - Pavel
+	 * @desc     - XML Generation, SCHEMA fles
+	 * @vers     - 1.0
+	 **/
 	$xml_data = array ('name' => $name, 'projectname' => $projectname, 'author' => $author, 'date' => $date, 'classvar' => $classvar, 'modules' => $modules, 'functions' => $functions );
 	
 	foreach ( $fields as &$field ) {
@@ -510,12 +523,12 @@ if ($action == "generate_html") {
 		fwrite ( $fpxml, $xml->saveArray ( $xml_data ) );
 		fclose ( $fpxml );
 	}
-
+	
 	/**
-	* @author   - Kiss Szili
-	* @desc     - LANG_ text generation with DEFINE.
-	* @vers     - 1.0
-	**/		
+	 * @author   - Kiss Szili
+	 * @desc     - LANG_ text generation with DEFINE.
+	 * @vers     - 1.0
+	 **/
 	if ($fptxt = fopen ( GEN_LANGUAGE_PATH . $NAME . ".txt", 'w' )) {
 		$data = $outhtml . $outhtmluser;
 		$outxt = "";
