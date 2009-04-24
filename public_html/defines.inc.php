@@ -61,7 +61,18 @@ define("CONFIG_IMAGE_URL", CONF_INDEX_URL."publ_images/config/");
 if(!defined("UPLOAD_ERR_FORM_SIZE")) {
 	define("UPLOAD_ERR_FORM_SIZE","2");
 }
-
+// FILE UPLOAD
+define("FU_CONF_INDEX_PATH",dirname(__FILE__));
+define("FU_CONF_INDEX_URL",INDEX_URL);
+define("FU_CONF_UPLOADDIR",FU_CONF_INDEX_PATH."/tmp/");
+define("FU_CONF_LANGUAGE","en");
+// IMAGE CROP
+define("IC_CONF_IMAGEDIR",FU_CONF_INDEX_PATH."/public_images/");
+define("IC_CONF_IMAGEDIR_THUMBS",FU_CONF_INDEX_PATH."/public_images/thumbs/");
+define("IC_CONF_IMAGE_WIDTH",500);
+define("IC_CONF_IMAGE_THUMB_HEIGHT",100);
+define("IC_CONF_IMAGE_THUMB_WIDTH",100);
+//
 function __autoload($class_name) {
 	$class_name = 'cls_' . strtolower($class_name) . '.php';
          	
