@@ -89,11 +89,11 @@ $(function() {
 <legend>{PROJECT_NAME_HTML}</legend>
 <div class="mHelp">{PROJECT_NAME_HELP}</div>
 #_ERROR_#
-<form action="{PROJECT_BASE_FILENAME_LOWER}.php?do=save" method="post" name="form_{PROJECT_BASE_FILENAME}" id="form_{PROJECT_BASE_FILENAME}" class="cmxform">
+<form action="{PROJECT_BASE_FILENAME_LOWER}.php?do=save" method="post" name="form_{PROJECT_BASE_FILENAME}" id="form_{PROJECT_BASE_FILENAME}" class="cmxform" enctype="multipart/form-data">
 <!-- BEGIN DYNAMIC BLOCK: formelements -->
 {FORMELEMENT}
 <!-- END DYNAMIC BLOCK: formelements -->
-<div><input type="submit" value="{PROJECT_GO}" class="button" /></div>
+<div><input name="submit" type="submit" value="{PROJECT_GO}" class="button" /></div>
 </form> 
 </fieldset>
 {CONTENTEND}
