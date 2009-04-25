@@ -1,9 +1,9 @@
 <?php
 // +------------------------------------------------------------------------+
-// | cls_file_upload                                                         |
+// | cls_file_upload                                                        |
 // +------------------------------------------------------------------------+
 // | Copyright (c) GraFX Software Solutions 2009. All rights reserved.      |
-// | Version       1.0                                                    |
+// | Version       1.0                                                      |
 // | Last modified 21/03/2009                                               |
 // | Email         webmaster@grafxsoftware.com                              |
 // | Web           http://www.grafxsoftware.co                              |
@@ -44,7 +44,7 @@ class FileUpload {
 	 *
 	 * @access public
 	 * @var string
-	 */	
+	 */
 	var $name;
 	
 	/**
@@ -52,15 +52,15 @@ class FileUpload {
 	 *
 	 * @access public
 	 * @var string
-	 */	
+	 */
 	var $ext;
-
+	
 	/**
 	 * Uploaded file's mimetype - image/jpg
 	 *
 	 * @access public
 	 * @var string
-	 */	
+	 */
 	var $mime;
 	
 	/**
@@ -68,27 +68,83 @@ class FileUpload {
 	 *
 	 * @access public
 	 * @var string
-	 */	
+	 */
 	var $tmpname;
-
+	
 	/**
-	 * Uploaded file's max_allowed - the max number of Kb
+	 * php.ini settings - upload_max_filesize in Kb
 	 *
 	 * @access public
-	 * @var string
-	 */		
+	 * @var integer
+	 */
 	var $max_allowed;
+	
+	/**
+	 * Uploaded file's max_filesize - for size smaller then max_allowed in Kb
+	 *
+	 * @access public
+	 * @var integer
+	 */
 	var $max_filesize;
 	
+	/**
+	 * If file exists and this is true then it is overwritten
+	 *
+	 * @access public
+	 * @var boolean
+	 */
 	var $overwrite;
 	
+	/**
+	 * All the allowed mimetypes for uploading
+	 *
+	 * @access public
+	 * @var array
+	 */
 	var $mime_allowed;
+	
+	/**
+	 * All the forbidden mimetypes for uploading
+	 *
+	 * @access public
+	 * @var array
+	 */
 	var $mime_forbidden;
 	
+	/**
+	 * The path of the saved file
+	 *
+	 * @access public
+	 * @var array
+	 */
 	var $save_path;
+	
+	/**
+	 * The name of the saved file
+	 *
+	 * @access public
+	 * @var array
+	 */
 	var $save_name;
 	
+	/**
+	 * Error message container
+	 *
+	 * @access public
+	 * @var array
+	 */
 	var $error_messages;
+	
+	/**
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public Constructor
+	 * @desc     - file upload util
+	 * @param    - array $file_field - $_FILES["name"] array
+	 * @return   - void
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	
 	function FileUpload($file_field) {
 		
@@ -161,14 +217,22 @@ class FileUpload {
 		$this->size = $file_field ["size"];
 		$this->tmpname = $file_field ["tmp_name"];
 		
-		
 		$this->mime_allowed = array ("image/*", "video/*" );
 		$this->mime_forbidden = array ("text/*" );
 		
 		$this->overwrite = true;
 	
 	}
-	
+	/**
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - is cheking if teh required mimetype is in the allowed ones
+	 * @param    - 
+	 * @return   - boolean the response of the search
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function checkMime() {
 		
 		$all = array ();
@@ -212,6 +276,16 @@ class FileUpload {
 	
 	}
 	
+	/**
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - the actual function for uploading
+	 * @param    - 
+	 * @return   - boolean true if everything was ok and the image was uploaded, false othervise
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function doUpload() {
 		
 		if ($file_field ["size"] > $this->max_filesize * 1024) {
@@ -228,10 +302,9 @@ class FileUpload {
 		
 		} else {
 			
-			if (empty ( $this->save_name )){
+			if (empty ( $this->save_name )) {
 				$this->save_name = $this->name;
-			}
-			else
+			} else
 				$this->save_name = $this->save_name . "." . $this->ext;
 			
 			if (! $this->overwrite && file_exists ( $this->save_path . "/" . $this->save_name )) {
@@ -252,83 +325,170 @@ class FileUpload {
 	
 	}
 	
+	/**
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - error message getter
+	 * @param    - 
+	 * @return   - mixed returns an array of error messages or empty string if there are no errors
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getErrorMessage() {
 		return (sizeof ( $this->error_messages ) > 0 ? implode ( "<br>", $this->error_messages ) : "");
 	}
 	
 	/**
-	 * @return unknown
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - getter for ext
+	 * @param    - 
+	 * @return   - string $this->ext
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getExt() {
 		return $this->ext;
 	}
 	
 	/**
-	 * @return unknown
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - getter for mime_allowed
+	 * @param    - 
+	 * @return   - array $this->mime_allowed
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getMime_allowed() {
 		return $this->mime_allowed;
 	}
 	
 	/**
-	 * @return unknown
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - getter for max_filesize
+	 * @param    - 
+	 * @return   - integer  $this->max_filesize
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getMax_filesize() {
 		return $this->max_filesize;
 	}
 	
 	/**
-	 * @return unknown
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - getter for mime_forbidden
+	 * @param    - 
+	 * @return   - array $this->mime_forbidden
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getMime_forbidden() {
 		return $this->mime_forbidden;
 	}
 	
 	/**
-	 * @return unknown
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - getter for save_name
+	 * @param    - 
+	 * @return   - string $this->save_name
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getSave_name() {
 		return $this->save_name;
 	}
 	
 	/**
-	 * @return unknown
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - getter for save_path
+	 * @param    - 
+	 * @return   - string $this->save_path
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function getSave_path() {
 		return $this->save_path;
 	}
 	
 	/**
-	 * @param unknown_type $mime_allowed
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - setter for $this->mime_allowed
+	 * @param    - array $mime_allowed
+	 * @return   - void
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function setMime_allowed($mime_allowed) {
 		$this->mime_allowed = $mime_allowed;
 	}
 	
 	/**
-	 * @param unknown_type $max_filesize
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - setter for $this->max_filesize
+	 * @param    - integer $max_filesize
+	 * @return   - void
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function setMax_filesize($max_filesize) {
 		$this->max_filesize = $max_filesize;
 	}
 	
 	/**
-	 * @param unknown_type $mime_forbidden
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - setter for $this->mime_forbidden
+	 * @param    - array $mime_forbidden
+	 * @return   - void
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function setMime_forbidden($mime_forbidden) {
 		$this->mime_forbidden = $mime_forbidden;
 	}
 	
 	/**
-	 * @param unknown_type $save_name
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - setter for $this->save_name
+	 * @param    - string $save_name
+	 * @return   - void
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function setSave_name($save_name) {
 		$this->save_name = $save_name;
 	}
 	
 	/**
-	 * @param unknown_type $save_path
-	 */
+	 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+	 * @type     - public
+	 * @desc     - setter for $this->save_path
+	 * @param    - string $save_path
+	 * @return   - void
+	 * @vers     - 1.0
+	 * @Mod by   -
+	 * @Mod vers -
+	 **/
 	function setSave_path($save_path) {
 		$this->save_path = $save_path;
 	}
