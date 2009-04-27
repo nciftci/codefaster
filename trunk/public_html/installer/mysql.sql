@@ -40,6 +40,7 @@ CREATE TABLE `modules` (
   `position` tinyint(2) default '0',
   `filename` varchar(100) NOT NULL,
   `extra_menu` text NOT NULL,
+  `restriction_name` VARCHAR(50) COLLATE utf8_bin NOT NULL, 
   PRIMARY KEY  (`module_id`),
   UNIQUE KEY `module_name` (`module_name`)    
 ) ENGINE=MyISAM; 
