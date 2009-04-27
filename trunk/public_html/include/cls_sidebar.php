@@ -22,6 +22,9 @@ class Sidebar{
 		
 	$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 	$ft->define(array("main"=>"sidebar.html"));
+	$template=$ft->get_template("sidebar.html");
+	
+	$var_array=$ft->getPrefPatternVariables("IS_",$template);
 	
 	// only show if is available
 	$SQL = "SELECT * FROM `".DB_PREFIX.$this->table_name."` WHERE availability=1  ORDER BY `position` ASC";
@@ -35,6 +38,7 @@ class Sidebar{
 		$availability[$i] = $row["availability"];
 		$filename[$i] = $row["filename"];
 		$extra_menu[$i] = $row["extra_menu"];
+		$restriction_name[$i] = $row["restriction_name"];
 		$i++;
 	}while ($row = mysql_fetch_array($retid));
 	$nrmodules = $i;
@@ -43,6 +47,7 @@ class Sidebar{
 		$ft->assign("SIDEBAR_EXIST",0);
 	}else{
 		$ft->assign("SIDEBAR_EXIST",1);
+		$ft->setPattern(array("LANG_","CONF_"));
 		$ft->define_dynamic ( "sideex", "main" );	
 		
 		for($i=0;$i<$nrmodules;$i++)
@@ -50,19 +55,36 @@ class Sidebar{
 			$ft->assign("MODULE_NAME",constant($module_name[$i]));
 			$ft->assign("FILENAME",$filename[$i]);
 			$ft->assign("ADMIN_URL",ADMIN_URL);
-			$ft->assign("LANG_ADMIN_ADD",LANG_ADMIN_ADD);
-			$ft->assign("LANG_ADMIN_LIST",LANG_ADMIN_LIST);
 			
+			
+			
+			//restriction
+			if(!empty($restriction_name[$i] )){
+			
+			$tmp=array($restriction_name[$i]);
+			
+			foreach($var_array as $value)
+			  $ft->assign("$value",(in_array($value,$tmp)?0:1));
+				}
+			else
+			foreach($var_array as $value)
+			   $ft->assign("$value",1);
+
 			// could be extra details what admin want to show. This is in extra_menu field.
 			if(!empty($extra_menu[$i]))
 			{
+				$var_lang_array=$ft->getPrefPatternVariables("LANG_",$extra_menu[$i]);
+	
+				foreach($var_lang_array as $language)
+				         $extra_menu[$i]=str_replace("{".$language."}",constant($language),$extra_menu[$i]);
+				
 				$ft->assign("ISEXTRA_MENU",1);
-				$ft->assign("EXTRA_MENU",$extra_menu[$i] );
+				$ft->assign("EXTRA_MENU",$extra_menu[$i]);
 			}
 			else 
 			$ft->assign("ISEXTRA_MENU",0);
-			
 			$ft->parse ( "SIDEEX", ".sideex" );
+	
 		}
 	}
 	$ft->multiple_assign_define ( "LANG_" );
