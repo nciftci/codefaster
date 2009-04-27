@@ -1,7 +1,7 @@
 <?php
 /**
- *Version. 1.6.2
-    $Id: cls_fast_template.php 11594 2009-03-19 15:59:18Z lvalics $
+ *Version. 1.6.3
+    $Id: cls_fast_template.php 12147 2009-04-27 13:57:19Z zelteto $
  *
  * Original Perl module CGI::FastTemplate by Jason Moore jmoore@sober.com
  * PHP3 port by CDI cdi@thewebmasters.net
@@ -82,142 +82,142 @@ FUNCTION rewrite_link_href_callback($matches) {
 }
 
 if (! class_exists ( 'FastTemplate' )) {
-
+	
 	class FastTemplate {
 		/**
 		 * @access private
 		 * @Desc - holds time of start generation
 		 */
 		var $start;
-
+		
 		/**
 		 * @access private
 		 * @Desc - Holds the last error message
 		 */
 		var $ERROR = "";
-
+		
 		/**
 		 * @access private
 		 * @Desc - Holds the HANDLE to the last template parsed by parse()
 		 */
 		var $LAST = "";
-
+		
 		/**
 		 * @access private
 		 * @Desc - Holds path-to-templates
 		 */
 		var $ROOT = "";
-
+		
 		/**
 		 * @access private
 		 * @Desc - if the php code is executed inside html templates
 		 */
 		var $PHP_IN_HTML = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc - Set to TRUE if this is a WIN32 server
 		 */
 		var $WIN32 = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc - Strict template checking. Unresolved vars in templates
 		 *         will generate a warning when found. used for debug.
 		 */
 		var $STRICT_DEBUG = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc - Strict template checking. Unresolved vars in templates will generate
 		 *         a warning when found.
 		 */
 		var $STRICT = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc -  Enable caching mode. Default: FALSE
 		 */
 		var $USE_CACHE = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc -  Enable caching mode. Default: FALSE
 		 */
 		var $DELETE_CACHE = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc - Do comments deletion on template loading. Default: FALSE
 		 */
 		var $STRIP_COMMENTS = FALSE;
-
+		
 		/**
 		 * @access private
 		 * @Desc - Holds the array of filehandles FILELIST[HANDLE] == "fileName"
 		 */
-		var $FILELIST = array ( );
-
+		var $FILELIST = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - Holds the array of dynamic blocks, and the fileHandles they live in.
 		 */
-		var $DYNAMIC = array ( );
-
+		var $DYNAMIC = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - Holds the array of Variable handles. PARSEVARS[HANDLE] == "value"
 		 */
-		var $PARSEVARS = array ( );
-
+		var $PARSEVARS = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - We only want to load a template once - when it's used.
 		 *         LOADED[FILEHANDLE] == 1 if loaded undefined if not loaded yet.
 		 */
-		var $LOADED = array ( );
+		var $LOADED = array ();
 		/**
 		 * @access private
 		 * @Desc - Holds the handle names assigned
 		 */
-		var $HANDLE = array ( );
-
+		var $HANDLE = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - Holds the warnings by a call to parse()
 		 */
-		var $WARNINGS = array ( );
-
+		var $WARNINGS = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - Time in seconds to expire cache files
 		 */
 		var $UPDT_TIME = '60';
-
+		
 		/**
 		 * @access private
 		 * @Desc -  Dir for save cached files default /cache/
 		 */
 		var $CACHE_PATH = './cache/';
-
+		
 		/**
 		 * @access private
 		 * @Desc - filename for caching
 		 */
 		var $CACHING = "";
-
+		
 		/**
 		 * @access private
 		 * @Desc -  Start of template comments
 		 */
 		var $COMMENTS_START = "{*";
-
+		
 		/**
 		 * @access private
 		 * @Desc -  End of template comments
 		 */
 		var $COMMENTS_END = "*}";
-
+		
 		/**
 		 * @access public
 		 * @Desc - Rewrite js, css, and img src from template to a custom path
@@ -228,35 +228,37 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Desc - enables the srsc path rewrites
 		 *         
 		 */
-		var $ENABLE_REWRITE_SRC_PATH = false; 		
-
+		var $ENABLE_REWRITE_SRC_PATH = false;
+		
 		/**
 		 * @access private
 		 * @Desc - Patterns are the ones which are used by the multiple assigned
 		 *         functions (this is for variable oriented language, config etc files)
 		 */
-		var $PATTERN_VARS_VARIABLE = array ( );
-
+		var $PATTERN_VARS_VARIABLE = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - Patterns are the ones which are used by the multiple assigned
 		 *         functions (this is for define oriented language files)
 		 */
-		var $PATTERN_VARS_DEFINE = array ( );
-
+		var $PATTERN_VARS_DEFINE = array ();
+		
 		/**
 		 * @access private
 		 * @Desc - if utf file includes are done IE is not using base href as he should.
 		 *         Set true if IE7 is not working
 		 */
 		var $IE_UTF_INCLUDE = true; //
+		
 
 		/**
 		 * @access public
 		 * @Desc - For visual editors, to be easy to work.
 		 */
-		var $REWRITE_TEMPLATE_PATH = array ("../",CONF_INDEX_URL);
+		var $REWRITE_TEMPLATE_PATH = array ("../", "" );
 		//var $REWRITE_TEMPLATE_PATH = "";
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -270,15 +272,15 @@ if (! class_exists ( 'FastTemplate' )) {
 		 **/
 		FUNCTION FastTemplate($pathToTemplates = "") {
 			GLOBAL $php_errormsg; //if the track_errors configuration option is turned on (it defaults to off).
-
+			
 
 			if (! empty ( $pathToTemplates )) {
 				$this->set_root ( $pathToTemplates );
 			}
-
+			
 			$this->start = $this->utime (); //NEW by AiK
 		} // end (new) FastTemplate ()
-
+		
 
 		/**
 		 * @author   - Voituk Vadim
@@ -297,7 +299,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			$this->clear_href ( $HREF );
 			RETURN $result;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - private
@@ -312,30 +314,30 @@ if (! class_exists ( 'FastTemplate' )) {
 		 **/
 		FUNCTION set_root($root) {
 			$trailer = substr ( $root, - 1 );
-
+			
 			if (! $this->WIN32) {
-
+				
 				if ((ord ( $trailer )) != 47) {
 					$root = "$root" . chr ( 47 );
 				}
-
+				
 				if (is_dir ( $root )) {
 					$this->ROOT = $root;
 				} else {
 					$this->ROOT = "";
 					$this->error ( "Specified ROOT dir [$root] is not a directory" );
 				}
-
+			
 			} else {
 				if ((ord ( $trailer )) != 92) { # WIN32 box - no testing
 					$root = "$root" . chr ( 92 );
 				}
-
+				
 				$this->ROOT = $root;
-
+			
 			}
 		} // End set_root()
-
+		
 
 		/**
 		 * @author   - Voituk Vadim
@@ -350,7 +352,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		FUNCTION get_root() {
 			RETURN $this->ROOT;
 		} // End get_root()
-
+		
 
 		/**
 		 * @author   - Artyem V. Shkondin aka AiK artvs@clubpro.spb.ru
@@ -362,14 +364,14 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION utime() {
 			$time = explode ( " ", microtime () );
 			$usec = ( double ) $time [0];
 			$sec = ( double ) $time [1];
 			RETURN $sec + $usec;
 		} // End utime ()
-
+		
 
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
@@ -387,11 +389,11 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION strict() {
 			$this->STRICT = TRUE;
 		}
-
+		
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
 		 * @type     - public
@@ -409,11 +411,11 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION no_strict() {
 			$this->STRICT = FALSE;
 		}
-
+		
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
 		 * @type     - public
@@ -424,11 +426,11 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION php_in_html($value) {
 			$this->PHP_IN_HTML = $value;
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis
 		 * @type     - public
@@ -442,28 +444,27 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION rewrite_src_path( $contents )
-			{
+		FUNCTION rewrite_src_path($contents) {
 			#Rewrite src path regex using Heredoc
-			$regexPattern[] = "/src\s*=(.*?)[\\\"']?([^\\\"' >]+)[\\\"'> ]/is";
+			$regexPattern [] = "/src\s*=(.*?)[\\\"']?([^\\\"' >]+)[\\\"'> ]/is";
 			//$regexPattern[] = "/<\s*link\s+[^>]*href\s*=\s*[\\\"']?([^\\\"' >]+)[\\\"' >]/is"; //BUG in 1.5.1
-			$regexPattern[] = "/<\s*link\s+[^>]*href\s*=\s*[\\\"']?[^\\\"' >]+[\\\"' >]/is";
+			$regexPattern [] = "/<\s*link\s+[^>]*href\s*=\s*[\\\"']?[^\\\"' >]+[\\\"' >]/is";
 			
-			IF ( sizeof( $this->REWRITE_SRC_PATH ) > 0 ) {
-				IF( strpos($contents, "'") ){
-				$contents=preg_replace($regexPattern[0], 'src=\''.$this->REWRITE_SRC_PATH.'\\2\'', $contents);
-				} ELSE {
-				$contents=preg_replace($regexPattern[0], 'src="'.$this->REWRITE_SRC_PATH.'\\2"', $contents);
+			IF (sizeof ( $this->REWRITE_SRC_PATH ) > 0) {
+				IF (strpos ( $contents, "'" )) {
+					$contents = preg_replace ( $regexPattern [0], 'src=\'' . $this->REWRITE_SRC_PATH . '\\2\'', $contents );
+				} else {
+					$contents = preg_replace ( $regexPattern [0], 'src="' . $this->REWRITE_SRC_PATH . '\\2"', $contents );
 				}
-			// preg_reclace_callback RETURN his result to a FUNCTION outside class body
-			$GLOBALS['REWRITE_SRC_PATH'] = $this->REWRITE_SRC_PATH;
-			$contents=preg_replace_callback($regexPattern[1], 'rewrite_link_href_callback', $contents);
-			unset($GLOBALS['REWRITE_SRC_PATH']);
+				// preg_reclace_callback RETURN his result to a FUNCTION outside class body
+				$GLOBALS ['REWRITE_SRC_PATH'] = $this->REWRITE_SRC_PATH;
+				$contents = preg_replace_callback ( $regexPattern [1], 'rewrite_link_href_callback', $contents );
+				unset ( $GLOBALS ['REWRITE_SRC_PATH'] );
 			}
-		
+			
 			RETURN $contents;
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis
 		 * @type     - public
@@ -477,7 +478,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		FUNCTION set_output_rewrite_src_path($path) {
 			$this->REWRITE_SRC_PATH = $path;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -488,22 +489,24 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION get_template($template) {
 			GLOBAL $php_errormsg; # if the track_errors configuration option is turned on (it defaults to off).
+			
 
 			if (empty ( $this->ROOT )) {
 				$this->error ( "Cannot open template. Root not valid.", 1 );
 				RETURN FALSE;
 			}
-
+			
 			if (empty ( $template )) {
 				$this->error ( "Cannot open template because the template name is empty.", 1 );
 				RETURN FALSE;
-			};
+			}
+			;
 			
 			$filename = "$this->ROOT" . "$template";
-
+			
 			if ($this->PHP_IN_HTML) {
 				ob_start (); #execute any php code from the template
 				include ($filename);
@@ -512,30 +515,29 @@ if (! class_exists ( 'FastTemplate' )) {
 			} else {
 				$contents = ((function_exists ( 'file_get_contents' ))) ? file_get_contents ( $filename ) : implode ( "\n", file ( $filename ) );
 			}
-
-			if($this->ENABLE_REWRITE_SRC_PATH)
-			$contents = $this->rewrite_src_path ( $contents );
-
-
+			
+			if ($this->ENABLE_REWRITE_SRC_PATH)
+				$contents = $this->rewrite_src_path ( $contents );
+			
 			if ((! $contents) or (empty ( $contents ))) {
 				$this->error ( "get_template() failure: [$filename] $php_errormsg", 1 );
 				RETURN FALSE;
 			} else { # Strip template comments */
-
+				
 
 				if ($this->STRIP_COMMENTS) {
 					$pattern = "/" . preg_quote ( $this->COMMENTS_START ) . "\s.*" . preg_quote ( $this->COMMENTS_END ) . "/sU";
 					$contents = preg_replace ( $pattern, '', $contents );
 				}
-
+				
 				$block = array ("/<!--\s(BEGIN|END)\sDYNAMIC\sBLOCK:\s([a-zA-Z\_0-9]*)\s-->/" );
 				$corrected = array ("\r\n <!-- \\1 DYNAMIC BLOCK: \\2 --> \r\n" );
 				$contents = preg_replace ( $block, $corrected, $contents );
-
+				
 				RETURN trim ( $contents );
 			}
 		} // end get_template
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -547,24 +549,24 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION show_unknowns($Line) {
-			$unknown = array ( );
+			$unknown = array ();
 			if (ereg ( "({[A-Z0-9_]+})", $Line, $unknown )) {
 				$UnkVar = $unknown [1];
 				if (! (empty ( $UnkVar ))) {
-
+					
 					if ($this->STRICT_DEBUG) {
 						$this->WARNINGS [] = "[FastTemplate] Warning: no value found for variable: $UnkVar \n";
 					}
-
+					
 					if ($this->STRICT) {
 						@error_log ( "[FastTemplate] Warning: no value found for variable: $UnkVar ", 0 );
 					}
 				}
 			}
 		} // end show_unknowns()
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -576,19 +578,19 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION parseParamString($string) {
-			$matches=array();
+			$matches = array ();
 			if (preg_match_all ( '/\{([a-z0-9_]+)\}/i', $string, $matches )) {
-
+				
 				FOR($i = 0; $i < count ( $matches [0] ); $i ++) {
 					$string = str_replace ( $matches [0] [$i], $this->PARSEVARS [$matches [1] [$i]], $string );
 				}
-
+			
 			}
 			RETURN $string;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - private
@@ -608,28 +610,28 @@ if (! class_exists ( 'FastTemplate' )) {
 			}
 			# echo "$value, $field, $params <BR>";
 			if (is_object ( $var )) {
-
+				
 				if (method_exists ( $var, $field )) {
 					eval ( '$return = $var->' . $field . '(' . $this->parseParamString ( $params ) . ');' );
 					RETURN ((! empty ( $return )) || ($return === TRUE));
-
-				}
+				
+				} 
 
 				ELSEif ((strcasecmp ( $field, 'id' ) != 0) && method_exists ( $var, 'get' )) {
 					$result = $var->get ( $field );
 					RETURN (! empty ( $result ) || $result === TRUE);
-				}
+				} 
 
 				ELSEif ((strcasecmp ( $field, 'id' ) == 0) && method_exists ( $var, 'getId' )) {
 					$result = $var->getId ();
 					RETURN (! empty ( $result ) || $result === TRUE);
 				}
-
+			
 			} else {
 				RETURN (! empty ( $var ) || $var === TRUE);
 			}
 		}
-
+		
 		/**
 		 * @author   - Alex Tonkov
 		 * @type     - private
@@ -640,7 +642,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION parse_defined($template) {
 			$lines = split ( "\n", $template );
 			$newTemplate = "";
@@ -648,18 +650,19 @@ if (! class_exists ( 'FastTemplate' )) {
 			$depth = 0;
 			$needparsedef [$depth] ["defs"] = FALSE;
 			$needparsedef [$depth] ["parse"] = TRUE;
-
+			
 			WHILE ( list ( $num, $line ) = each ( $lines ) ) {
 				//Added "necessary" lines to new string
 				if (((! $needparsedef [$depth] ["defs"]) || ($needparsedef [$depth] ["parse"])) && (strpos ( $line, "IFDEF:" ) === FALSE) && (strpos ( $line, "IFNDEF:" ) === FALSE) && (strpos ( $line, "ELSE" ) === FALSE) && (strpos ( $line, "ENDIF" ) === FALSE))
 					$newTemplate .= trim ( $line ) . "\n";
-
+					
 				//by Alex Tonkov: Parse the start of define block and check the condition
 				if (preg_match ( "/<!--\s*IFDEF:\s*([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)?([a-zA-Z_][a-zA-Z0-9_]+)?\(?(\s*\,?\".*\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\s*-->/i", $line, $regs )) {
 					$depth ++;
 					$needparsedef [$depth] ["defs"] = TRUE;
 					if ($this->value_defined ( $regs [1], $regs [3], $regs [4] ))
-						$needparsedef [$depth] ["parse"] = $needparsedef [$depth - 1] ["parse"]; else
+						$needparsedef [$depth] ["parse"] = $needparsedef [$depth - 1] ["parse"];
+					else
 						$needparsedef [$depth] ["parse"] = FALSE;
 				}
 				//by Alex Tonkov: IFNDEF block
@@ -667,7 +670,8 @@ if (! class_exists ( 'FastTemplate' )) {
 					$depth ++;
 					$needparsedef [$depth] ["defs"] = TRUE;
 					if (! $this->value_defined ( $regs [1], $regs [3], $regs [4] ))
-						$needparsedef [$depth] ["parse"] = $needparsedef [$depth - 1] ["parse"]; else
+						$needparsedef [$depth] ["parse"] = $needparsedef [$depth - 1] ["parse"];
+					else
 						$needparsedef [$depth] ["parse"] = FALSE;
 				}
 				//by Alex Tonkov: ELSE block
@@ -683,11 +687,11 @@ if (! class_exists ( 'FastTemplate' )) {
 			}
 			if ($depth)
 				$this->error ( 'Some nonclosed IDEFS blocks', 0 );
-
+			
 			RETURN $newTemplate;
-
+		
 		}
-
+		
 		/**
 		 * @author   - CDI cdi@thewebmasters.net
 		 * @type     - private
@@ -700,8 +704,8 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers - 1.1.1
 		 */
 		FUNCTION parse_template($template, $ft_array) {
-			$matches=array();
-            /* Parsing and replacing object statements {Object.field} */
+			$matches = array ();
+			/* Parsing and replacing object statements {Object.field} */
 			if (preg_match_all ( '/\{([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)([a-zA-Z_][a-zA-Z0-9_]+)\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\}/i', $template, $matches )) {
 				FOR($i = 0; $i < count ( $matches [0] ); ++ $i) {
 					$obj = $ft_array [$matches [1] [$i]];
@@ -709,8 +713,10 @@ if (! class_exists ( 'FastTemplate' )) {
 						eval ( '$return = $obj->' . $matches [3] [$i] . '(' . $this->parseParamString ( $matches [4] [$i] ) . ');' );
 						$template = str_replace ( $matches [0] [$i], $return, $template );
 					} else if (is_object ( $obj ) && ($matches [3] [$i] == 'id') && method_exists ( $obj, 'getId' ))
-						$template = str_replace ( $matches [0] [$i], $obj->getId (), $template ); else if (is_object ( $obj ) && method_exists ( $obj, 'get' ))
-						$template = str_replace ( $matches [0] [$i], $obj->get ( $matches [3] [$i] ), $template ); else if (! is_object ( $obj ))
+						$template = str_replace ( $matches [0] [$i], $obj->getId (), $template );
+					else if (is_object ( $obj ) && method_exists ( $obj, 'get' ))
+						$template = str_replace ( $matches [0] [$i], $obj->get ( $matches [3] [$i] ), $template );
+					else if (! is_object ( $obj ))
 						$template = str_replace ( $matches [0] [$i], '', $template );
 				} //for
 			} //echo $template;
@@ -718,46 +724,46 @@ if (! class_exists ( 'FastTemplate' )) {
 			if (preg_match_all ( '/<\!\-\-\s*#include\s+file="([\{\}a-zA-Z0-9_\.\-\/]+)"\s*\\-\->/i', $template, $matches )) {
 				FOR($i = 0; $i < count ( $matches [0] ); $i ++) {
 					$file_path = $matches [1] [$i];
-
+					
 					FOREACH ( $ft_array as $key => $value ) {
 						if (! empty ( $key )) {
 							$key = '{' . "$key" . '}';
 							$file_path = str_replace ( "$key", "$value", "$file_path" );
 						}
 					} //foreach
-
+					
 
 					$content = '';
-
+					
 					if (! isset ( $ft_array [$file_path] )) {
-
+						
 						if (! file_exists ( $file_path ))
 							$file_path = $this->ROOT . $file_path;
-
+						
 						if (! file_exists ( $file_path ))
 							$file_path = $this->ROOT . basename ( $file_path );
-
+						
 						if (file_exists ( $file_path )) {
 							$content = ((function_exists ( 'file_get_contents' ))) ? file_get_contents ( $file_path ) : implode ( "\n", file ( $file_path ) );
 						} else
 							$content = '';
 					} else
 						$content = $ft_array [$file_path];
-
+					
 					$template = str_replace ( $matches [0] [$i], $content, $template );
-
+				
 				} //for
 			} //preg_match_all
-
+			
 
 			reset ( $ft_array );
-
+			
 			WHILE ( list ( $key, $val ) = each ( $ft_array ) ) {
 				if (! (empty ( $key ))) {
 					if (gettype ( $val ) != "string") {
 						settype ( $val, "string" );
 					}
-
+					
 					$key = '{' . "$key" . '}'; //php4 doesn't like '{$' combinations.
 					$template = str_replace ( "$key", "$val", "$template" ); //Correct using str_replace insted ereg_replace
 				}
@@ -771,7 +777,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				$template = preg_replace ( "/(<!--\s*IFNDEF:\s*([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)?([a-zA-Z_][a-zA-Z0-9_]+)?\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\s*-->)/i", "\n$0\n", $template );
 				$template = preg_replace ( "/(<!--\s*ELSE\s*-->)/i", "\n\\0\n", $template );
 				$template = preg_replace ( "/(<!--\s*ENDIF\s*-->)/i", "\n\\0\n", $template );
-
+				
 				//Correct using str_replace insted ereg_replace
 				// Removed because it deletes newline in textareas.
 				// TX to Martin Fasani
@@ -784,25 +790,25 @@ if (! class_exists ( 'FastTemplate' )) {
 				$needparsedef = FALSE;
 				// end by Voituk Vadim
 				$template = "";
-
+				
 				WHILE ( list ( $num, $line ) = each ( $lines ) ) {
-
+					
 					if (substr_count ( $line, "<!-- BEGIN DYNAMIC BLOCK:" ) > 0) {
 						$inside_block = TRUE;
 					}
-
+					
 					if (! $inside_block) {
 						$template .= "$line\n";
 					}
-
+					
 					if (substr_count ( $line, "<!-- END DYNAMIC BLOCK:" ) > 0) {
 						$inside_block = FALSE;
 					}
-
+				
 				}
-
+				
 				$template = $this->parse_defined ( $template );
-
+			
 			} else {
 				// Warn about unresolved template variables
 				if (ereg ( "({[A-Z0-9_]+})", $template )) {
@@ -815,11 +821,11 @@ if (! class_exists ( 'FastTemplate' )) {
 					}
 				}
 			}
-
+			
 			RETURN $template;
-
+		
 		} // end parse_template();
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -873,14 +879,14 @@ if (! class_exists ( 'FastTemplate' )) {
 			FOREACH ( $this->PATTERN_VARS_VARIABLE as $value )
 				$this->multiple_assign ( "$value" );
 				// end multiple parse section
-
+			
 
 			$append = FALSE;
-
+			
 			$this->LAST = $ReturnVar;
 			$this->HANDLE [$ReturnVar] = 1;
 			//echo "startparse $ReturnVar";
-
+			
 
 			if (gettype ( $FileTags ) == "array") {
 				unset ( $this->$ReturnVar ); // Clear any previous data
@@ -903,13 +909,13 @@ if (! class_exists ( 'FastTemplate' )) {
 			} else {
 				// FileTags is not an array
 				$val = $FileTags;
-
+				
 				if ((substr ( $val, 0, 1 )) == '.') {
 					// Append this template to a previous ReturnVar
 					$append = TRUE;
 					$val = substr ( $val, 1 );
 				}
-
+				
 				if ((! isset ( $this->$val )) || (empty ( $this->$val ))) {
 					$this->LOADED ["$val"] = 1;
 					if (isset ( $this->DYNAMIC ["$val"] )) {
@@ -919,7 +925,7 @@ if (! class_exists ( 'FastTemplate' )) {
 						$this->$val = $this->get_template ( $fileName );
 					}
 				}
-
+				
 				if ($append) {
 					// changed by AiK
 					if (isset ( $this->$ReturnVar )) {
@@ -933,10 +939,10 @@ if (! class_exists ( 'FastTemplate' )) {
 				//  For recursive calls.
 				$this->assign ( array ($ReturnVar => $this->$ReturnVar ) );
 			}
-
+			
 			RETURN;
 		} //  End parse()
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -952,32 +958,32 @@ if (! class_exists ( 'FastTemplate' )) {
 			if (empty ( $template )) {
 				$template = $this->LAST;
 			}
-
+			
 			if ((! (isset ( $this->$template ))) || (empty ( $this->$template ))) {
 				$this->error ( "Nothing parsed, nothing printed", 0 );
 				RETURN;
 			} else {
-
+				
 				if (! get_magic_quotes_gpc ())
 					$this->$template = stripslashes ( $this->$template );
-
+				
 				if ($this->IE_UTF_INCLUDE) {
 					$user_agent = $_SERVER ['HTTP_USER_AGENT'];
 					// IE7.0
 					if (eregi ( "msie", $user_agent ) && eregi ( "[7]\.[0]", $user_agent ) && eregi ( "Windows", $user_agent ))
 						$this->$template = strstr ( $this->$template, '<' );
 				}
-
+				
 				if ($this->USE_CACHE) {
 					$this->cache_file ( $this->$template );
 				} else {
 					RETURN $this->$template;
 				}
-
+				
 				RETURN;
 			}
 		} // end getfast()
-
+		
 
 		/**
 		 * @author   - Wilfried Trinkl - wisl@gmx.at
@@ -1012,7 +1018,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			;
 			RETURN;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - private
@@ -1037,12 +1043,12 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   - GraFXltd, for introduce visual template possibilities in editors like Dreamweaver, etc.
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION FastPrint($template = "", $return = "") {
-			if(is_array($this->REWRITE_TEMPLATE_PATH))
-			$tmp=str_replace($this->REWRITE_TEMPLATE_PATH[0],$this->REWRITE_TEMPLATE_PATH[1],$this->getfast ( $template ));
+			if (is_array ( $this->REWRITE_TEMPLATE_PATH ))
+				$tmp = str_replace ( $this->REWRITE_TEMPLATE_PATH [0], $this->REWRITE_TEMPLATE_PATH [1], $this->getfast ( $template ) );
 			else
-			$tmp=$this->getfast ( $template );
+				$tmp = $this->getfast ( $template );
 			
 			if (! $return) {
 				echo $tmp;
@@ -1050,7 +1056,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			} else
 				RETURN $tmp;
 		} // end FastPrint()
-
+		
 
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
@@ -1062,7 +1068,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION USE_CACHE($fname = "") {
 			$this->USE_CACHE = TRUE;
 			if ($fname) {
@@ -1070,7 +1076,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			}
 			$this->verify_cached_files ( $fname );
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
@@ -1084,7 +1090,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		FUNCTION setCacheTime($time) {
 			$this->UPDT_TIME = $time;
 		}
-
+		
 		/**
 		 * @author   - GraFX Software Solutions
 		 * @type     - public
@@ -1101,7 +1107,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 *             #}
 		 * @Mod vers - 1.1.6 WHILE ( ($fname = readdir ( $dirlisting ))!=true ) { //boolean value was expected here
 		 **/
-
+		
 		FUNCTION DELETE_CACHE() {
 			$this->DELETE_CACHE = TRUE;
 			$expired = time () - $this->UPDT_TIME;
@@ -1113,11 +1119,11 @@ if (! class_exists ( 'FastTemplate' )) {
 					@unlink ( $dir . $fname );
 				}
 			}
-
+			
 			closedir ( $dirlisting );
-
+		
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
@@ -1131,7 +1137,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 *             supply the trailing slash. old code follows:
 		 *             include $this->self_script();
 		 **/
-
+		
 		FUNCTION verify_cached_files() {
 			if (($this->USE_CACHE) && ($this->cache_file_is_updated ())) {
 				if (! $this->CACHING) {
@@ -1139,11 +1145,11 @@ if (! class_exists ( 'FastTemplate' )) {
 				} else {
 					include $this->CACHING . ".ft";
 				}
-
+				
 				exit ( 0 );
 			}
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com and P. Pavlovic: ppavlovic@mail.ru
 		 * @type     - public
@@ -1157,7 +1163,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 *             supply the trailing slash. old code follows:
 		 *             RETURN $this->CACHE_PATH.'/'.$fname;
 		 **/
-
+		
 		FUNCTION self_script($relativePath = "") {
 			$fname = $_SERVER ['REQUEST_URI'];
 			//$fname = getenv('SCRIPT_NAME');
@@ -1165,19 +1171,19 @@ if (! class_exists ( 'FastTemplate' )) {
 				FOREACH ( $_SERVER ['argv'] as $val ) {
 					$q [] = $val;
 				}
-
+				
 				$fname .= join ( "_and_", $q );
 			}
-
+			
 			$fname = md5 ( $fname );
-
+			
 			if ($relativePath) {
 				RETURN $this->CACHE_PATH . $fname; // Used by include to reclain cache
 			} else {
 				RETURN $this->cache_path ( $fname ); // Used to write and check/revalidate cache lifetime
 			}
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
@@ -1198,7 +1204,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		FUNCTION cache_path($fname) {
 			RETURN $this->CACHE_PATH . basename ( $fname );
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
@@ -1212,7 +1218,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		FUNCTION self_script_in_cache_path() {
 			RETURN $this->cache_path ( basename ( $this->self_script () ) );
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
@@ -1229,25 +1235,25 @@ if (! class_exists ( 'FastTemplate' )) {
 			} else {
 				$fname = $this->CACHING;
 			}
-
+			
 			if (! file_exists ( $fname . ".ft" )) {
 				RETURN FALSE;
 			}
-
+			
 			//			Verification of cache expiration
 			//		    filemtime() -> RETURN unix time of last modification in file
 			//		    time() -> RETURN unix time
-
+			
 
 			$expire_time = time () - filemtime ( $fname . ".ft" );
-
+			
 			if ($expire_time >= $this->UPDT_TIME) {
 				RETURN FALSE;
 			} else {
 				RETURN TRUE;
 			}
 		}
-
+		
 		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
@@ -1258,7 +1264,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   - GraFX Software Solutions
 		 * @Mod vers - 1.1.1
 		 **/
-
+		
 		FUNCTION cache_file($content = "") {
 			if (($this->USE_CACHE) && (! $this->cache_file_is_updated ())) {
 				if (! $this->CACHING) {
@@ -1266,7 +1272,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				} else {
 					$fname = $this->CACHING;
 				}
-
+				
 				$fname = $fname . ".ft";
 				// Opening $fname in writing only mode
 				if (! $fp = fopen ( $fname, 'w' )) {
@@ -1282,12 +1288,12 @@ if (! class_exists ( 'FastTemplate' )) {
 					include $fname;
 					RETURN;
 				}
-
+				
 				fclose ( $fp );
-
+			
 			}
 		} // end cache_file()
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -1305,21 +1311,21 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION fetch($template = "") {
 			if (empty ( $template )) {
 				$template = $this->LAST;
 			}
-
+			
 			if ((! (isset ( $this->$template ))) || (empty ( $this->$template ))) {
 				$this->error ( "Nothing parsed, nothing printed", 0 );
 				RETURN "";
 			}
-
+			
 			RETURN ($this->$template);
-
+		
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1369,12 +1375,12 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION define_dynamic($Macro, $ParentName) {
 			$this->DYNAMIC ["$Macro"] = $ParentName;
 			RETURN TRUE;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1395,7 +1401,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				$this->$ParentTag = $this->get_template ( $fileName );
 				$this->LOADED [$ParentTag] = 1;
 			}
-
+			
 			if ($this->$ParentTag) {
 				$template = $this->$ParentTag;
 				$DataArray = split ( "\n", $template );
@@ -1404,61 +1410,61 @@ if (! class_exists ( 'FastTemplate' )) {
 				$outside = TRUE;
 				$start = FALSE;
 				$end = FALSE;
-
+				
 				WHILE ( list ( $lineNum, $lineData ) = each ( $DataArray ) ) {
-
+					
 					$lineTest = trim ( $lineData );
-
+					
 					if ("<!-- BEGIN DYNAMIC BLOCK: $Macro -->" == "$lineTest") {
 						$start = TRUE;
 						$end = FALSE;
 						$outside = FALSE;
 					}
-
+					
 					if ("<!-- END DYNAMIC BLOCK: $Macro -->" == "$lineTest") {
 						$start = FALSE;
 						$end = TRUE;
 						$outside = TRUE;
 					}
-
+					
 					if ((! $outside) and (! $start) and (! $end)) {
 						$newMacro .= "$lineData\n";
 					} // Restore linebreaks
-
+					
 
 					if (($outside) and (! $start) and (! $end)) {
 						$newParent .= "$lineData\n";
 					} // end Restore linebreaks
-
+					
 
 					if ($end) {
 						$newParent .= '{' . "$MacroName}\n";
 					}
-
+					
 					if ($end) {
 						$end = FALSE;
 					} // Next line please
-
+					
 
 					if ($start) {
 						$start = FALSE;
 					}
 				} // end While
-
+				
 
 				$this->$Macro = $newMacro;
 				$this->$ParentTag = $newParent;
-
+				
 				RETURN TRUE;
-
+			
 			} else { // $ParentTag NOT loaded - MAJOR oopsie
 				@error_log ( "ParentTag: [$ParentTag] not loaded!", 0 );
 				$this->error ( "ParentTag: [$ParentTag] not loaded!", 0 );
 			}
-
+			
 			RETURN FALSE;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1481,16 +1487,16 @@ if (! class_exists ( 'FastTemplate' )) {
 			if (empty ( $Macro )) {
 				RETURN FALSE;
 			}
-
+			
 			$ParentTag = $this->DYNAMIC ["$Macro"]; // The file must already be in memory.
-
+			
 
 			if ((! $this->$ParentTag) or (empty ( $this->$ParentTag ))) {
 				$fileName = $this->FILELIST [$ParentTag];
 				$this->$ParentTag = $this->get_template ( $fileName );
 				$this->LOADED [$ParentTag] = 1;
 			}
-
+			
 			if ($this->$ParentTag) {
 				$template = $this->$ParentTag;
 				$DataArray = split ( "\n", $template );
@@ -1498,7 +1504,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				$outside = TRUE;
 				$start = FALSE;
 				$end = FALSE;
-
+				
 				WHILE ( list ( $lineNum, $lineData ) = each ( $DataArray ) ) {
 					$lineTest = trim ( $lineData );
 					if ("<!-- BEGIN DYNAMIC BLOCK: $Macro -->" == "$lineTest") {
@@ -1506,42 +1512,42 @@ if (! class_exists ( 'FastTemplate' )) {
 						$end = FALSE;
 						$outside = FALSE;
 					}
-
+					
 					if ("<!-- END DYNAMIC BLOCK: $Macro -->" == "$lineTest") {
 						$start = FALSE;
 						$end = TRUE;
 						$outside = TRUE;
 					}
-
+					
 					if (($outside) and (! $start) and (! $end)) {
 						$newParent .= "$lineData\n";
 					} // Restore linebreaks
-
+					
 
 					if ($end) {
 						$end = FALSE;
 					} // Next line please
-
+					
 
 					if ($start) {
 						$start = FALSE;
 					}
 				} // end While
-
+				
 
 				$this->$ParentTag = $newParent;
-
+				
 				RETURN TRUE;
-
+			
 			} else { // $ParentTag NOT loaded - MAJOR oopsie
 				@error_log ( "ParentTag: [$ParentTag] not loaded!", 0 );
 				$this->error ( "ParentTag: [$ParentTag] not loaded!", 0 );
 			}
-
+			
 			RETURN FALSE;
-
+		
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1569,19 +1575,19 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION define($fileList, $value = null) {
 			if ((gettype ( $fileList ) != "array") && ! is_null ( $value ))
 				$fileList = array ($fileList => $value ); //added by Voituk Vadim
-
+			
 
 			WHILE ( list ( $FileTag, $FileName ) = each ( $fileList ) ) {
 				$this->FILELIST ["$FileTag"] = $FileName;
 			}
-
+			
 			RETURN TRUE;
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1593,11 +1599,11 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION clear_parse($ReturnVar = "") {
 			$this->clear ( $ReturnVar );
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1625,33 +1631,33 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION clear($ReturnVar = "") {
-
+			
 			if (! empty ( $ReturnVar )) {
 				if ((gettype ( $ReturnVar )) != "array") {
-
+					
 					unset ( $this->$ReturnVar );
 					RETURN;
-
+				
 				} else {
-
+					
 					WHILE ( list ( $key, $val ) = each ( $ReturnVar ) ) {
 						unset ( $this->$val );
 					}
-
+					
 					RETURN;
 				}
 			}
-
+			
 			WHILE ( list ( $key, $val ) = each ( $this->HANDLE ) ) { // Empty - clear all of them
 				$KEY = $key;
 				unset ( $this->$KEY );
 			}
-
+			
 			RETURN;
 		} //  end clear()
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -1671,16 +1677,16 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION clear_all() {
 			$this->clear ();
 			$this->clear_assign ();
 			$this->clear_define ();
 			$this->clear_tpl ();
-
+			
 			RETURN;
 		} //  end clear_all
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -1699,20 +1705,20 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION clear_tpl($fileHandle = "") {
 			if (empty ( $this->LOADED )) { // Nothing loaded, nothing to clear
 				RETURN TRUE;
 			}
-
+			
 			if (empty ( $fileHandle )) {
 				// Clear ALL fileHandles
 				WHILE ( list ( $key, $val ) = each ( $this->LOADED ) ) {
 					unset ( $this->$key );
 				}
-
+				
 				unset ( $this->LOADED );
-
+				
 				RETURN TRUE;
 			} else {
 				if ((gettype ( $fileHandle )) != "array") {
@@ -1729,11 +1735,11 @@ if (! class_exists ( 'FastTemplate' )) {
 					RETURN TRUE;
 				}
 			}
-
+			
 			RETURN FALSE;
-
+		
 		} // end clear_tpl
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -1758,13 +1764,13 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   - GraFX Software Solutions
 		 * @Mod vers - 1.6.0
 		 */
-
+		
 		FUNCTION clear_define($FileTag = "") {
 			if (empty ( $FileTag )) {
 				unset ( $this->FILELIST );
 				RETURN;
 			}
-
+			
 			if ((gettype ( $FileTag )) != "array") {
 				unset ( $this->FILELIST [$FileTag] );
 				RETURN;
@@ -1775,7 +1781,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				RETURN;
 			}
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1793,7 +1799,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				}
 			}
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1814,7 +1820,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION clear_href($href) {
 			if (! empty ( $href )) {
 				if ((gettype ( $href )) != "array") {
@@ -1823,17 +1829,17 @@ if (! class_exists ( 'FastTemplate' )) {
 				} else {
 					FOREACH ( $href as $value )
 						unset ( $this->PARSEVARS [$value] );
-
+					
 					RETURN;
 				}
 			} else {
 				// Empty - clear them all
 				$this->clear_assign ();
 			}
-
+			
 			RETURN;
 		}
-
+		
 		/**
 		 * @author   - Voituk Vadim
 		 * @type     - public
@@ -1851,10 +1857,10 @@ if (! class_exists ( 'FastTemplate' )) {
 				foreach ( $Keys as $k )
 					if (! empty ( $k ))
 						$this->PARSEVARS [strtoupper ( $k )] = str_replace ( '&amp;#', '&#', $Arr [$k] );
-
+			
 			}
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1885,7 +1891,8 @@ if (! class_exists ( 'FastTemplate' )) {
 						//  Empty Keys are NOT
 						// ORIG $this->PARSEVARS["$key"] = $val;
 						if (! is_object ( $val ))
-							$this->PARSEVARS ["$key"] = str_replace ( '&amp;#', '&#', $val ); else //GRAFX && Voituk
+							$this->PARSEVARS ["$key"] = str_replace ( '&amp;#', '&#', $val );
+						else //GRAFX && Voituk
 							$this->PARSEVARS ["$key"] = $val; //GRAFX && Voituk
 					}
 				}
@@ -1894,12 +1901,13 @@ if (! class_exists ( 'FastTemplate' )) {
 				if (! empty ( $ft_array )) {
 					// ORIG $this->PARSEVARS["$ft_array"] = $trailer;
 					if (! is_object ( $trailer ))
-						$this->PARSEVARS ["$ft_array"] = str_replace ( '&amp;#', '&#', $trailer ); else //GRAFX
+						$this->PARSEVARS ["$ft_array"] = str_replace ( '&amp;#', '&#', $trailer );
+					else //GRAFX
 						$this->PARSEVARS ["$ft_array"] = $trailer; //GRAFX && Voituk
 				}
 			}
 		}
-
+		
 		/**
 		 * @author   - Christian Brandel cbrandel@gmx.de
 		 * @type     - public
@@ -1920,19 +1928,19 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION get_assigned($ft_name = "") {
 			if (empty ( $ft_name )) {
 				RETURN FALSE;
 			}
-
+			
 			if (isset ( $this->PARSEVARS ["$ft_name"] )) {
 				RETURN ($this->PARSEVARS ["$ft_name"]);
 			} else {
 				RETURN FALSE;
 			}
 		}
-
+		
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
@@ -1944,20 +1952,20 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION error($errorMsg, $die = 0) {
 			$this->ERROR = $errorMsg;
-
+			
 			echo "ERROR: $this->ERROR <BR> \n";
-
+			
 			if ($die == 1) {
 				exit ();
 			}
-
+			
 			RETURN;
-
+		
 		} // end error()
-
+		
 
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
@@ -1976,18 +1984,18 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION multiple_assign($pattern) {
 			WHILE ( list ( $key, $value ) = each ( $GLOBALS ) ) {
 				if (substr ( $key, 0, strlen ( $pattern ) ) == $pattern) {
 					$this->assign ( strtoupper ( $key ), $value );
 				}
 			}
-
+			
 			reset ( $GLOBALS );
-
+		
 		} // multiple_assign
-
+		
 
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
@@ -1999,14 +2007,14 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION multiple_assign_define($pattern) {
 			$ar = get_defined_constants ();
 			FOREACH ( $ar as $key => $def )
 				if (substr ( $key, 0, strlen ( $pattern ) ) == $pattern)
 					$this->assign ( strtoupper ( $key ), $def );
 		} // multiple_assign_define
-
+		
 
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
@@ -2019,12 +2027,12 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION pre_filter($pattern, $replace) {
 			$this->PRE_FILTER [0] = $pattern;
 			$this->PRE_FILTER [1] = $replace;
 		} // pre_filter
-
+		
 
 		/**
 		 * @author   -  Artyem V. Shkondin aka AiK artvs@clubpro.spb.ru
@@ -2040,7 +2048,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   - GraFX Software Solutions webmaster@grafxsoftware.com
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION showDebugInfo($Debug_type = null) {
 			$tm = $this->utime () - $this->start;
 			if ($Debug_type != null) {
@@ -2052,14 +2060,14 @@ if (! class_exists ( 'FastTemplate' )) {
                                   _debug_console.document.write('<html><title>Debug Console</title><body bgcolor=#ffffff>');
                                   _debug_console.document.write('<h3>Debugging info: generated during $tm seconds</h3>');
                                   ";
-
+					
 					if ($this->STRICT_DEBUG)
 						$this->printarray ( $this->WARNINGS, "Warnings" );
-
+					
 					$this->printarray ( $this->FILELIST, "Templates" );
 					$this->printarray ( $this->DYNAMIC, "Dynamic bloks" );
 					$this->printarray ( $this->PARSEVARS, "Parsed variables" );
-
+					
 					print " _debug_console.document.close();
                              </SCRIPT> ";
 				}
@@ -2074,14 +2082,14 @@ if (! class_exists ( 'FastTemplate' )) {
                                         _debug_console.document.write('<h3>Debugging info: generated during $tm seconds</h3>');
                                         ";
 						$this->printarray ( $this->WARNINGS, "Warnings" );
-
+						
 						print " _debug_console.document.close();
                                   </SCRIPT> ";
 					}
 				}
 			}
 		} //end of showDebugInfo()
-
+		
 
 		/**
 		 * @author   - Jason Moore
@@ -2100,30 +2108,30 @@ if (! class_exists ( 'FastTemplate' )) {
                         _debug_console.document.write('<font face=Tahoma color=#0000FF size=2><b>$caption</b> </font>');\n
                         _debug_console.document.write('<table border=0 width=100%  cellspacing=1 cellpadding=2>');
                         _debug_console.document.write('<tr bgcolor=#CCCCCC><th width=175>key</th><th>value</th></tr>');\n ";
-
+				
 				$flag = TRUE;
-
+				
 				WHILE ( list ( $key, $val ) = each ( $arr ) ) {
-
+					
 					$flag = ! $flag;
 					$val = htmlspecialchars ( mysql_escape_string ( $val ) );
-
+					
 					if (! $flag) {
 						$color = "#EEFFEE";
 					} else {
 						$color = "#EFEFEF";
 					}
-
+					
 					print "
                              _debug_console.document.write('<tr bgcolor=$color><td> $key</td><td valign=bottom><pre>$val</pre></td></tr>');\n ";
-
+				
 				}
-
+				
 				print "
                         _debug_console.document.write(\"</table>\");";
 			}
 		} //
-
+		
 
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
@@ -2150,7 +2158,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION setPattern($pattern, $type = 1) {
 			/*
               $type = 1 we have defines
@@ -2159,14 +2167,16 @@ if (! class_exists ( 'FastTemplate' )) {
 			if (is_array ( $pattern )) {
 				FOREACH ( $pattern as $value )
 					if ($type)
-						$this->PATTERN_VARS_DEFINE ["$value"] = "$value"; else
+						$this->PATTERN_VARS_DEFINE ["$value"] = "$value";
+					else
 						$this->PATTERN_VARS_VARIABLE ["$value"] = "$value";
-
+			
 			} else if ($type)
-				$this->PATTERN_VARS_DEFINE ["$pattern"] = "$pattern"; else
+				$this->PATTERN_VARS_DEFINE ["$pattern"] = "$pattern";
+			else
 				$this->PATTERN_VARS_VARIABLE ["$pattern"] = "$pattern";
 		}
-
+		
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
 		 * @type     - public
@@ -2177,12 +2187,12 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION emptyPattern() {
-			$this->PATTERN_VARS_DEFINE [] = array ( );
-			$this->PATTERN_VARS_VARIABLE [] = array ( );
+			$this->PATTERN_VARS_DEFINE [] = array ();
+			$this->PATTERN_VARS_VARIABLE [] = array ();
 		}
-
+		
 		/**
 		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
 		 * @type     - public
@@ -2194,13 +2204,46 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-
+		
 		FUNCTION deletePattern($pattern, $type = 1) {
 			if ($type)
-				unset ( $this->PATTERN_VARS_DEFINE ["$pattern"] ); else
+				unset ( $this->PATTERN_VARS_DEFINE ["$pattern"] );
+			else
 				unset ( $this->PATTERN_VARS_VARIABLE ["$pattern"] );
 		}
+		
 
+		/**
+		 * @author   - GraFX Software Solutions webmaster@grafxsoftware.com
+		 * @type     - public
+		 * @desc     - returns in an array all the variable names from the template
+		 * @param    - array or string  $prefix is the prefix of the template vars we want to retrive LANG_
+		 * @param    - string $template is the template we are parsing
+		 * @return   - array
+		 * @vers     - 1.0
+		 * @Mod by   -
+		 * @Mod vers -
+		 */		
+		function getPrefPatternVariables($prefix, $template) {
+			if (is_array ( $prefix ))
+				$prefix = implode ( "|", $prefix );
+			
+			if (empty ( $prefix ) || empty ( $template )) {
+				return array ();
+			}
+			
+			$pattern = '/(' . $prefix . ')([a-zA-Z_][a-zA-Z0-9_]+)/i';
+			if (preg_match_all ( $pattern, $template, $matches, PREG_SET_ORDER )) {
+				$tmp = array ();
+				foreach ( $matches as $value )
+					$tmp [] = $value [0];
+				return $tmp;
+			
+			}
+			return array ();
+		
+		}
+		
 	//  ************************************************************
 	} // End cls_fast_template.php
 } // end of if defined
