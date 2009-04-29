@@ -55,7 +55,7 @@ case "del":
 	 **/
 	if(!empty($all_url_vars["{FUNC_NAME1ELEMENT}"]))
 	{
-		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]);
+		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"],$LANG);
 		{VARR}->delete($all_url_vars["{FUNC_NAME1ELEMENT}"]);
 		header("Location: ".$_SERVER['HTTP_REFERER']);
         exit;
@@ -63,7 +63,7 @@ case "del":
 
   break;
 case "activate":
-    {VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]);
+    {VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"],$LANG);
 
 	<!-- IFDEF: ISACTIVATED -->
     if({VARR}->get{ACTIVE_ELEMENT}()==1) 
@@ -145,7 +145,7 @@ case "mod":
                 $ft->assign("{FORM_ELEMSUPPER}",$_SESSION["{FORM_ELEMS}"]);
                 <!-- END DYNAMIC BLOCK: errmodformelements -->     
 	{
-		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]); 
+		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"],$LANG); 
 		<!-- BEGIN DYNAMIC BLOCK: get_elements -->
 		<!-- IFDEF: ISHIDDEN -->
 		$ft->assign("{FORM_ELEMSUPPER}",{VARR}->get{FORM_ELEMS}());
@@ -203,10 +203,10 @@ case "save":
             $ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
             if(empty($all_url_vars["{FUNC_NAME1ELEMENT}"]))
                 // value is empty, new items will be INSERTed
-                {VARR} = new {CLS}(0);
+                {VARR} = new {CLS}(0,$LANG);
             else 
                 // value have ID, all data will be UDPATEd
-                {VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"]);
+                {VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"],$LANG);
             <!-- BEGIN DYNAMIC BLOCK: set_elements -->
             <!-- IFDEF: ISHIDDEN_SAVE -->
             {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
