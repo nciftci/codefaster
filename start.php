@@ -81,11 +81,16 @@ for($i = 0; $i < $toknr; $i ++) {
 	}
 }
 
-$ft->assign("DBFIELDS",$fields);
 
-$tokexample = explode(";", $fields);
+$ft->assign("DBFIELDS_EN",$fields);
+
+$fields_noen=str_replace("_en","",$fields);
+$ft->assign("DBFIELDS",$fields_noen);
+
+$tokexample = explode(";", $fields_noen);
 $tokenr     = sizeof($tokexample);
 $example    = "";
+
 
 for($i = 0; $i < $tokenr-1; $i++) {
 	$example.=ucwords($tokexample[$i]);
@@ -96,5 +101,6 @@ $ft->assign("EXAMPLE",$example);
 $ft->parse("BODY", array("content", "main"));
 
 print $ft->fetch("BODY");
+
 
 ?>

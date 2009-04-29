@@ -375,8 +375,18 @@ if ($action == "generate_html") {
 		} else
 			$tmp_fld = $listing;
 		
-		$select_what = implode ( ', ', array_keys ( $listing ) );
+		$tmp_language_fields=$session->get("language_fields");
 		
+		
+		
+		
+		foreach(array_keys($listing) as $value)
+		$tmp_listing[]=($value==$tmp_language_fields[$value])?$value:$value."_{\$LANG}";
+
+		//print_r($tmp_listing);
+		$select_what = implode ( ', ',   $tmp_listing );
+		//echo $select_what ;
+		//exit;
 		$flds = "array(";
 		foreach ( $tmp_fld as $key => $it ) {
 			$flds .= '"#_LANG_ADMIN_' . $NAMEUPPER . "_" . strtoupper ( $key ) . '_#",';

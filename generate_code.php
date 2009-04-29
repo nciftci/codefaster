@@ -78,6 +78,14 @@ if($all_url_vars['fieldnames'][strlen($all_url_vars['fieldnames'])-1] == ";") {
 }
 
 $fields =explode(";",$all_url_vars['fieldnames']);
+$fields_en =explode(";",$all_url_vars['fieldnames_en']);
+
+foreach($fields as $key=>$value)
+ $tmp_fields[$value]=$fields_en[$key];
+
+//print_r($tmp_fields);exit;
+$session->set("language_fields", $tmp_fields);
+
 $all_url_vars['funct_name']=str_replace(" ","",$all_url_vars['funct_name']);
 
 if($all_url_vars['funct_name'][strlen($all_url_vars['funct_name'])-1] == ";") { 
@@ -98,15 +106,32 @@ while(!empty($fields[$i])) {
 	$i++;
 }
 
-$nr = $i;		
+$nr = $i;	
+
+
+$buffer="";
+$buffer_insert="";
+
 for ($i = 1; $i < $nr; $i ++) {
+  if($fields[$i]==$fields_en[$i])
+  {
 	$buffer .= "`" . $fields[$i] . "`";
+	$buffer_insert .= "`" . $fields[$i] . "`";
+  }
+  else
+  {
+    $buffer_insert .= "`" . $fields[$i] . "_{\$this->lang}` ";
+	$buffer .= "`" . $fields[$i] . "_{\$this->lang}` AS `" . $fields[$i] ."`";
+	}	
+		
 	if($i <> $nr-1) {
 		$buffer.=",";
 	}
 }
 
 $ft->assign("LIST", $buffer);
+$ft->assign("LIST_IN", $buffer_insert);
+
 
 if($all_url_vars['type'] == "php") {        
 
@@ -183,7 +208,14 @@ if($all_url_vars['type'] == "php") {
 
 	for ($i=1;$i<$nr;$i++) {
 		$buffer .= "`";
+		if($fields[$i]==$fields_en[$i])
+		{
 		$buffer .= "$fields[$i]`=";
+		}
+		else
+		{
+		$buffer .= "$fields[$i]_{\$this->lang}`=";
+		}
 		$buffer .= "'\"."; 
 		$buffer .= "\$this->slashes(\$this->".$fields[$i];
 		$buffer .= ").\"'";
