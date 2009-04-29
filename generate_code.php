@@ -126,6 +126,7 @@ for ($i = 1; $i < $nr; $i ++) {
 		
 	if($i <> $nr-1) {
 		$buffer.=",";
+		$buffer_insert.=",";
 	}
 }
 
