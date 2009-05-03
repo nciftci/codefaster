@@ -1,7 +1,7 @@
 <?php
 
 
-function generateMonth($date) {
+public function generateMonth($date) {
 
 	$date=strftime("%Y-%m-%d",strtotime($date));
 	
@@ -57,7 +57,7 @@ function generateMonth($date) {
 
 }
  
-function prepareWeekArray(){
+public function prepareWeekArray(){
 $temp_ar=array();	
 for ($i=0; $i<7; $i++) 
 $temp_ar[$i]="";
@@ -68,7 +68,7 @@ return $temp_ar;
 
 
 
-function getMonth($index){
+public function getMonth($index){
 
 	if($index>0)
 	 $index--;
@@ -80,7 +80,7 @@ function getMonth($index){
 
 }
 
-function getMonthShort($index){
+public function getMonthShort($index){
 	
 	if($index>0)
 	 $index--;
@@ -92,19 +92,19 @@ function getMonthShort($index){
 
 }
 
-function getDay($index){
+public function getDay($index){
 	$arr=explode("|",LANG_CALENDAR_DAYNAMES);
 	
 	return $arr[$index];
 }
 
-function getDayShort($index){
+public function getDayShort($index){
 	$arr=explode("|",LANG_CALENDAR_DAYNAMES_ABREW);
 	
 	return $arr[$index];
 }
 
-function formatMonthd($date){
+public function formatMonthd($date){
 
   $arr=generateMonth($date);
   
@@ -156,7 +156,7 @@ function formatMonthd($date){
 
 }
 
-function genLink($ara,$date){
+public function genLink($ara,$date){
 	$temp=array();
 	while (list($key, $value) = each($ara)) 
 	{
@@ -169,7 +169,7 @@ function genLink($ara,$date){
 	return implode('&',$temp);
 }
 
-function formatMonth($date,$datearray){
+public function formatMonth($date,$datearray){
 
   $arr=generateMonth($date);
  
@@ -235,14 +235,14 @@ function formatMonth($date,$datearray){
 
 
 
-function chDate($date){
+public function chDate($date){
 
 return strftime("%Y%m%d",strtotime($date));
 
 
 }
 
-function shiftDay($date,$number)
+public function shiftDay($date,$number)
 {
 if($number>0)
 $number="+".$number;
@@ -252,7 +252,7 @@ return strftime("%Y%m%d",strtotime($number." day ".$date));
 }
 
 
-function shiftMonth($date,$number)
+public function shiftMonth($date,$number)
 {
 if($number>0)
 $number="+".$number;
@@ -261,7 +261,7 @@ return strftime("%Y%m%d",strtotime($number." month ".$date));
 
 }
 
-function shiftYear($date,$number){
+public function shiftYear($date,$number){
 if($number>0)
 $number="+".$number;
 /*
@@ -275,28 +275,28 @@ print "<br>";
 return strftime("%Y%m%d",strtotime($number." year ".$date));
 }
 
-function getYearFromDate($date){
+public function getYearFromDate($date){
 return strftime("%Y",strtotime($date));
 
 }
 
-function getMonthFromDate($date){
+public function getMonthFromDate($date){
 return strftime("%m",strtotime($date));
 
 }
 
-function getDayFromDate($date){
+public function getDayFromDate($date){
 return strftime("%d",strtotime($date));
 
 }
 
-function getNow(){
+public function getNow(){
 return strftime("%Y%m%d",strtotime("now"));
 
 }
 
 
-function monthFromDateIndex($date,$i){
+public function monthFromDateIndex($date,$i){
 
 if($i<10)
 $i="0".$i;
@@ -305,7 +305,7 @@ return getYearFromDate($date).$i.getDayFromDate($date);
 
 }
 
-function generateDates($date1,$date2){
+public function generateDates($date1,$date2){
 $array_dates=array();
 if(strtotime($date2)>=strtotime($date1)) 
 {
