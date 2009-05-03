@@ -1,7 +1,7 @@
 <?php
 class Captcha
 {
-	function Captcha()
+	public function __construct()
 	{					
 		//header("Content-type: image/jpg");
 		if(function_exists("imagecreate"))
