@@ -16,20 +16,20 @@
 
 class Pagination {
     // the style of the pagination (0-5)
-    var $type = 0;
+    protected $type = 0;
     // the number of items shown on aa page
-    var $number_items = 5;
+    protected $number_items = 5;
     // the number of page grouping
-    var $number_pages = 3;
+    protected $number_pages = 3;
     // the url on the pagination tags
-    var $url = "";
+    protected $url = "";
     // the template on which the pagination is done
-    var $template = "content";
+    protected $template = "content";
 	// the dinamic zone's name
-    var $dinamic_name = "rowpag";
+    protected $dinamic_name = "rowpag";
 
     // Constructor
-    function Pagination()
+    public function __construct()
     {
     }
 
@@ -39,7 +39,7 @@ class Pagination {
     * @return the pagination type
     */
 
-    function getType()
+    public function getType()
     {
         return $this->type;
     }
@@ -50,7 +50,7 @@ class Pagination {
     * @return the pagination the number of the items / page
     */
 
-    function getNumberItems()
+    public function getNumberItems()
     {
         return $this->number_items;
     }
@@ -60,7 +60,7 @@ class Pagination {
     *
     * @return the pagination url
     */
-    function getUrl()
+    public function getUrl()
     {
         return $this->url;
     }
@@ -70,7 +70,7 @@ class Pagination {
     *
     * @return the pagination page numbers
     */
-    function getNumberPages()
+    public function getNumberPages()
     {
         return $this->number_pages;
     }
@@ -80,7 +80,7 @@ class Pagination {
     *
     * @return the pagination template
     */
-    function getTemplate()
+    public function getTemplate()
     {
         return $this->template;
     }
@@ -90,7 +90,7 @@ class Pagination {
      *
      * @return the dimanic zone's name
      **/
-    function getDinamnicName()
+    public function getDinamnicName()
     {
         return $this->dinamic_name;
     }
@@ -103,7 +103,7 @@ class Pagination {
     * @return
     */
 
-    function setType($type)
+    public function setType($type)
     {
         $this->type = $type;
     }
@@ -115,7 +115,7 @@ class Pagination {
     * @param mixed $number_items
     * @return
     */
-    function setNumberItems($number_items)
+    public function setNumberItems($number_items)
     {
         $this->number_items = $number_items;
     }
@@ -127,7 +127,7 @@ class Pagination {
     * @param mixed $url
     * @return
     */
-    function setUrl($url)
+    public function setUrl($url)
     {
         $this->url = $url;
     }
@@ -139,7 +139,7 @@ class Pagination {
     * @param mixed $number_pages
     * @return
     */
-    function setNumberPages($number_pages)
+    public function setNumberPages($number_pages)
     {
         $this->number_pages = $number_pages;
     }
@@ -151,7 +151,7 @@ class Pagination {
     * @param mixed $template
     * @return
     */
-    function setTemplate($template)
+    public function setTemplate($template)
     {
         $this->template = $template;
     }
@@ -164,7 +164,7 @@ class Pagination {
 	 * @param mixed $dinamic_name
 	 * @return
 	 **/
-	function setDinamicName($dinamic_name)
+	public function setDinamicName($dinamic_name)
     {
         $this->dinamic_name = $dinamic_name;
     }
@@ -180,7 +180,7 @@ class Pagination {
     * @return
     */
 
-    function typeSettings(&$page)
+    public function typeSettings(&$page)
     {
         switch ($this->type) {
             case 0: // showing only the prev and next tags
@@ -236,11 +236,11 @@ class Pagination {
     * @param mixed $page A FastTemplate instance.
     * @return
     */
-    function make($item_total, $current_item = 0, &$page)
+    public function make($item_total, $current_item = 0, &$page)
     {
 	 $page->assign("PAGINATION", "0");
 
-        // calling this function to "free" the template zones
+        // calling this public function to "free" the template zones
         // with IFDEF approach
         $this->typeSettings($page);
         // total pages

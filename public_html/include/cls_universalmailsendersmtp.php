@@ -28,30 +28,30 @@ class UniversalMailSender {
     *
     * @var mail_to
     */
-    var $mail_to = "";
+    protected $mail_to = "";
     /**
     * the full email spec of the sender "test user" <test@something.com>
     *
     * @var mail_from
     */
 
-    var $mail_from = "";
+    protected $mail_from = "";
 
     /**
     * email of the reciver test@something.com
     *
     * @var mail_to_addr
     */
-    var $mail_to_addr = "";
+    protected $mail_to_addr = "";
 
     /**
     * email of the sender test@something.com
     *
     * @var mail_from_addr
     */
-    var $mail_from_addr = "";
-    var $mail_cc = "";
-    var $mail_bcc = "";
+    protected $mail_from_addr = "";
+    protected $mail_cc = "";
+    protected $mail_bcc = "";
     /**
     * email of the sender test@something.com
     * this is required in some windows mailers and uses
@@ -59,38 +59,38 @@ class UniversalMailSender {
     *
     * @var mail_sender
     */
-    var $mail_sender = "";
-    var $mail_error_to = "";
-    var $mail_reply_to = "";
-    var $mail_subject = "Empty Subject";
-    var $mail_xmailer = "UniversalMailSender";
+    protected $mail_sender = "";
+    protected $mail_error_to = "";
+    protected $mail_reply_to = "";
+    protected $mail_subject = "Empty Subject";
+    protected $mail_xmailer = "UniversalMailSender";
 
     /**
     * default charset
     *
     * @var mail_charset
     */
-    var $mail_charset = "UTF-8";
-    var $mail_text_message = "Empty Text";
-    var $mail_html_message = "Empty Text";
-    var $mail_body = "";
-    var $mail_header = "";
-    var $mail_send_type;
-    var $mail_debug = "0";
-    var $mail_debug_message = "";
-    var $attachments = array();
-    var $attachments_img = array();
-    var $mixed_boundary;
-    var $related_boundary;
-    var $alternative_boundary;
-    var $error_pointer = 0;
+    protected $mail_charset = "UTF-8";
+    protected $mail_text_message = "Empty Text";
+    protected $mail_html_message = "Empty Text";
+    protected $mail_body = "";
+    protected $mail_header = "";
+    protected $mail_send_type;
+    protected $mail_debug = "0";
+    protected $mail_debug_message = "";
+    protected $attachments = array();
+    protected $attachments_img = array();
+    protected $mixed_boundary;
+    protected $related_boundary;
+    protected $alternative_boundary;
+    protected $error_pointer = 0;
     /**
     * error messages
     *
     * @var errors
     */
 
-    var $errors = array(1 => 'The mail is not valid',
+    protected $errors = array(1 => 'The mail is not valid',
         2 => 'Could not open file'
 
         );
@@ -101,7 +101,7 @@ class UniversalMailSender {
     * @var mime_types
     */
 
-    var $mime_types = array("ai" => "application/postscript",
+    protected $mime_types = array("ai" => "application/postscript",
         "aif" => "audio/x-aiff",
         "aifc" => "audio/x-aiff",
         "aiff" => "audio/x-aiff",
@@ -297,7 +297,7 @@ class UniversalMailSender {
     *
     * @param string $send_type if the parameter is empty then text mail will be sent othervise html
     */
-    function UniversalMailSender($send_type = "")
+    public function __construct($send_type = "")
     {
         if (empty($send_type) || $send_type == 1)
             $this->mail_send_type = 1; // text
@@ -320,7 +320,7 @@ class UniversalMailSender {
     * @param mixed $address
     * @return true if email is ok and false othervise
     */
-    function valid_email($address)
+    public function valid_email($address)
     {
         if (ereg('^[a-zA-Z0-9 \._\-]+@([a-zA-z0-9\-]*\.)+[a-zA-Z]+$', $address))
             return true;
@@ -336,7 +336,7 @@ class UniversalMailSender {
     * @param mixed $to_address email address(es)
     * @param mixed $to_name reciever's name(s)
     */
-    function setToAddress($to_address, $to_name)
+    public function setToAddress($to_address, $to_name)
     {
         $to_address = (array)$to_address;
         $to_name = (array)$to_name;
@@ -361,7 +361,7 @@ class UniversalMailSender {
     * @param mixed $from_address email address
     * @param mixed $from_name sender's name
     */
-    function setFromAddress($from_address, $from_name)
+    public function setFromAddress($from_address, $from_name)
     {
         if ($this->valid_email($from_address)) {
             $this->mail_from = (empty($from_name))?$from_address:"\"$from_name\" <$from_address>";
@@ -380,7 +380,7 @@ class UniversalMailSender {
     * @param mixed $cc_address
     * @param mixed $cc_name
     */
-    function setCcAddress($cc_address, $cc_name)
+    public function setCcAddress($cc_address, $cc_name)
     {
         $cc_address = (array)$cc_address;
         $cc_name = (array)$cc_name;
@@ -403,7 +403,7 @@ class UniversalMailSender {
     * @param mixed $cc_address
     * @param mixed $cc_name
     */
-    function setBccAddress($bcc_address, $bcc_name)
+    public function setBccAddress($bcc_address, $bcc_name)
     {
         $bcc_address = (array)$bcc_address;
         $bcc_name = (array)$bcc_name;
@@ -425,7 +425,7 @@ class UniversalMailSender {
     * @param mixed $subject
     * @return
     */
-    function setSubject($subject)
+    public function setSubject($subject)
     {
         if (!empty($subject))
             $this->mail_subject = $subject;
@@ -439,7 +439,7 @@ class UniversalMailSender {
     * @param mixed $charset
     * @return
     */
-    function setCharset($charset)
+    public function setCharset($charset)
     {
         $this->mail_charset = $charset;
     }
@@ -452,7 +452,7 @@ class UniversalMailSender {
     * @param mixed $text_message
     * @return
     */
-    function setTextMessage($text_message)
+    public function setTextMessage($text_message)
     {
         if (!empty($text_message))
             $this->mail_text_message = wordwrap(strip_tags(preg_replace('/<br\\s*?\/??>/i', UNIV_LINE_BREAK, $text_message)), 72,UNIV_LINE_BREAK);
@@ -467,7 +467,7 @@ class UniversalMailSender {
     * @param mixed $html_message
     * @return
     */
-    function setHtmlMessage($html_message)
+    public function setHtmlMessage($html_message)
     {
         if (!empty($html_message))
             $this->mail_html_message = $html_message;
@@ -481,7 +481,7 @@ class UniversalMailSender {
     * @param string $send_type
     * @return
     */
-    function setType($send_type = "")
+    public function setType($send_type = "")
     {
         if (empty($send_type) || $send_type == 1)
             $this->mail_send_type = 1; // text
@@ -495,7 +495,7 @@ class UniversalMailSender {
     * @param string $xmailer
     * @return
     */
-    function setXmailer($xmailer = "")
+    public function setXmailer($xmailer = "")
     {
         if ($this->valid_email($xmailer)) {
             $this->mail_xmailer = $xmailer;
@@ -512,7 +512,7 @@ class UniversalMailSender {
     * @param string $sender
     * @return
     */
-    function setSender($sender = "")
+    public function setSender($sender = "")
     {
         if ($this->valid_email($sender)) {
             $this->mail_sender = sender;
@@ -528,7 +528,7 @@ class UniversalMailSender {
     * @param string $error_to
     * @return
     */
-    function setErrorTo($error_to = "")
+    public function setErrorTo($error_to = "")
     {
         if ($this->valid_email($error_to)) {
             $this->mail_error_to = error_to;
@@ -544,7 +544,7 @@ class UniversalMailSender {
     * @param string $reply_to
     * @return
     */
-    function setReplyTo($reply_to = "")
+    public function setReplyTo($reply_to = "")
     {
         if ($this->valid_email($reply_to)) {
             $this->mail_reply_to = reply_to;
@@ -560,7 +560,7 @@ class UniversalMailSender {
     * @param mixed $debug 1 - on 0 - off
     * @return
     */
-    function setDebug($debug)
+    public function setDebug($debug)
     {
         $this->mail_debug = $debug;
     }
@@ -573,7 +573,7 @@ class UniversalMailSender {
     * @param mixed $text
     * @return
     */
-    function clean($text)
+    public function clean($text)
     {
         return str_replace("\n", " ", str_replace("\r\n", " ", $text));
     }
@@ -583,7 +583,7 @@ class UniversalMailSender {
     *
     * @return Returns the headers
     */
-    function getDebugMessage()
+    public function getDebugMessage()
     {
         return $this->mail_debug_message;
     }
@@ -596,7 +596,7 @@ class UniversalMailSender {
     * @param mixed $tag_string
     * @return
     */
-    function securityFilter($tag_string)
+    public function securityFilter($tag_string)
     {
         if (strpos($this->mail_from, 'Content-Type:') === false && strpos($this->mail_from, 'Bcc:') === false && strpos($this->mail_from, 'bcc:') === false && strpos($this->mail_from, 'cc:') === false
                 )
@@ -610,7 +610,7 @@ class UniversalMailSender {
     *
     * @return
     */
-    function SendMail()
+    public function SendMail()
     {
         // security checkings
         if ($this->securityFilter($this->mail_from) && $this->securityFilter($this->mail_to_addr) && $this->securityFilter($this->mail_cc) && $this->securityFilter($this->mail_bcc) && $this->securityFilter($this->mail_to) && $this->securityFilter($this->mail_sender) && $this->securityFilter($this->mail_error_to) && $this->securityFilter($this->mail_reply_to)
@@ -639,7 +639,7 @@ class UniversalMailSender {
     * @param mixed $mail_html_message
     * @return
     */
-    function SendMailWindows($to_address, $from_address, $mail_sender, $mail_error_to, $mail_reply_to, $subject, $send_type, $mail_text_message, $mail_html_message)
+    public function SendMailWindows($to_address, $from_address, $mail_sender, $mail_error_to, $mail_reply_to, $subject, $send_type, $mail_text_message, $mail_html_message)
     {
         $headers = "From: $from_address\r\n";
         if (empty($mail_reply_to))
@@ -681,7 +681,7 @@ class UniversalMailSender {
     *
     * @return
     */
-    function makeHeaders()
+    public function makeHeaders()
     {
         //$this->mail_header = "Received: from " . $this->mail_xmailer . " ([" . $this->getVar("REMOTE_ADDR") . "]) ";
         //$this->mail_header .= "by " . $this->getVar("SERVER_NAME") . " with HTTP;" . UNIV_LINE_BREAK;
@@ -722,7 +722,7 @@ class UniversalMailSender {
     *
     * @return
     */
-    function makeBody()
+    public function makeBody()
     {
         $this->makeHeaders();
 
@@ -796,7 +796,7 @@ class UniversalMailSender {
     *
     * @return
     */
-    function SendMailLinux()
+    public function SendMailLinux()
     {
         $this->makeBody();
 
@@ -868,7 +868,7 @@ class UniversalMailSender {
     * @param mixed $file
     * @return
     */
-    function openAttachementFile($file)
+    public function openAttachementFile($file)
     {
         if (($fp = @fopen($file, 'r'))) {
             $content = fread($fp, filesize($file));
@@ -886,7 +886,7 @@ class UniversalMailSender {
     * @param mixed $filename
     * @return
     */
-    function getMimeType($filename)
+    public function getMimeType($filename)
     {
         if (!function_exists('mime_content_type')) {
             $idx = strtolower(end(explode('.', $filename)));
@@ -909,7 +909,7 @@ class UniversalMailSender {
     * @param string $type
     * @return
     */
-    function addAttachementFile($file, $name, $type = "")
+    public function addAttachementFile($file, $name, $type = "")
     {
         if (($content = $this->openAttachementFile($file))) {
             $this->attachments[] = array('content' => chunk_split(base64_encode($content), 76, UNIV_LINE_BREAK),
@@ -928,7 +928,7 @@ class UniversalMailSender {
     *
     * @return
     */
-    function getError()
+    public function getError()
     {
         return $this->errors[$this->error_pointer];
     }
@@ -941,7 +941,7 @@ class UniversalMailSender {
     * @param mixed $var
     * @return
     */
-    function getVar($var)
+    public function getVar($var)
     {
         if (version_compare(phpversion(), "4.1.0", "<")) {
             global $HTTP_SERVER_VARS;

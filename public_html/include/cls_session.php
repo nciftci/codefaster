@@ -10,9 +10,9 @@ Scripts Home:           http://www.grafxsoftware.com
 ############################################################
 */
 class MYSession {
-	var $MY_SESSION_ARRAY = array();
-	var $session_state = 0;
-	function MYSession ()
+	protected $MY_SESSION_ARRAY = array();
+	protected $session_state = 0;
+	public function __construct()
 	{
 		// Use $HTTP_SESSION_VARS with PHP 4.0.6 or less
 		 $session_state = session_start ();
@@ -34,9 +34,9 @@ class MYSession {
 				}
 			}
 		}
-	}// function Mysession
+	}// public function Mysession
 	//*********************
-	function get($name="")
+	public function get($name="")
 	{
 		if(empty($name))
 	  		return 0;
@@ -47,9 +47,9 @@ class MYSession {
 			else
 			   return $this->MY_SESSION_ARRAY[$name];
 		}
-	}// function get
+	}// public function get
 	//************************
-	function set($name,$value)
+	public function set($name,$value)
 	{
 		if(empty($name))
 			return 0;
@@ -64,9 +64,9 @@ class MYSession {
 			else
 			  $_SESSION[$name]=$value;
 		}
-	}// function set
+	}// public function set
 	//******************
-	function del($name)
+	public function del($name)
 	{
 		if(empty($name) || empty($this->MY_SESSION_ARRAY[$name]))
 			return 0;
@@ -81,9 +81,9 @@ class MYSession {
 			else
 				unset($_SESSION[$name]);
 		}
-	}// function del
+	}// public function del
 	//****************
-	function del_all()
+	public function del_all()
 	{
 		$this->MY_SESSION_ARRAY[$name]=array();
 		if(version_compare("4.0.6", phpversion(), ">"))
@@ -93,9 +93,9 @@ class MYSession {
 		}
 		else
 			$_SESSION[$name]=array();
-	}// function del_all
+	}// public function del_all
 	//*************************
-	function array_copy($array)
+	public function array_copy($array)
 	{
 		$newarray= array();
 		foreach ($array as $key => $value)
@@ -103,6 +103,6 @@ class MYSession {
 			$newarray[$key]=$value;
 		}
 		return  $newarray;
-	}// function array_copy
+	}// public function array_copy
 }// end class
 ?>

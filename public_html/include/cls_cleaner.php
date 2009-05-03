@@ -13,8 +13,8 @@ define("ATTRIB_BLACKLIST",1);
 
 class HTMLCleaner
 {
-var $Options;
-var $Tag_whitelist = '<table><tbody><thead><tfoot><tr><th><td><colgroup><col>
+protected $Options;
+protected $Tag_whitelist = '<table><tbody><thead><tfoot><tr><th><td><colgroup><col>
 <p><br><hr><blockquote>
 <b><i><u><sub><sup><strong><em><tt><var>
 <code><xmp><cite><pre><abbr><acronym><address><samp>
@@ -27,12 +27,12 @@ var $Tag_whitelist = '<table><tbody><thead><tfoot><tr><th><td><colgroup><col>
 //add <html><head><meta><title> to generate proper page
 //don't forget to remove <body strip bellow
 
-var $Attrib_blacklist = 'id|on[\w]+';
-var $CleanUpTags = array('a','span','b','i','u','strong','em','big','small','tt','var','code','xmp','cite','pre','abbr','acronym','address','q','samp','sub','sup');//array of inline tags that can be merged
-var $TidyConfig;
-var $Encoding = 'latin1';
-var $Version = '1.0';
-function HTMLCleaner() {
+protected $Attrib_blacklist = 'id|on[\w]+';
+protected $CleanUpTags = array('a','span','b','i','u','strong','em','big','small','tt','var','code','xmp','cite','pre','abbr','acronym','address','q','samp','sub','sup');//array of inline tags that can be merged
+protected $TidyConfig;
+protected $Encoding = 'latin1';
+protected $Version = '1.0';
+public function __construct() {
 	$this->Options = array(
 				'RemoveStyles'			=> true,	//removes style definitions like style and class
 				'IsWord'				=> true,	//Microsoft Word flag - specific operations may occur
@@ -45,7 +45,7 @@ function HTMLCleaner() {
 				'Optimize'				=>true,		//Optimize code - merge tags
 				'Compress'				=> false
 				);	//trims all spaces (line breaks, tabs) between tags and between words.
-	
+
 	// Specify TIDY configuration
 	$this->TidyConfig = array(
 	       'indent'         				=> true, /*a bit slow*/
@@ -61,25 +61,25 @@ function HTMLCleaner() {
 		   ); //Sets the number of characters allowed before a line is soft-wrapped
 }
 /*-----------------------------------------------------------------------------*/
-function RemoveBlacklistedAttributes($attribs) {
+public function RemoveBlacklistedAttributes($attribs) {
 		//the attribute _must_ have a line-break or a space before
 		$this->html =  preg_replace('/[\s]+('.$attribs.')=[\s]*("[^"]*"|\'[^\']*\')/i',"",$this->html); //double and single quoted
 		$this->html =  preg_replace('/[\s]+('.$attribs.')=[\s]*[^ |^>]*/i',"",$this->html); 	//not quoted
 }
 
 /*-----------------------------------------------------------------------------*/
-function TidyClean() {
+public function TidyClean() {
 	if(!class_exists('tidy')) {
 			if(function_exists( 'tidy_parse_string' ) ) {
 				//use procedural style for compatibility with PHP 4.3
 				tidy_set_encoding($this->Encoding);
-			
+
 				foreach ($this->TidyConfig as $key => $value) {
 				   tidy_setopt($key,$value);
 				}
 			tidy_parse_string($this->html);
 			tidy_clean_repair();
-			$this->html = tidy_get_output();	    
+			$this->html = tidy_get_output();
 			}
 			else
 				print("<b>No tidy support. Please enable it in your php.ini.\r\nOnly basic cleaning is beeing applied\r\n</b>");
@@ -92,8 +92,8 @@ function TidyClean() {
 			$this->html = $tidy;
 	}
 }
-/*-----------------------------------------------------------------------------*/	
-function cleanUp($encoding = 'latin1') {  
+/*-----------------------------------------------------------------------------*/
+public function cleanUp($encoding = 'latin1') {
 
 if(!empty($encoding))
 	$this->Encoding = $encoding;
@@ -119,36 +119,36 @@ else
 if($this->Options['UseTidy']){
 	if($this->Options['TidyBefore'])
 		$this->TidyClean();
-}  
-      
-// remove escape slashes  
-$this->html = stripslashes($this->html);  
-      
+}
+
+// remove escape slashes
+$this->html = stripslashes($this->html);
+
 //++++
 if($this->Options['CleaningMethod'][0] == TAG_WHITELIST){
-	// trim everything before the body tag right away, leaving possibility for body attributes  
+	// trim everything before the body tag right away, leaving possibility for body attributes
 	if(preg_match("/<body/i", "$this->html"))
-		$this->html = stristr( $this->html, "<body");  
-    
-	// strip tags, still leaving attributes, second variable is allowable tags  
-	$this->html = strip_tags($this->html, $this->Tag_whitelist);  
+		$this->html = stristr( $this->html, "<body");
+
+	// strip tags, still leaving attributes, second variable is allowable tags
+	$this->html = strip_tags($this->html, $this->Tag_whitelist);
 	}
-	        
+
 //++++
 if($this->Options['RemoveStyles'])
 	//remove class and style definitions from tidied result
 	$this->RemoveBlacklistedAttributes('class|style');
-	
+
 //++++
-if($this->Options['IsWord']){	
-	$this->RemoveBlacklistedAttributes('lang|[ovwxp]:\w+'); 
+if($this->Options['IsWord']){
+	$this->RemoveBlacklistedAttributes('lang|[ovwxp]:\w+');
 }
-	
+
 //++++
 if($this->Options['CleaningMethod'][1] == ATTRIB_BLACKLIST){
 	if(!empty($this->Attrib_blacklist))
 		$this->RemoveBlacklistedAttributes($this->Attrib_blacklist);
-}	
+}
 
 //++++
 if($this->Options['Optimize']){
@@ -161,10 +161,10 @@ if($this->Options['Optimize']){
 			$this->html = preg_replace("/<($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<\/($tag)>/i","\\2", $this->html,-1,$count); //strip empty inline tags (must be on top of merge inline tags)
 			$repl += $count;
 			$this->html = preg_replace("/<\/($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<($tag)>/i","\\2", $this->html,-1,$count);//merge inline tags
-			$repl += $count;				
+			$repl += $count;
 		}
 	}
-	
+
 	}
 	else {//PHP 4
 			$repl = 1;
@@ -173,20 +173,20 @@ if($this->Options['Optimize']){
 				foreach($this->CleanUpTags as $tag){
 					$count = preg_match("/<($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<\/($tag)>/i", $this->html);
 					$repl += $count;
-					$this->html = preg_replace("/<($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<\/($tag)>/i","\\2", $this->html); //strip empty inline tags (must be on top of merge inline tags)	
-					
+					$this->html = preg_replace("/<($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<\/($tag)>/i","\\2", $this->html); //strip empty inline tags (must be on top of merge inline tags)
+
 					$count = preg_match("/<\/($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<($tag)>/i", $this->html);
 					$repl += $count;
 					$this->html = preg_replace("/<\/($tag)[^>]*>[\s]*([(&nbsp;)]*)[\s]*<($tag)>/i","\\2", $this->html);//merge inline tags
 					}
-			}	
+			}
 	}//end php version test
-		
-	
+
+
 	//drop empty paras after merging tags
 	if($this->Options['DropEmptyParas'])
 		$this->html = preg_replace('/<(p|h[1-6]{1})([^>]*)>[\s]*[(&nbsp;)]*[\s]*<\/(p|h[1-6]{1})>/i',"\r\n", $this->html);
-	
+
 	//trim extra spaces only if tidy is not set to indent
 		if(!$this->TidyConfig['indent']){
 			$this->html = preg_replace('/([^<>])[\s]+([^<>])/i',"\\1 \\2", $this->html);//trim spaces between words
@@ -194,7 +194,7 @@ if($this->Options['Optimize']){
 		}
 }//end optimize
 //++++
-	
+
 	//must be on top of	FillEmptyTableCells, because it can strip nbsp enclosed in paras
 	if($this->Options['DropEmptyParas'] && !$this->Options['Optimize'])
 		$this->html = preg_replace('/<(p|h[1-6]{1})([^>]*)>[\s]*[(&nbsp;)]*[\s]*<\/(p|h[1-6]{1})>/i',"\r\n", $this->html);
@@ -202,7 +202,7 @@ if($this->Options['Optimize']){
 
 	if($this->Options['FillEmptyTableCells'])
 		$this->html = preg_replace("/<td([^>]*)>[\s]*<\/td>/i", "<td\\1>&nbsp;</td>", $this->html);
-   
+
 //++++
 
     if($this->Options['Compress']){
@@ -216,9 +216,10 @@ if($this->Options['Optimize']){
 if($this->Options['UseTidy']){
 	if(!$this->Options['TidyBefore'])
 		$this->TidyClean();
-}  
-	
-	return $this->html;    
+}
+
+	return $this->html;
 } //end cleanup
 /*-----------------------------------------------------------------------------*/
 }
+?>

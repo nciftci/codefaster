@@ -1,24 +1,24 @@
 <?php
 	class Listing {
-		var $sql;
-		var $rs;
-		var $numrows;
-		var $numfields;
-		var $fields;
-		var $limit;
-		var $firstid;
-		var $activatelisting;
-		var $activename;
-		var $noofpage;
-		var $offset;
-		var $page;
-		var $style;
-		var $parameter;
-		var $activestyle;
-		var $buttonstyle;
-		var $limit_display;
+		protected $sql;
+		protected $rs;
+		protected $numrows;
+		protected $numfields;
+		protected $fields;
+		protected $limit;
+		protected $firstid;
+		protected $activatelisting;
+		protected $activename;
+		protected $noofpage;
+		protected $offset;
+		protected $page;
+		protected $style;
+		protected $parameter;
+		protected $activestyle;
+		protected $buttonstyle;
+		protected $limit_display;
 		
-		function Listing($query) {
+		public function __construct($query) {
 			$this->offset=0;
 			$this->page=1;
 			$this->sql=$query;
@@ -28,43 +28,43 @@
 			$this->numrows=mysql_num_rows($this->rs);
 			$this->numfields=mysql_num_fields($this->rs);
 		}
-		function getNumRows() {
+		public function getNumRows() {
 			return $this->numrows;
 		}
-		function setLimit($no) {
+		public function setLimit($no) {
 			$this->limit=$no;
 		}
 		// ID field name
-        function setFirstID($id) {
+        public function setFirstID($id) {
             $this->firstid=$id;
         }
-		function getFirstID() {
+		public function getFirstID() {
 			return $this->firstid;
 		}	
 		// ID field name
 		// end item activate exist	
-        function setActivateListing($idlist) {
+        public function setActivateListing($idlist) {
             $this->activatelisting=$idlist;
         }
-		function getActivateListing() {
+		public function getActivateListing() {
 			return $this->activatelisting;
 		}
 		// Active field name
-        function setActivateFieldName($name) {
+        public function setActivateFieldName($name) {
             $this->activename=$name;
         }
-		function getActivateFieldName() {
+		public function getActivateFieldName() {
 			return $this->activename;
 		}		
 		// end item activate exist			
-		function getLimit() {
+		public function getLimit() {
 			return $this->limit;
 		}
-		function getNoOfPages() {
+		public function getNoOfPages() {
 			return ceil($this->noofpage=($this->getNumRows()/$this->getLimit()));
 		}
 
-		function getOffset($page) {
+		public function getOffset($page) {
 			if($page>$this->getNoOfPages()) {
 				$page=$this->getNoOfPages();
 			}
@@ -86,10 +86,10 @@
 				return $this->offset;
 			}
 		}
-		function getPage() {
+		public function getPage() {
 			return $this->page;
 		}
-		function listPages() {
+		public function listPages() {
 			$limited=$this->sql." limit ".$this->offset." , ".$this->limit;
 			$this->rs=mysql_query($limited) or die(mysql_error());
 			
@@ -170,40 +170,40 @@
 			$data.="</table>";
 			return $data;
 		}
-		function setFields($fields) {
+		public function setFields($fields) {
 			$this->fields=$fields;
 		}
-		function getFields() {
+		public function getFields() {
 			return $this->fields;
 		}
-		function getFieldCount() {
+		public function getFieldCount() {
 			return $this->numfields();
 		}
-		function setLimitDisplay($disp) {
+		public function setLimitDisplay($disp) {
 			$this->limit_display=$disp;
 		}
-		function setStyle($style) {
+		public function setStyle($style) {
 			$this->style=$style;
 		}
-		function getStyle() {
+		public function getStyle() {
 			return $this->style;
 		}
-		function setActiveStyle($style) {
+		public function setActiveStyle($style) {
 			$this->activestyle=$style;
 		}
-		function getActiveStyle() {
+		public function getActiveStyle() {
 			return $this->activestyle;
 		}
-		function setButtonStyle($style) {
+		public function setButtonStyle($style) {
 			$this->buttonstyle=$style;
 		}
-		function getButtonStyle() {
+		public function getButtonStyle() {
 			return $this->buttonstyle;
 		}
-		function setParameter($parameter) {
+		public function setParameter($parameter) {
 			$this->parameter=$parameter;
 		}
-		function getParameter() {
+		public function getParameter() {
 			return $this->parameter;
 		}
 	}
