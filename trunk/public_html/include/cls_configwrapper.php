@@ -31,13 +31,13 @@ $cw->save();
 */
 class ConfigWrapper
 {
- var  $id;
- var  $description;
- var  $name;
- var  $value;
- var  $comment;
- var  $type;
-function ConfigWrapper($id)
+ protected  $id;
+ protected  $description;
+ protected  $name;
+ protected  $value;
+ protected  $comment;
+ protected  $type;
+public function __construct($id)
 	{
 
 
@@ -45,7 +45,7 @@ function ConfigWrapper($id)
 	  {
 
 		$this->id = $id;
-		$SQL = " SELECT description,name,value,comment,type FROM ".STAT_DB_INDEX."config  WHERE id='".$this->id."'";
+		$SQL = " SELECT `description`,`name`,`value`,`comment`,`type` FROM `".STAT_DB_INDEX."config`  WHERE `id`='".$this->id."'";
 		$retid = mysql_query($SQL) or die($MYSQL);
 		if ($row = mysql_fetch_array($retid))
 		{
@@ -68,62 +68,62 @@ function ConfigWrapper($id)
 		}
       }
 	}//end constructor ConfigWrapper
-function getId()
+public function getId()
 {
   return $this->id;
 } // end getId()
-function getDescription()
+public function getDescription()
 {
   return $this->description;
 } // end getDescription()
-function getName()
+public function getName()
 {
   return $this->name;
 } // end getName()
-function getValue()
+public function getValue()
 {
   return $this->value;
 } // end getValue()
-function getComment()
+public function getComment()
 {
   return $this->comment;
 } // end getComment()
-function getType()
+public function getType()
 {
   return $this->type;
 } // end getType()
-function setId($id)
+public function setId($id)
 {
   $this->id=$id;
 } // end setId()
-function setDescription($description)
+public function setDescription($description)
 {
   $this->description=$description;
 } // end setDescription()
 
-function setName($name)
+public function setName($name)
 {
   $this->name=$name;
 } // end setName()
 
-function setValue($value)
+public function setValue($value)
 {
   $this->value=$value;
 } // end setValue()
 
-function setComment($comment)
+public function setComment($comment)
 {
   $this->comment=$comment;
 } // end setComment()
-function setType($type)
+public function setType($type)
 {
   $this->type=$type;
 } // end setType()
 
-function save() {
+public function save() {
 		if (($this->id)==0)
 		{
-			$SQL = "INSERT INTO ".STAT_DB_INDEX."config (description,name,value,comment,type)";
+			$SQL = "INSERT INTO `".STAT_DB_INDEX."config` (`description`,`name`,`value`,`comment`,`type`)";
 			$SQL .= " VALUES('$this->description','$this->name','$this->value','$this->comment','$this->type')";
 			$retid = mysql_query($SQL);
 			if (!$retid) { echo( mysql_error()); }
@@ -131,25 +131,25 @@ function save() {
 		}
 		else
 		{
-			$SQL = "UPDATE ".STAT_DB_INDEX."config SET description='$this->description',name='$this->name',value='$this->value',comment='$this->comment',type='$this->type'";
-			$SQL .= " WHERE id='".$this->id."'";
+			$SQL = "UPDATE `".STAT_DB_INDEX."config` SET `description`='$this->description',`name`='$this->name',`value`='$this->value',`comment`='$this->comment',`type`='$this->type'";
+			$SQL .= " WHERE `id`='".$this->id."'";
 			$retid = mysql_query($SQL);
 			if (!$retid) { echo( mysql_error()); }
 		}
 
 }//end save()
-function delete($id)
+public function delete($id)
 {
-	$SQL = "DELETE FROM ".STAT_DB_INDEX."config WHERE id=".$id."";
+	$SQL = "DELETE FROM `".STAT_DB_INDEX."config` WHERE `id`=".$id."";
 	$retid = mysql_query($SQL);
 	if (!$retid) { echo( mysql_error()); }
 } // end delete()
-function generateConfig($path){
+public function generateConfig($path){
 // checking the file rights
 	if (!file_exists($path))
 	    return 0;
 	 else {
-			$SQL = "SELECT name,value,comment FROM ".DB_PREFIX."config";
+			$SQL = "SELECT `name`,`value`,`comment` FROM `".DB_PREFIX."config`";
 			$retid = mysql_query($SQL);
         	$buffer="";
 			if (!$retid) { echo( mysql_error()); }
@@ -163,7 +163,7 @@ function generateConfig($path){
 		   if($buffer<>"")
 		   {
 				$handle = @fopen($path, "w");
-			$buffer="<?php \n".$buffer."\n\n // if Error Reporting Disable, then set to not report any errors on screen\n if (ERROR_DEBUG==0 || ERROR_DEBUG==2)\n\n error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);\n\n// Disable magic_quotes_runtime\n\nset_magic_quotes_runtime(0);\nheader(\"Content-Type: text/html; charset=\".CONF_CHARSET);\n\n?>";
+			$buffer="<?php \n".$buffer."\n\n // if Error Reporting Disable, then set to not report any errors on screen\n if (ERROR_DEBUG==0 || ERROR_DEBUG==2)\n\n error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);\n\n//error_reporting(E_ALL|E_NOTICE);\n\n// Disable magic_quotes_runtime\n\nset_magic_quotes_runtime(0);\nheader(\"Content-Type: text/html; charset=\".CONF_CHARSET);\n\n?>";
 				if (@fwrite($handle, $buffer) === FALSE) {
 					return 0;
 		   		}

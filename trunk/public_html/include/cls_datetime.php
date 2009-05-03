@@ -3,19 +3,19 @@
 class Datetime {
 
 	// return a date at interval $days from today
-	function add_date_days($days)
+	public function add_date_days($days)
 	{
 		return date('Y-m-d', strtotime("+ {$days} day"));
 	}
 
 	// return a date at interval $days from $data
-	function add_date_days_from($data, $days) 
+	public function add_date_days_from($data, $days) 
 	{
 		return date('Y-m-d', strtotime("+ {$days} day", strtotime($date)));
 	}
 
 	// return 1 or 0 if date $date is (or not) between date $first and $second
-	function isBetween($date, $first, $second)
+	public function isBetween($date, $first, $second)
 	{
 		$first  = strtotime($first);
 		$second = strtotime($second);
@@ -27,7 +27,7 @@ class Datetime {
 		return false;
 	}   
 
-	function formatDate($msqldate, $date_type)
+	public function formatDate($msqldate, $date_type)
 	{
 		$timestamp = @strtotime($msqldate);
 

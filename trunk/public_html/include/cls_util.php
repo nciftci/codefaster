@@ -1,12 +1,12 @@
 <?php
 class Util{
-	function make_left_menu($ft,$menuleft,$menuleft,$menuright,$addon_menu,$all_url_vars){
+	public function make_left_menu($ft,$menuleft,$menuleft,$menuright,$addon_menu,$all_url_vars){
 		$ft->assign("ADMIN_URL", ADMIN_URL);
 		$ft->multiple_assign_define("LANG_");
 		$ft->multiple_assign_define("CONF_");
 	}
 
-	function check_authentification(){
+	public function check_authentification(){
 		// begin authenticate part
 		if(AUTH_TYPE == 1)
 		{

@@ -1,64 +1,64 @@
 <?php
 class ImageCreation {
-    var $path = "images/";
-    var $image_w;
-    var $image_h;
-    var $image_text;
-    var $fontpath = "images/";
-    var $fontname = "SOLMEDIO.TTF";
-    var $fontsize = "";
-    var $fontcolor = "BLACK";
-    var $fontbackgroundcolor = "WHITE";
-    var $name_to_rgb = array();
-    var $rgb_to_name = array();
-    var $name_to_hex = array();
-    var $hex_to_name = array();
-    var $hex_to_rgb = array();
-    var $rgb_to_hex = array();
+    protected $path = "images/";
+    protected $image_w;
+    protected $image_h;
+    protected $image_text;
+    protected $fontpath = "images/";
+    protected $fontname = "SOLMEDIO.TTF";
+    protected $fontsize = "";
+    protected $fontcolor = "BLACK";
+    protected $fontbackgroundcolor = "WHITE";
+    protected $name_to_rgb = array();
+    protected $rgb_to_name = array();
+    protected $name_to_hex = array();
+    protected $hex_to_name = array();
+    protected $hex_to_rgb = array();
+    protected $rgb_to_hex = array();
 
-    var $error_messages = array(1 => "Cannot Initialize new GD image streamsss!",
+    protected $error_messages = array(1 => "Cannot Initialize new GD image streamsss!",
         2 => "Font is missing!",
         3 => "File write error!!"
         );
-    var $error;
+    protected $error;
 
-    function ImageCreation($image_text)
+    public function __construct($image_text)
     {
         $this->image_text = $image_text;
         $this->init();
     }
 
-    function setPath($path)
+    public function setPath($path)
     {
         $this->path = $path;
     }
 
-    function setImageW($image_w)
+    public function setImageW($image_w)
     {
         $this->image_w = $image_w;
     }
 
-    function setImageH($image_h)
+    public function setImageH($image_h)
     {
         $this->image_h = $image_h;
     }
 
-    function setFontPath($fontpath)
+    public function setFontPath($fontpath)
     {
         $this->fontpath = $fontpath;
     }
 
-    function setFontName($fontname)
+    public function setFontName($fontname)
     {
         $this->fontname = $fontname;
     }
 
-    function setFontSize($fontsize)
+    public function setFontSize($fontsize)
     {
         $this->fontsize = $fontsize;
     }
 
-    function setFontColor($fontcolor)
+    public function setFontColor($fontcolor)
     {
         $fontcolor = strtoupper($fontcolor);
         // if it's hex web color
@@ -71,7 +71,7 @@ class ImageCreation {
             $this->fontcolor = "BLACK";
     }
 
-    function setFontBackColor($fontbackgroundcolor)
+    public function setFontBackColor($fontbackgroundcolor)
     {
         $fontbackgroundcolor = strtoupper($fontbackgroundcolor);
         // if it's hex web color
@@ -84,63 +84,63 @@ class ImageCreation {
             $this->fontbackgroundcolor = "WHITE";
     }
 
-    function getFontBackColor()
+    public function getFontBackColor()
     {
         return $this->fontbackgroundcolor;
     }
 
-    function getFontSize()
+    public function getFontSize()
     {
         return $this->fontsize;
     }
 
-    function getFontColor()
+    public function getFontColor()
     {
         return $this->fontcolor;
     }
 
-    function getFontName()
+    public function getFontName()
     {
         return $this->fontname;
     }
 
-    function getFontPath()
+    public function getFontPath()
     {
         return $this->fontpath;
     }
 
-    function getImageH()
+    public function getImageH()
     {
         return $this->image_h;
     }
 
-    function getImageW()
+    public function getImageW()
     {
         return $this->image_w;
     }
 
-    function getPath()
+    public function getPath()
     {
         return $this->path;
     }
 
-    function getErrorMessage()
+    public function getErrorMessage()
     {
         return $this->error_messages[$this->error];
     }
 
-    function createName()
+    public function createName()
     {
         return md5($this->image_text) . ".jpg";
 
     }
 
-    function fileExists()
+    public function fileExists()
     {
         return file_exists($this->path . $this->createName());
     }
 
-    function calculateTextBox($size, $angle, $fontfile, $text)
+    public function calculateTextBox($size, $angle, $fontfile, $text)
     {
         $bbox = imagettfbbox($size, $angle, $fontfile, $text);
         // calculate x baseline
@@ -166,7 +166,7 @@ class ImageCreation {
         return $bbox;
     }
 
-    function createImage()
+    public function createImage()
     {
         // try to make a box measuring the text
         $measures = $this->calculateTextBox($this->fontsize, 0, $this->fontpath . $this->fontname, $this->image_text);
@@ -198,7 +198,7 @@ class ImageCreation {
             $this->error = 1;
     }
 
-    function init()
+    public function init()
     {
         if (!function_exists("imagecreate") || !function_exists("imagettftext"))
             $this->error = 1;
