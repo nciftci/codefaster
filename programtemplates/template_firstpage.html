@@ -1,70 +1,57 @@
-     <p>This tool is designed in such a way to facilitate the creation of java and php classes in javabeans style. It is extremely useful in case you have a Mysql table and you would like to generate a class over this table which would have a constructor, saving (updating) and drop option, and to provide the possibility to enter and query internal variables assigned for each field of the table. The advantage this generator provides is generating a class scheleton which may be altered in the future. 
-        The disadvantage consists in reduced applicability as it is useful in case the first field is set as Primary Key. </p>
-      <p><strong> NEW in 1.2.0:</strong><br>
-        - We have added the possibility to use not only PRIMARY KEY, but to be able to send a whole WHERE to a class.<br>
-        - Undo module (history), you can save your steps into a history table and use it as backup.</p>
-        
-        <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign="top"><br>
       <form action="generate_code.php" method="post">
-        <table width="749" border="0" cellpadding="3" cellspacing="3">
-          <tr> 
+        <table width="939" border="0" cellpadding="3" cellspacing="3">
+          <tr>
             <td width="28%" valign="top"><div align="right">Developer name </div></td>
-            <td width="72%"><input name="author" type="text">
+            <td width="72%"><input name="author" type="text" value="Test Developer" />
               (ex. John Smith) </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="28%" valign="top"><div align="right">Project name </div></td>
-            <td width="72%"><input name="projectname" type="text">
+            <td width="72%"><input name="projectname" type="text" value="Test Product" />
               (ex. Rating Script) </td>
           </tr>
-          <tr> 
+          <tr>
             <td valign="top"><div align="right">CLASS name </div></td>
-            <td><input name="name" type="text">
+            <td><input name="name" type="text" value="TestProduct" />
               (ex. classProduct) </td>
           </tr>
-          <tr> 
+          <tr>
             <td valign="top"><div align="right">VARIABLE name </div></td>
-            <td><input name="varname" type="text">
+            <td><input name="varname" type="text" value="testproduct" />
               (ex. cp) </td>
           </tr>
-          <tr> 
-            <td valign="top"><div align="right">Type</div></td>
-            <td>php4 
-              <input name="type" type="radio" value="php" checked>
-              php5 
-              <input type="radio" name="type" value="php5">
-              <!--java
-        		<input type="radio" name="type" value="java" />	-->
-               </td>
+          <tr>
+            <td valign="top"><div align="right">TABLE name </div></td>
+            <td><input name="table" type="text" id="table" size="50" value="{TABLE}" disabled="disabled" />
+                <input name="table" type="hidden" id="table" value="{TABLE}" />
+            </td>
           </tr>
-          <tr> 
+          <tr>
             <td valign="top"><div align="right">DB fields </div></td>
-            <td><input name="fieldnames" type="text" id="fieldnames" size="50"> 
-              <br>
-              (id;item;itemid;votes; (<strong>first is unique ID</strong>))</td>
+            <td><input name="fieldnames_en" type="text" id="fieldnames_en" size="100" value="{DBFIELDS_EN}" disabled="disabled" />
+                <input name="fieldnames" type="hidden" id="fieldnames" value="{DBFIELDS}" />
+                <input name="fieldnames_en" type="hidden" id="fieldnames_en" value="{DBFIELDS_EN}" />
+            </td>
           </tr>
-          <tr> 
+          <tr>
             <td valign="top"><div align="right">Functions name </div></td>
-            <td><input name="funct_name" type="text" id="funct_name" size="50"> 
-              <br>
-              (ex. ID;Item;ItemID;Votes)</td>
+            <td><input name="funct_name" type="text" id="funct_name" value="{EXAMPLE}" size="100" />
+                <br />
+              (ex. {EXAMPLE})</td>
           </tr>
-          <tr> 
-            <td valign="top"><div align="right">DB Table </div></td>
-            <td><input name="table" type="text" id="table"> <br>
-              (database table name: ex. product) </td>
-          </tr>
-          <tr> 
+          <tr>
             <td valign="top"><div align="right">History(undo) Table </div></td>
-            <td><input name="history_table" type="text" id="history_table"> <br>
-              (ex. undo_table; leave empty to disable undo function) </td>
+            <td><input name="history_table" id="history_table" type="checkbox" />
+                <br />
+              (seelct to enable history/undo function) </td>
           </tr>
-          <tr> 
-            <td colspan="2"><div align="center"> 
-                <input type="submit" name="Submit" value="Submit" class="button">
-              </div></td>
+          <tr>
+            <td colspan="2"><div align="center">
+                <input type="submit" name="Submit" value="Submit" class="button" />
+            </div></td>
           </tr>
         </table>
       </form>
