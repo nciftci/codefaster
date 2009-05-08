@@ -56,6 +56,12 @@ define("PUBL_IMAGE_URL", CONF_INDEX_URL."publ_images/");
 // used for examples in configuration, here place example images
 define("CONFIG_IMAGE_PATH", INDEX_PATH."publ_images/config/");
 define("CONFIG_IMAGE_URL", CONF_INDEX_URL."publ_images/config/");
+// cache path
+define("CACHE_PATH", INDEX_PATH."cache/");
+define("CACHE_URL", CONF_INDEX_URL."cache/");
+// pdf path
+define("PDF_PATH", INDEX_PATH."publ_images/pdf/");
+define("PDF_URL", CONF_INDEX_URL."publ_images/pdf/");
 
 // if an error accured on upload images this number will be returned
 if(!defined("UPLOAD_ERR_FORM_SIZE")) {
