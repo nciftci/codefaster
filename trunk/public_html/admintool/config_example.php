@@ -6,7 +6,7 @@
 	include_once(INCLUDE_LANGUAGE_PATH.$LANG.".admintool.inc.php");
 	include_once(INCLUDE_PATH."connection.php");
 
-	$util=new Util();
+	$util=new Authenticate();
 	$util->check_authentification();
 
 	$stringutil = new String("");

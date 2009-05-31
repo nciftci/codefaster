@@ -11,7 +11,7 @@ $stringutil = new String("nope");
 $all_url_vars = array();
 $all_url_vars = $stringutil->parse_all();
 
-//$util=new Util();
+//$util=new Authenticate();
 //$util->check_authentification();
 
 if(empty($all_url_vars['action']))

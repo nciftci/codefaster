@@ -25,7 +25,7 @@ $all_url_vars = $stringutil->parse_all ();
  * @desc     - autentication will be called here
  * @vers     - 1.0
  **/
-$util = new Util ( );
+$util = new Authenticate ();
 $util->check_authentification ();
 
 /**
