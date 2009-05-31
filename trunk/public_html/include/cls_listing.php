@@ -219,48 +219,48 @@
 
 					$i++;
 				}
+
+				foreach($all_fields_array as $field)
+				{
+					$str="";
+					$n_field=$field["index"];
+					if ($field["mode"]=="field"){
+						$str=$normal_fields[$n_field];
+					};
+					if ($field["mode"]=="extra"){
+						$function=$this->extra_fields[$n_field]["function"];
+						$function_class_or_object=$function["class_or_object"];
+						$function_name=$function["function"];
+						$parameter=$rows[0];
+						$function_call="";
+						if (empty($function_class_or_object)){
+							$function_call=$function_name;
+						}else{
+							$function_call=array($function_class_or_object,$function_name);
+						};
+
+
+						if (is_callable($function_call)){
+							$str=call_user_func_array($function_call,array($parameter));
+						}else{
+							$str="";//the function could not be called
+						};
+					};
+					if($str != "")
+						$data.="<td class=\"bodytext\">".$stringutil->cleanDescription2($str)."</td>";
+					else
+						$data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
+				};
+
 				// TODO: activ
 				if ($this->getActivateListing() == 1) {
 					if ( $rows[$max] == 1) { //if is active, green
-					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$rows[0]."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.ico\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
+						$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$rows[0]."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.ico\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
 					}
 					else { //if inactive red
-					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$rows[0]."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.ico\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
+						$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$rows[0]."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.ico\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
 					}
 				}
-
-			foreach($all_fields_array as $field)
-			{
-				$str="";
-				$n_field=$field["index"];
-				if ($field["mode"]=="field"){
-					$str=$normal_fields[$n_field];
-				};
-				if ($field["mode"]=="extra"){
-					$function=$this->extra_fields[$n_field]["function"];
-					$function_class_or_object=$function["class_or_object"];
-					$function_name=$function["function"];
-					$parameter=$rows[0];
-					$function_call="";
-					if (empty($function_class_or_object)){
-						$function_call=$function_name;
-					}else{
-						$function_call=array($function_class_or_object,$function_name);
-					};
-
-
-					if (is_callable($function_call)){
-						$str=call_user_func_array($function_call,array($parameter));
-					}else{
-						$str="";//the function could not be called
-					};
-				};
-				if($str != "")
-					$data.="<td class=\"bodytext\">".$stringutil->cleanDescription2($str)."</td>";
-				else
-					$data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
-			};
-
 
 				if ($this->enableMod == 0)
 				{
@@ -354,7 +354,7 @@
 			$this->replace_table[$field]=$rpl;
 		}
 		
-		public function addNewFunctionColumn($position,$title,$function_or_method,$class_or_object){
+		public function addNewFunctionColumn($position,$title,$function_or_method,&$class_or_object){
 			$new_index=0;
 			if (!empty($this->extra_fields)) $new_index=sizeof($this->extra_fields);
 			$ef["pos"]=$position;
