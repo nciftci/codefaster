@@ -1,45 +1,10 @@
 <?php
-include_once(INCLUDE_PATH.'cls_file_upload.php');
-include_once(INCLUDE_PATH.'cls_image_crop.php');
 
 class Util{
 	function make_left_menu($ft,$menuleft,$menuleft,$menuright,$addon_menu,$all_url_vars){
 		$ft->assign("ADMIN_URL", ADMIN_URL);
 		$ft->multiple_assign_define("LANG_");
 		$ft->multiple_assign_define("CONF_");
-	}
-
-	function check_authentification(){
-		// begin authenticate part
-		if(AUTH_TYPE == 1)
-		{
-			if (!$AUTHENTICATE)
-			{
-				header( "WWW-Authenticate: Basic realm=\"ADMIN ".CONF_SITE_NAME."\"");
-				header( "HTTP/1.0 401 Unauthorized");
-				$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
-				$ft->define(array("main"=>"template_firstpage.html", "content"=>"authentication_failed.html"));
-				$ft->assign("ADMIN_URL", ADMIN_URL);
-				$ft->multiple_assign_define("LANG_");
-				$ft->multiple_assign_define("CONF_");
-				$ft->parse("BODY", array("content","main"));
-				$ft->showDebugInfo(ERROR_DEBUG);
-				$ft->FastPrint();
-				exit;
-			}
-		}
-		else if(AUTH_TYPE == 2)
-		{
-			include_once(INCLUDE_PATH.'cls_session.php');
-			$sess = new MYSession();
-			if (!$sess->get(SESSION_ID))
-			{
-				$sess->set('session_url_before',$_SERVER['REQUEST_URI']);
-				header("Location: login.php");
-				exit;
-			}
-		}// end authenticate part
-
 	}
 
 	/**************************************************************/
@@ -152,46 +117,11 @@ class Util{
 		return $buffer;
 	}//end formatStateForSelect
 
-	private function uploadImage($prefix_stored_filename,$input_filename){
-		$save_name = $prefix_stored_filename."_".substr(md5("0_".date("Y-m-d H:i:s").$input_filename),0,12);
-		$thumbnail_save_name="thumb_".$save_name;
 
-		$fu = new FileUpload ( $_FILES [$input_filename] );
-		$fu->setSave_name ( $save_name);
-		$fu->setSave_path ( CONF_UPLOADDIR );
-
-		if ($fu->doUpload ()){
-			$im_crop = new ImageCrop ( CONF_UPLOADDIR.$fu->getSave_name() );
-			$im_crop->setSave_name($thumbnail_save_name);
-			$im_crop->setSave_path ( CONF_UPLOADDIR );
-
-			list ( $width, $height ) = $im_crop->getImage_size ();
-
-			//Scale the image if it is greater than the width set above
-			if ($width > THUMBNAIL_WIDTH) 
-				$im_crop->setSave_scale ( THUMBNAIL_WIDTH / $width );
-			else
-				$im_crop->setSave_scale ( 1 );
-
-			$im_crop->setSave_width ( $width );
-			$im_crop->setSave_height ( $height );
-
-			if (! $im_crop->doResize ())
-			{
-				print_r ( $im_crop->getErrorMessage () );
-				exit;
-			}					
-
-			return $fu->getSave_name();
-		}else{		
-			return false;
-		};
-
-	}
-	public function getUploadImagesHtml($n_images,$files_string){
+	public function getUploadImagesHtml($n_images,$files_string,$labels,$image_path){
 	    $result="";
 		for ($i=0;$i<$n_images;$i++){
-			$result.="<div><label for='image'>".LANG_ADMIN_PICTURE."</label><input size='10' name='imagefile_".$i."' id='imagefile_".$i."' type='file' title='' />\n";
+			$result.="<div><label for='image'>".$labels[$i]."</label><input name='imagefile_".$i."' id='imagefile_".$i."' type='file' title='' />\n";
 
 			$image_filename="spacer.gif";
 			if (!empty($files_string)){
@@ -204,28 +134,65 @@ class Util{
 				$original_image_filename=substr($files_string,0,$end);
 				$image_filename="thumb_".substr($files_string,0,$end);
 				$files_string=substr($files_string,$end+1);
-				
+
 				$result.="<input name='imagefile_old_".$i."' type='hidden' id='imagefile_old_".$i."' value='".$original_image_filename."'/>";
 			};
-			$result.="<br/><img src='".CONF_UPLOADURL.$image_filename."'/></div>"; 
+			$result.="<br/><a href='#' onclick='return showDialog()' class=''modal'><div style=\"display: none;\" id=\"bigpicture\" title=\"".LANG_ADMIN_BIGIMAGE."\"><img src='".$image_path.$original_image_filename."' /></div><img src='".$image_path.$image_filename."' /></a></div>";
 		};
-
+		//
+        $result.="<div><label for='check'>".LANG_ADMIN_CHECK_TO_EDIT."</label><input name='check' id='check' type='checkbox' value='1'/></div>";
 		$result.="<input name='imagefile_n' id='imagefile_n' type='hidden' value='".$n_images."' />";
 
 	    return $result;
 	}
 
-	public function uploadAllImages($prefix_stored_filename){
+	private function uploadImage($prefix_stored_filename,$input_filename,$path){
+		$save_name = $prefix_stored_filename."_".substr(md5("0_".date("Y-m-d H:i:s").$input_filename),0,12);
+		$thumbnail_save_name="thumb_".$save_name;
+
+		$fu = new FileUpload ( $_FILES [$input_filename] );
+		$fu->setSave_name ( $save_name);
+		$fu->setSave_path ( $path );
+		if ($fu->doUpload ()){
+			$im_crop = new ImageCrop ( $path.$fu->getSave_name() );
+			$im_crop->setSave_name($path.$thumbnail_save_name.".". $fu->getExt ());
+			//$im_crop->setSave_path ( CATEGORY_IMAGE_PATH );
+
+			list ( $width, $height ) = $im_crop->getImage_size ();
+
+			//Scale the image if it is greater than the width set above
+			if ($width > IC_CONF_IMAGE_THUMB_WIDTH)
+				$im_crop->setSave_scale ( IC_CONF_IMAGE_THUMB_WIDTH / $width );
+			else
+				$im_crop->setSave_scale ( 1 );
+
+			$im_crop->setSave_width ( $width );
+			$im_crop->setSave_height ( $height );
+
+			if (! $im_crop->doResize ())
+			{
+				print_r ( $im_crop->getErrorMessage () );
+				exit;
+			}
+
+			return $fu->getSave_name();
+		}else{		
+			return false;
+		};
+
+	}
+
+	public function uploadAllImages($prefix_stored_filename, $path){
 		$imagefile_n=$_REQUEST['imagefile_n'];
 		$result="";
 		for ($i=0;$i<$imagefile_n;$i++){
 			$filename='imagefile_'.$i;
 			$old_image=$_REQUEST['imagefile_old_'.$i];
-			$r=$this->uploadImage($prefix_stored_filename,$filename);
+			$r=$this->uploadImage($prefix_stored_filename,$filename,$path);
 			if ($r) {//s-a putut upload
 				if (!empty($old_image)){
-					@unlink(CONF_UPLOADDIR.$old_image);
-					@unlink(CONF_UPLOADDIR."thumb_".$old_image);
+					@unlink($path.$old_image);
+					@unlink($path."thumb_".$old_image);
 				};
 			}else{
 				if (!empty($old_image)){
