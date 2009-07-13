@@ -201,7 +201,9 @@ public function save() {
 
 public function delete(${IDCLASS})
 {
-if (is_int(${IDCLASS})) $where_clause="WHERE `{IDCLASS}`='".${IDCLASS}."'";
+if (empty(${IDCLASS})) return;
+
+if (stristr((string)${IDCLASS},"where") === FALSE) $where_clause="WHERE `{IDCLASS}`='".${IDCLASS}."'";
 else $where_clause=${IDCLASS};
 if ($this->enable_undo){
 $this->write_delete_undo($where_clause);
