@@ -84,11 +84,11 @@ case "list":
 	 * @TODO     - TH row seems not match with TD row. 
 	 **/	
     $ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
-	$Obj=new Listing("SELECT {SELECT_WHAT} FROM ".DB_PREFIX."{TBL_NAME} ORDER BY 1 DESC");
-	
-	// set the LIMIT on page, default is 15
+	$Obj=new Listing();
+	$Obj->init_mysql(DB_PREFIX . '{TBL_NAME}', array({SELECT_WHAT}));
+        // set the LIMIT on page, default is 15
 	$limit= 15;
-    //the number of page in the pagination bar 
+       //the number of page in the pagination bar
 	$max=4;
 	$gpos = (isset ( $_GET ["page"] ) ? $_GET["page"]/$limit : 0);
 
