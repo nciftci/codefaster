@@ -88,5 +88,10 @@ function __autoload($class_name) {
 		include_once(INDEX_PATH . $class_name);
 	}
 }
- 
+
+include_once( INCLUDE_PATH . 'FirePHPCore/FirePHP.class.php' );
+$firephp = new FirePHP();
+$firephp->setEnabled(false);
+//$firephp->error('Error Message');
+
 ?>
