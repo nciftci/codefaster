@@ -253,6 +253,36 @@ class String
     	return $text;
     }
 
+        /**
+         *
+         * @param <string> $string
+         * @return <string> encoded string 
+         */
+        function str_hex($string){
+		$hex='';
+		for ($i=0; $i < strlen($string); $i++){
+			$hex .= dechex(ord($string[$i]));
+		}
+		return $hex;
+	}
+
+        /**
+         *
+         * @param <string> $hex
+         * @return <string> return decoded string
+         */
+	function hex_str($hex){
+
+
+            $string='';
+            for ($i=0; $i < strlen($hex)-1; $i+=2) {
+                $string .= chr(hexdec(substr($hex, $i, 2)));
+            }
+
+           
+
+            return $string;
+	}
 }
 
 ?>
