@@ -27,6 +27,7 @@ $stringutil->setIntVars("{FUNC_NAME}");
 <!-- END DYNAMIC BLOCK: phpelements -->
 
 $all_url_vars = $stringutil->parse_all();
+$all_url_vars['{FUNC_NAME1ELEMENT}'] = $stringutil->hex_str($all_url_vars['{FUNC_NAME1ELEMENT}']);
 
 {OTHER_INCLUDE_MODULES}
 
@@ -148,7 +149,7 @@ case "mod":
 		{VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"],$LANG); 
 		<!-- BEGIN DYNAMIC BLOCK: get_elements -->
 		<!-- IFDEF: ISHIDDEN -->
-		$ft->assign("{FORM_ELEMSUPPER}",{VARR}->get{FORM_ELEMS}());
+		$ft->assign("{FORM_ELEMSUPPER}",{STR_HEX_START}{VARR}->get{FORM_ELEMS}(){STR_HEX_END});
         <!-- ENDIF --> 
          <!-- IFDEF: ISRADIO -->
 		$ft->assign("SELECTEDRD_{FORM_ELEMSUPPER}_1", ({VARR}->get{FORM_ELEMS}()==1?"checked":""));

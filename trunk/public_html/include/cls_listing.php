@@ -395,7 +395,7 @@
 
 				// TODO: activ
 				if ($this->getActivateListing() == 1) {
-					if ( $datarow[$max] == 1) { //if is active, green
+					if ( $datarow[$max-1] == 1) { //if is active, green
 					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.ico\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
 					}
 					else { //if inactive red
