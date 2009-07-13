@@ -557,7 +557,8 @@ if ($action == "generate_html") {
 			
 			if (! $dupl && $a !== false) {
 				$dt [$i] = substr ( $cor, 1, $b - 1 );
-				$outxt .= "define('{$dt[$i]}', '{$session->get("name")}');\n";
+				$tmp=str_replace("LANG_","",$dt[$i]);
+				$outxt .= "define('{$dt[$i]}', '{$tmp}');\n";
 				$i ++;
 			}
 			
