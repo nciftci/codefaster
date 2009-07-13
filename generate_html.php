@@ -391,10 +391,10 @@ if ($action == "generate_html") {
 		foreach ( $tmp_fld as $key => $it ) {
 			$flds .= '"#_LANG_ADMIN_' . $NAMEUPPER . "_" . strtoupper ( $key ) . '_#",';
 		}
-		if (! empty ( $all_url_vars ["active_select"] ))
-			$flds .= '" ");';
-		else
-			$flds .= ');';
+//		if (! empty ( $all_url_vars ["active_select"] ))
+//			$flds .= '" ");';
+//		else
+		$flds .= ');';
 	
 	}
 	
@@ -457,7 +457,8 @@ if ($action == "generate_html") {
 	$ftphp->define_dynamic ( "langerrformelements", "main" );
 	// for required fields in PHP error.
 	$tmp_required = $session->get ( "required" );
-	
+
+	$k=0;	
 	foreach ( $items as $key => $it ) {
 		if ($it == "hidden" || $it == "checkbox" || $it == "radio" || $it == "select") {
 			$ftphp->assign ( "FUNC_NAME", $key );
@@ -478,6 +479,16 @@ if ($action == "generate_html") {
 		
 		$ftphp->assign ( "FORM_ELEMS", $key );
 		$ftphp->assign ( "FORM_ELEMSUPPER", strtoupper ( $key ) );
+
+		$str_hex_start="";
+		$str_hex_end="";
+		if ($k==0){
+			$str_hex_start='$stringutil->str_hex(';
+			$str_hex_end=')';
+		}
+		$ftphp->assign ( "STR_HEX_START",$str_hex_start);
+		$ftphp->assign ( "STR_HEX_END",$str_hex_end);
+
 		//$ftphp->assign ( "FORM_ELEMUPPER", strtoupper ( $field ) );
 		$ftphp->parse ( "GET_ELEMENTS", ".get_elements" );
 		$ftphp->parse ( "SET_ELEMENTS", ".set_elements" );
@@ -485,7 +496,8 @@ if ($action == "generate_html") {
 		$ftphp->parse ( "ERRFORMELEMENTS", ".errformelements" );
 		$ftphp->parse ( "ERRMODFORMELEMENTS", ".errmodformelements" );
 		$ftphp->parse ( "UNSETFORMELEMENTS", ".unsetformelements" );
-	
+
+		$k++;
 	}
 	
 	$ftphp->parse ( "BODY", array ("main" ) );
