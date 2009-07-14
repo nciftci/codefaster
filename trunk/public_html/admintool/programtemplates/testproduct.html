@@ -19,15 +19,25 @@ $.fck.config = {
 path: '{CONF_INDEX_URL}javascript/editor/',
 height: 400
 };
+
+
+
+$('textarea.descriptionshort').fck();
+
+
+
+
+$('textarea.description').fck();
+
+
+
+
+
 });
-
 function showDialog(){
-   $("#bigpicture").dialog({ height: 570, width: 760  });
-   return false;
+$("#bigpicture").dialog({ height: 570, width: 760  });
+return false;
 };
-
-
-
 </script>
 <!-- IFDEF: LISTING -->
 {CONTENT}
@@ -101,32 +111,36 @@ function showDialog(){
 
 
 
-<div><label for='name'>{LANG_ADMIN_TESTPRODUCT_NAME} </label><input name="name" id="name" type="text" value="{NAME}" title="{LANG_ADMIN_TESTPRODUCT_VERIF_NAME}"  /></div>
+<div><label for='name'>{LANG_ADMIN_TESTPRODUCT_NAME} <abbr title='{LANG_ADMIN_TESTPRODUCT_REQUIRED}'>*</abbr></label><input name="name" id="name" type="text" value="{NAME}" title="{LANG_ADMIN_TESTPRODUCT_VERIF_NAME}" class="{required:true, messages: {required:'{LANG_ADMIN_VALIDATION_REQUIRED}'}}" /></div>
 
 
 
 
-<input name='descriptionshort' id='descriptionshort' type='hidden' value='{DESCRIPTIONSHORT}' />
+<div><label for='descriptionshort'>{LANG_ADMIN_TESTPRODUCT_DESCRIPTIONSHORT} </label><textarea name="descriptionshort" id="descriptionshort"  title="{LANG_ADMIN_TESTPRODUCT_VERIF_DESCRIPTIONSHORT}" cols="50" rows="6" style="width:600px;">{DESCRIPTIONSHORT}</textarea></div>
 
 
 
 
-<input name='description' id='description' type='hidden' value='{DESCRIPTION}' />
+<div><label for='description'>{LANG_ADMIN_TESTPRODUCT_DESCRIPTION} </label><textarea name="description" id="description"  title="{LANG_ADMIN_TESTPRODUCT_VERIF_DESCRIPTION}" cols="50" rows="6" style="width:600px;">{DESCRIPTION}</textarea></div>
 
 
 
 
-<input name='categoryid' id='categoryid' type='hidden' value='{CATEGORYID}' />
+<div><label for='categoryid'>{LANG_ADMIN_TESTPRODUCT_CATEGORYID} </label><select name="categoryid" id="categoryid" title="{LANG_ADMIN_TESTPRODUCT_VERIF_CATEGORYID}" >
+<option value="0">({LANG_ADMIN_TESTPRODUCTPLEASECHOOSECATEGORYID})</option>
+{CATEGORYID}</select></div>
 
 
 
 
-<input name='isthisreal' id='isthisreal' type='hidden' value='{ISTHISREAL}' />
+<div><label for='isthisreal'>{LANG_ADMIN_TESTPRODUCT_ISTHISREAL} </label><select name="isthisreal" id="isthisreal" title="{LANG_ADMIN_TESTPRODUCT_VERIF_ISTHISREAL}" >
+<option value="0">({LANG_ADMIN_TESTPRODUCTPLEASECHOOSEISTHISREAL})</option>
+{ISTHISREAL}</select></div>
 
 
 
 
-<input name='termsagree' id='termsagree' type='hidden' value='{TERMSAGREE}' />
+<div><label for='termsagree'>{LANG_ADMIN_TESTPRODUCT_TERMSAGREE} </label><input name="termsagree" id="termsagree" type="checkbox" value="1"title="{LANG_ADMIN_TESTPRODUCT_VERIF_TERMSAGREE}"  {SELCHBOX_TERMSAGREE} /></div>
 
 
 
@@ -136,7 +150,7 @@ function showDialog(){
 
 
 
-<input name='active' id='active' type='hidden' value='{ACTIVE}' />
+<div><label for='active'>{LANG_ADMIN_TESTPRODUCT_ACTIVE} </label><input name="active" id="active" value="1" type="radio" title="{LANG_ADMIN_TESTPRODUCT_VERIF_ACTIVE}"  {SELECTEDRD_ACTIVE_1} />{LANG_ADMIN_TESTPRODUCT_YES}<input name="active" id="active" value="0" type="radio" {SELECTEDRD_ACTIVE_0} />{LANG_ADMIN_TESTPRODUCT_NO}</div>
 
 
 
@@ -147,6 +161,7 @@ function showDialog(){
 </fieldset>
 
 <!-- ENDIF -->
+
 
 
 
