@@ -263,7 +263,7 @@ class Util{
 			$result.="<br/><a href='#' onclick='return showDialog()' class=''modal'><div style=\"display: none;\" id=\"bigpicture\" title=\"".LANG_ADMIN_BIGIMAGE."\"><img src='".$image_path.$original_image_filename."' /></div><img src='".$image_path.$image_filename."' /></a></div>";
 		};
 		//
-        $result.="<div><label for='check'>".LANG_ADMIN_CHECK_TO_EDIT."</label><input name='check' id='check' type='checkbox' value='1'/></div>";
+        $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_EDIT."</small></label><input name='check' id='check' type='checkbox' value='1'/></div>";
 		$result.="<input name='imagefile_n' id='imagefile_n' type='hidden' value='".$n_images."' />";
 
 	    return $result;
