@@ -309,10 +309,13 @@ class ImageCrop {
 		
 		if (! $this->checkMime ( $imageMime ))
 			return false;
-		
+
+
 		$image_width = ceil ( $this->save_width * $this->save_scale );
 		$image_height = ceil ( $this->save_height * $this->save_scale );
-		
+
+               
+
 		$save_image = imagecreatetruecolor ( $image_width, $image_height );
 		
 		switch ($this->image_size [2]) {
@@ -328,7 +331,8 @@ class ImageCrop {
 			default :
 				$src_im = false;
 		}
-		
+
+
 		if (! $src_im) {
 			
 			$this->error_messages [] = IC_MESSAGE_FILE_NEW_IMAGE_COULD_NOT_BE_CREATED;
@@ -347,28 +351,32 @@ class ImageCrop {
 
 		else
 			imagecopyresampled ( $save_image, $src_im, 0, 0, $this->start_width, $this->start_height, $image_width, $image_height, $this->save_width, $this->save_height );
-		
+
+
+                $save_filename=$this->image_path."/".$this->save_name.".".$this->save_ext;
+
 		switch ($this->image_size [2]) {
 			case IMAGETYPE_GIF :
-				$res = @imagegif ( $save_image, $this->save_name );
+				$res = @imagegif ( $save_image, $save_filename );
 				break;
 			case IMAGETYPE_JPEG :
-				$res = @imagejpeg ( $save_image, $this->save_name, $this->save_jpg_quality );
+				$res = @imagejpeg ( $save_image, $save_filename, $this->save_jpg_quality );
 				break;
 			case IMAGETYPE_PNG :
-				$res = @imagepng ( $save_image, $this->save_name );
+				$res = @imagepng ( $save_image, $save_filename );
 				break;
 			default :
 				$res = false;
 		}
-		
+
+
 		if (! $res) {
 			$this->error_messages [] = IC_MESSAGE_FILE_NEW_IMAGE_COULD_NOT_BE_CREATED;
 			return false;
 		
 		}
 		
-		chmod ( $this->save_name, 0777 );
+		chmod ( $save_filename, 0777 );
 		
 		if ($this->del_old_file)
 			if (! $this->deleteFile ()) {
