@@ -36,8 +36,12 @@ $all_url_vars['{FUNC_NAME1ELEMENT}'] = $stringutil->hex_str($all_url_vars['{FUNC
 * @desc     - autentication will be called here
 * @vers     - 1.0
 **/
-$util=new Authenticate();
-$util->check_authentification();
+$util = new Util();
+
+
+$auth = new Authenticate();
+$auth -> check_authentification();
+
 
 /**
 * @desc     - Call of Fast Template, with PATH from defines.inc.php
@@ -169,7 +173,7 @@ case "mod":
         <!-- ENDIF --> 
         <!-- IFDEF: ISBROWSE -->
 		$ft->assign("PUBL_IMAGE_URL",PUBL_IMAGE_URL);
-		$ft->assign("{FORM_ELEMSUPPER}",({VARR}->get{FORM_ELEMS}()=="")?"spacer.gif":{VARR}->get{FORM_ELEMS}());
+		$ft->assign("BROWSE_{FORM_ELEMSUPPER}",$util->getUploadImagesHtml({VARR}->get{FORM_ELEMS}()));
         <!-- ENDIF --> 
 		<!-- END DYNAMIC BLOCK: get_elements -->
 		$ft->assign("{".strtoupper("{FUNC_NAME1ELEMENT}")."}",$all_url_vars["{FUNC_NAME1ELEMENT}"]);
@@ -228,8 +232,10 @@ case "save":
             {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
             <!-- IFDEF: ISBROWSE_SAVE -->
-            if(!empty($all_url_vars["{FORM_ELEMS}"]))
+/*            if(!empty($all_url_vars["{FORM_ELEMS}"]))
                 {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+                */
+                {VARR}->set{FORM_ELEMS}($util->uploadAllImages("{CLS}"));
             <!-- ENDIF --> 
             <!-- END DYNAMIC BLOCK: set_elements -->
             {VARR}->save();

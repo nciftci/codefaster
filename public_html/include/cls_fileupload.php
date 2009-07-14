@@ -312,10 +312,11 @@ class FileUpload {
 				return false;
 			
 			}
-			
-			if (move_uploaded_file ( $this->tmpname, $this->save_path . "/" . $this->save_name ))
+			$outfile=$this->save_path . "/" . $this->save_name;
+			if (move_uploaded_file ( $this->tmpname, $outfile)){
+                               @chmod($outfile,0666);
 				return true;
-			else {
+                        } else {
 				$this->error_messages [] = FU_MESSAGE_UPLOAD_CANT_WRITE;
 				return false;
 			

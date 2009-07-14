@@ -63,14 +63,17 @@ define("CACHE_URL", CONF_INDEX_URL."cache/");
 define("PDF_PATH", INDEX_PATH."publ_images/pdf/");
 define("PDF_URL", CONF_INDEX_URL."publ_images/pdf/");
 
+define("THUMBNAIL_WIDTH",80);
+
 // if an error accured on upload images this number will be returned
 if(!defined("UPLOAD_ERR_FORM_SIZE")) {
 	define("UPLOAD_ERR_FORM_SIZE","2");
 }
 // FILE UPLOAD
 define("FU_CONF_INDEX_PATH",dirname(__FILE__));
-define("FU_CONF_INDEX_URL",INDEX_URL);
+define("FU_CONF_INDEX_URL",CONF_INDEX_URL);
 define("FU_CONF_UPLOADDIR",FU_CONF_INDEX_PATH."/tmp/");
+define("FU_CONF_UPLOADURL",CONF_INDEX_URL."/tmp/");
 define("FU_CONF_LANGUAGE","en");
 // IMAGE CROP
 define("IC_CONF_IMAGEDIR",FU_CONF_INDEX_PATH."/public_images/");

@@ -1,4 +1,6 @@
 <?php
+include_once(INCLUDE_PATH.'cls_file_upload.php');
+include_once(INCLUDE_PATH.'cls_image_crop.php');
 
 class Util{
 	function make_left_menu($ft,$menuleft,$menuleft,$menuright,$addon_menu,$all_url_vars){
@@ -118,10 +120,67 @@ class Util{
 	}//end formatStateForSelect
 
 
-	public function getUploadImagesHtml($n_images,$files_string,$labels,$image_path){
+
+/**
+ *
+ * @param <string> $prefix_stored_filename
+ * @param <string> $input_filename
+ * @return <string>  $name of the stored filename
+ */
+	private function uploadImage($prefix_stored_filename,$input_filename){
+		$save_name = $prefix_stored_filename."_".substr(md5("0_".date("Y-m-d H:i:s").$input_filename),0,12);
+		$thumbnail_save_name="thumb_".$save_name;
+
+
+
+		$fu = new FileUpload ( $_FILES [$input_filename] );
+		$fu->setSave_name ( $save_name);
+		$fu->setSave_path ( FU_CONF_UPLOADDIR );
+
+
+		if ($fu->doUpload ()){
+			$im_crop = new ImageCrop ( FU_CONF_UPLOADDIR.$fu->getSave_name() );
+			$im_crop->setSave_name($thumbnail_save_name);
+			$im_crop->setSave_path ( FU_CONF_UPLOADDIR );
+
+			list ( $width, $height ) = $im_crop->getImage_size ();
+
+			//Scale the image if it is greater than the width set above
+                        
+			if ($width > THUMBNAIL_WIDTH)
+				$im_crop->setSave_scale ( THUMBNAIL_WIDTH / $width );
+			else
+				$im_crop->setSave_scale ( 1 );
+
+			$im_crop->setSave_width ( $width );
+			$im_crop->setSave_height ( $height );
+
+			if (! $im_crop->doResize ())
+			{
+				print_r ( $im_crop->getErrorMessage () );
+                                print("x_x");
+				exit;
+			}
+
+			return $fu->getSave_name();
+		}else{
+                        print_r($fu->error_messages);print("__");exit;
+			return false;
+		};
+
+	}
+
+        /**
+         *
+         * @param <string> $files_string the string which contains information about uploaded images
+         * @return <string>  HTML code for image upload
+         */
+
+	public function getUploadImagesHtml($files_string){
 	    $result="";
+            $n_images=1;
 		for ($i=0;$i<$n_images;$i++){
-			$result.="<div><label for='image'>".$labels[$i]."</label><input name='imagefile_".$i."' id='imagefile_".$i."' type='file' title='' />\n";
+			$result.="<div><label for='image'>".LANG_ADMIN_PICTURE."</label><input size='10' name='imagefile_".$i."' id='imagefile_".$i."' type='file' title='' />\n";
 
 			$image_filename="spacer.gif";
 			if (!empty($files_string)){
@@ -137,62 +196,34 @@ class Util{
 
 				$result.="<input name='imagefile_old_".$i."' type='hidden' id='imagefile_old_".$i."' value='".$original_image_filename."'/>";
 			};
-			$result.="<br/><a href='#' onclick='return showDialog()' class=''modal'><div style=\"display: none;\" id=\"bigpicture\" title=\"".LANG_ADMIN_BIGIMAGE."\"><img src='".$image_path.$original_image_filename."' /></div><img src='".$image_path.$image_filename."' /></a></div>";
+			$result.="<br/><img src='".FU_CONF_UPLOADURL.$image_filename."'/></div>";
 		};
-		//
-        $result.="<div><label for='check'>".LANG_ADMIN_CHECK_TO_EDIT."</label><input name='check' id='check' type='checkbox' value='1'/></div>";
+
 		$result.="<input name='imagefile_n' id='imagefile_n' type='hidden' value='".$n_images."' />";
+
+//                       print_r($result);exit;
+      
 
 	    return $result;
 	}
 
-	private function uploadImage($prefix_stored_filename,$input_filename,$path){
-		$save_name = $prefix_stored_filename."_".substr(md5("0_".date("Y-m-d H:i:s").$input_filename),0,12);
-		$thumbnail_save_name="thumb_".$save_name;
+/**
+ *
+ * @param <string> $prefix_stored_filename
+ * @return <string>
+ */
 
-		$fu = new FileUpload ( $_FILES [$input_filename] );
-		$fu->setSave_name ( $save_name);
-		$fu->setSave_path ( $path );
-		if ($fu->doUpload ()){
-			$im_crop = new ImageCrop ( $path.$fu->getSave_name() );
-			$im_crop->setSave_name($path.$thumbnail_save_name.".". $fu->getExt ());
-			//$im_crop->setSave_path ( CATEGORY_IMAGE_PATH );
-
-			list ( $width, $height ) = $im_crop->getImage_size ();
-
-			//Scale the image if it is greater than the width set above
-			if ($width > IC_CONF_IMAGE_THUMB_WIDTH)
-				$im_crop->setSave_scale ( IC_CONF_IMAGE_THUMB_WIDTH / $width );
-			else
-				$im_crop->setSave_scale ( 1 );
-
-			$im_crop->setSave_width ( $width );
-			$im_crop->setSave_height ( $height );
-
-			if (! $im_crop->doResize ())
-			{
-				print_r ( $im_crop->getErrorMessage () );
-				exit;
-			}
-
-			return $fu->getSave_name();
-		}else{		
-			return false;
-		};
-
-	}
-
-	public function uploadAllImages($prefix_stored_filename, $path){
-		$imagefile_n=$_REQUEST['imagefile_n'];
-		$result="";
+	public function uploadAllImages($prefix_stored_filename){
+		$imagefile_n=1;//$_REQUEST['imagefile_n'];
+            	$result="";
 		for ($i=0;$i<$imagefile_n;$i++){
 			$filename='imagefile_'.$i;
 			$old_image=$_REQUEST['imagefile_old_'.$i];
-			$r=$this->uploadImage($prefix_stored_filename,$filename,$path);
-			if ($r) {//s-a putut upload
+			$r=$this->uploadImage($prefix_stored_filename,$filename);
+			if ($r) {//the upload was possible
 				if (!empty($old_image)){
-					@unlink($path.$old_image);
-					@unlink($path."thumb_".$old_image);
+					@unlink(FU_CONF_UPLOADDIR.$old_image);
+					@unlink(FU_CONF_UPLOADDIR."thumb_".$old_image);
 				};
 			}else{
 				if (!empty($old_image)){

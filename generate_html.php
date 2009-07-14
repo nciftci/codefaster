@@ -204,8 +204,7 @@ foreach ( $fields as $field ) {
 				if ($all_url_vars ["item_textarea"] [$field] == "with_editor")
 					$fck_toolbar = "{toolbar:'Basic'}";
 				if ($all_url_vars ["item_textarea"] [$field] == "with_advanced_editor")
-					$fck_toolbar = "{toolbar:'Default'}";
-				
+					$fck_toolbar = "{toolbar:'Default'}";			
 				$fthtml->assign ( "FCK_FIELD", $field );
 				$fthtml->assign ( "FCK_TOOLBAR", $fck_toolbar );
 				$fthtml->parse ( "FCKELEMENTS", ".fckelements" );
@@ -215,7 +214,8 @@ foreach ( $fields as $field ) {
 			
 			// generate form browse (upload) element
 			case 'browse' :
-				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" type=\"file\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" " . $class_value . " /><br /><img src=\"#_PUBL_IMAGE_URL_##_" . $strupperfield . "_#\" />" . $divend;
+				//$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" type=\"file\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" " . $class_value . " /><br /><img src=\"#_PUBL_IMAGE_URL_##_" . $strupperfield . "_#\" />" . $divend;
+                                $fielddata=$divstart."#_BROWSE_{$strupperfield}_#";
 				break;
 			
 			// generate form checkbox element
