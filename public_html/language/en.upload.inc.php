@@ -25,7 +25,7 @@ define("FU_MESSAGE_UPLOAD_FILESIZE_LARGE", "File is too large!");
 
 
 define("IC_MESSAGE_GD_NOT_LOADED", "GD Library is not Loaded!");
-define("IC_MESSAGE_FILE_NOT_EXISTS", "The file is not exists");
+define("IC_MESSAGE_FILE_NOT_EXISTS", "The file doesn't exist");
 define("IC_MESSAGE_FILE_MIME_NOT_ALLOWED", "This mimetype is not allowed to resize!");
 define("IC_MESSAGE_FILE_COULD_NOT_WRITE", "Can't write new file!");
 define("IC_MESSAGE_FILE_COULD_NOT_DELETE", "File not exists or could not be deleted!");

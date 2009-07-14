@@ -11,8 +11,7 @@ include_once(INCLUDE_PATH . "cls_image_crop.php");
 $stringutil = new String();
 $all_url_vars = $stringutil->parse_all();
 $thumb_name = $_SESSION["path"]."thumb_".$_SESSION["uploaded_file"];
-$thumb_width = 100;
-$thumb_heigth = 75;
+
 $ft = new FastTemplate( ADMIN_TEMPLATE_CONTENT_PATH );
 if(MULTILANGUAGE == 0) $ft->assign("MULTILANGUAGE",1);
 if(SHOP == 1) $ft->assign("SHOP",1);
