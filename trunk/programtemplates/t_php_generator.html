@@ -93,7 +93,13 @@ case "list":
     $ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
 	$Obj=new Listing();
 	$Obj->init_mysql(DB_PREFIX . '{TBL_NAME}', array({SELECT_WHAT}));
-        // set the LIMIT on page, default is 15
+    
+    // replace data from listing from other table
+    //$Obj->setReplaceColumnIdFromDatabase("DBfield","DBtable","TBid_column","TBdata_column");
+    // replace data from listing from array
+    //$Obj->setReplaceColumnIdFromArray("field",$d_field);
+    
+    // set the LIMIT on page, default is 15
 	$limit= 15;
        //the number of page in the pagination bar
 	$max=4;
