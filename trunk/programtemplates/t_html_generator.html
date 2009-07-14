@@ -24,6 +24,10 @@ $(function() {
     $('textarea.{FCK_FIELD}').fck({FCK_TOOLBAR});
 <!-- END DYNAMIC BLOCK: fckelements -->
 });
+function showDialog(){
+   $("#bigpicture").dialog({ height: 570, width: 760  });
+   return false;
+};
 </script>
 <!-- IF##DEF: LISTING -->
 #_CONTENT_#
