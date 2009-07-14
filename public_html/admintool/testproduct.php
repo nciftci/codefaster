@@ -82,7 +82,11 @@ case 'list':
 **/
 	$ft -> define( array( 'main' => 'template_index.html', 'content' => 'testproduct.html' ) );
 	$Obj = new Listing();
-	$Obj -> init_mysql( DB_PREFIX . 'product', array( id, name, categoryid, fileupload, active ) );// set the LIMIT on page, default is 15
+	$Obj -> init_mysql( DB_PREFIX . 'product', array( id, name, categoryid, fileupload, active ) );
+	
+	$Obj->setReplaceColumnIdFromArray("categoryid",$d_categoryid);
+	//$Obj->setReplaceColumnIdFromArray("isthisreal",$d_isthisreal);
+	// set the LIMIT on page, default is 15
 	$limit = 15;//the number of page in the pagination bar
 	$max = 4;
 	$gpos = ( isset( $_GET [ 'page' ] ) ? $_GET[ 'page' ]/$limit : 0 );
