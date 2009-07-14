@@ -19,6 +19,15 @@ define("LANG_ADMIN_ACTIVATE","Activate");
 define("LANG_ADMIN_DEACTIVATE","Deactivate");
 define("LANG_ADMIN_ADD","Add");
 define("LANG_ADMIN_LIST","List");
+define("LANG_ADMIN_UPLOAD","Upload "); 
+define("LANG_ADMIN_CHECK_TO_EDIT","Check this if you wish to edit the picture after upload");
+define("LANG_ADMIN_BIGIMAGE","Large image (scroll if you need)");
+define("LANG_ADMIN_IMAGEUPLOADEDSUCCESS","Picture uploaded successfully!");
+define("LANG_ADMIN_IMAGEUPLOADEDSUCCESS_HELP","Select a part of the image. On the right, you will see the preview of the selected part.");
+define("LANG_ADMIN_THUMBIMAGE_CREATE","Create Thumbnail");
+define("LANG_ADMIN_THUMBIMAGE_PREVIEW","Thumbnail Preview");
+define("LANG_ADMIN_IMAGE_SAVE","Save final picture");
+define("LANG_ADMIN_THUMBIMAGE","Create Thumbnail");
 
 /****** AUTENTICATION *****/
 define("LANG_ADMIN_AUTHENTICATION","Authentification");
