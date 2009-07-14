@@ -48,7 +48,7 @@ $(window).load(function () {
 <div style="border:2px #e5e5e5 solid; float:left; position:relative; overflow:hidden; width:{TH_WIDTH}px; height:{TH_HEIGTH}px;"> <img src="{PIC}"
 	style="position: relative;" alt="{LANG_ADMIN_THUMBIMAGE_PREVIEW}" /></div>
 <br style="clear: both;" />
-<form name="thumbnail" action="upload.php?action=save" method="post">
+<form name="thumbnail" action="{PHP_FILE_SAVE}?do=save_crop" method="post">
     <input type="hidden" name="x1" value="" id="x1" />
     <input type="hidden" name="y1" value="" id="y1" />
     <input type="hidden" name="x2" value="" id="x2" />
