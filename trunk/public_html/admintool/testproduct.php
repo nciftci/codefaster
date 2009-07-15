@@ -206,7 +206,7 @@ case 'save':
 		if( $upload_image_check )
 		{// TODO review for custom field names and ONLY if upload field
 			$fu = new FileUpload( $_FILES[ 'imagefile_0' ] );
-			$fu -> setSave_name( 'TestProduct' . substr( md5( '0_' . date( 'Y-m-d H:i:s' ) . $_FILES[ 'imagefile_0' ][ 'name' ] ), 0, 12 ) );
+			$fu -> setSave_name( 'TestProduct_' . substr( md5( '0_' . date( 'Y-m-d H:i:s' ) . $_FILES[ 'imagefile_0' ][ 'name' ] ), 0, 12 ) );
 			$fu -> setSave_path( FU_CONF_UPLOADDIR );//pre_resize start
 			$width = '';
 			$height = '';
