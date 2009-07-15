@@ -255,7 +255,7 @@ case "save":
             if ($upload_image_check) { 
 				// TODO review for custom field names and ONLY if upload field
                 $fu = new FileUpload($_FILES["imagefile_0"]);
-                $fu->setSave_name("tmp_".substr(md5("0_".date("Y-m-d H:i:s").$_FILES["imagefile_0"]["name"]),0,12));
+                $fu->setSave_name("{CLS}".substr(md5("0_".date("Y-m-d H:i:s").$_FILES["imagefile_0"]["name"]),0,12));
                 $fu->setSave_path(FU_CONF_UPLOADDIR);
 
                 //pre_resize start
@@ -287,6 +287,7 @@ case "save":
                 //pre_resize end
 
                 $_SESSION["uploaded_file"] = $tmp_save_name;
+                $_SESSION['{FUNC_NAME1ELEMENT}'] =  $all_url_vars[ '{FUNC_NAME1ELEMENT}' ];
                 @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=crop_preview' );
                 exit;
             };
@@ -361,6 +362,13 @@ case "save":
             print_r ( $im_crop->getErrorMessage ());  //TODO print_r?
             exit;
         }
+
+        {VARR} = new {CLS}( $_SESSION[ '{FUNC_NAME1ELEMENT}' ], $LANG );
+
+        {VARR} -> setfileupload( $_SESSION[ 'uploaded_file' ] );
+        {VARR} -> save();
+
+
             @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=list' );
             exit;
 
