@@ -20,7 +20,6 @@ $stringutil = new String();
 * @vers     - 1.0
 **/
 $stringutil -> setIntVars( 'id' );
-$stringutil -> setIntVars( 'descriptionshort' );
 $stringutil -> setIntVars( 'description' );
 $stringutil -> setIntVars( 'categoryid' );
 $stringutil -> setIntVars( 'isthisreal' );
@@ -137,14 +136,16 @@ case 'mod':
 		$testproduct = new TestProduct( $all_url_vars[ 'id' ], $LANG );
 		$ft -> assign( 'ID', $stringutil -> str_hex( $testproduct -> getid() ) );
 		$ft -> assign( 'NAME', $testproduct -> getname() );
-		$ft -> assign( 'DESCRIPTIONSHORT', $testproduct -> getdescriptionshort() );
+		$labels = array();
+		array_push( $labels, LANG_ADMIN_UPLOAD );//TODO: for multiple upload, need multiple name
+		$ft -> assign( 'BROWSE_DESCRIPTIONSHORT', $util -> getUploadImagesHtml( 1, $testproduct -> getdescriptionshort(), $labels, FU_CONF_UPLOADURL , "descriptionshort") );
 		$ft -> assign( 'DESCRIPTION', $testproduct -> getdescription() );
 		$ft -> assign( 'CATEGORYID', $testproduct -> getcategoryid() );
 		$ft -> assign( 'ISTHISREAL', $testproduct -> getisthisreal() );
 		$ft -> assign( 'TERMSAGREE', $testproduct -> gettermsagree() );
 		$labels = array();
 		array_push( $labels, LANG_ADMIN_UPLOAD );//TODO: for multiple upload, need multiple name
-		$ft -> assign( 'BROWSE_FILEUPLOAD', $util -> getUploadImagesHtml( 1, $testproduct -> getfileupload(), $labels, FU_CONF_UPLOADURL ) );
+		$ft -> assign( 'BROWSE_FILEUPLOAD', $util -> getUploadImagesHtml( 1, $testproduct -> getfileupload(), $labels, FU_CONF_UPLOADURL ,"fileupload") );
 		$ft -> assign( 'ACTIVE', $testproduct -> getactive() );
 		$ft -> assign( '{' . strtoupper( 'id' ) . '}', $all_url_vars[ 'id' ] );
 	}
@@ -159,7 +160,7 @@ case 'save':
 **/
 	// TODO: We need here to give back the errors. You can customize it. Ex: check if email, via a function (class).
 	$err = 0;
-	
+        
 	if( !empty( $err ) )
 	{
 		$_SESSION[ 'id' ] = $all_url_vars[ 'id' ];
@@ -176,6 +177,8 @@ case 'save':
 	}
 	else
 	{
+
+                $cropping_files_array=array();
 		$ft -> define( array( 'main' => 'template_index.html', 'content' => 'testproduct.html' ) );
 		
 		if( empty( $all_url_vars[ 'id' ] ) )
@@ -189,60 +192,41 @@ case 'save':
 		
 		$testproduct -> setid( $all_url_vars[ 'id' ] );
 		$testproduct -> setname( $all_url_vars[ 'name' ] );
-		$testproduct -> setdescriptionshort( $all_url_vars[ 'descriptionshort' ] );
+		$upload_image_check = !empty( $all_url_vars[ 'descriptionshort_check' ] );//TODO: De unde vine?
+		if( $upload_image_check ){
+                       array_push($cropping_files_array,"descriptionshort");
+                }
+                else
+		{
+                
+			$testproduct -> setdescriptionshort( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR ,"descriptionshort") );
+		}
+		
 		$testproduct -> setdescription( $all_url_vars[ 'description' ] );
 		$testproduct -> setcategoryid( $all_url_vars[ 'categoryid' ] );
 		$testproduct -> setisthisreal( $all_url_vars[ 'isthisreal' ] );
 		$testproduct -> settermsagree( $all_url_vars[ 'termsagree' ] );
-		$upload_image_check = !empty( $all_url_vars[ 'check' ] );//TODO: De unde vine?
-		if( !$upload_image_check )
+		$upload_image_check = !empty( $all_url_vars[ 'fileupload_check' ] );//TODO: De unde vine?
+		if( $upload_image_check ){
+                       array_push($cropping_files_array,"fileupload");
+                }
+                else
 		{
-			$testproduct -> setfileupload( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR ) );
+                
+			$testproduct -> setfileupload( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR ,"fileupload") );
 		}
 		
 		$testproduct -> setactive( $all_url_vars[ 'active' ] );
 		$testproduct -> save();
 		
-		if( $upload_image_check )
-		{// TODO review for custom field names and ONLY if upload field
-			$fu = new FileUpload( $_FILES[ 'imagefile_0' ] );
-			$fu -> setSave_name( 'TestProduct_' . substr( md5( '0_' . date( 'Y-m-d H:i:s' ) . $_FILES[ 'imagefile_0' ][ 'name' ] ), 0, 12 ) );
-			$fu -> setSave_path( FU_CONF_UPLOADDIR );//pre_resize start
-			$width = '';
-			$height = '';
-			$extension = $fu -> getExt();
-			$input_image = FU_CONF_UPLOADDIR . $fu -> getSave_name() . '.' . $extension;
-			move_uploaded_file( $_FILES[ 'imagefile_0' ][ 'tmp_name' ], $input_image ) ;
-			@chmod( $input_image, 0666 );
-			list( $width, $height, $type, $attr ) = getimagesize( $input_image );
-			$tmp_save_name = $fu -> getSave_name() . '.' . $fu -> getExt();
-			$tmp_save_path = FU_CONF_UPLOADDIR . '/' . $tmp_save_name;
-			$im_crop = new ImageCrop( $tmp_save_path );
-			$im_crop -> setSave_name( $tmp_save_path );
-			$im_crop -> setSave_width( $width );
-			$im_crop -> setSave_height( $height );
-			
-			if( $width > 800 )
-			{
-				$im_crop -> setSave_scale( 800/$width );
-			}
-			else
-			{
-				$im_crop -> setSave_scale( 1 );
-			}
-			
-			if( ! $im_crop -> doResize() )
-			{
-				print_r( $im_crop -> getErrorMessage() );
-				exit;
-			}//pre_resize end
-			$_SESSION[ 'uploaded_file' ] = $tmp_save_name;
-			$_SESSION[ 'id' ] = $all_url_vars[ 'id' ];
-			@header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=crop_preview' );
-			exit;
-		}
-		
-		;
+		if( !empty($cropping_files_array) )
+		{
+                        $_SESSION['CROP_FILES']=$cropping_files_array;
+                        @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
+
+                        exit;
+		};
+                
 		unset( $_SESSION[ 'err' ] );
 		unset( $_SESSION[ 'id' ] );
 		unset( $_SESSION[ 'name' ] );
@@ -259,6 +243,45 @@ case 'save':
 		exit;
 	}//end else
 	break;// TODO move into IF file upload exist, generate, else not.
+
+case 'prepare_crop_preview':
+
+    $filebase=array_pop($_SESSION['CROP_FILES']);
+    $input_post_filename=$filebase.'_imagefile_0';
+    $fu = new FileUpload( $_FILES[ $input_post_filename ] );
+    $fu -> setSave_name( 'TestProduct_' . substr( md5( '0_' . date( 'Y-m-d H:i:s' ) . $_FILES[ 'imagefile_0' ][ 'name' ] ), 0, 12 ) );
+    $fu -> setSave_path( FU_CONF_UPLOADDIR );//pre_resize start
+    $width = '';
+    $height = '';
+    $extension = $fu -> getExt();
+    $input_image = FU_CONF_UPLOADDIR . $fu -> getSave_name() . '.' . $extension;
+    move_uploaded_file( $_FILES[ $input_post_filename ][ 'tmp_name' ], $input_image ) ;
+    @chmod( $input_image, 0666 );
+    list( $width, $height, $type, $attr ) = getimagesize( $input_image );
+    $tmp_save_name = $fu -> getSave_name() . '.' . $fu -> getExt();
+    $tmp_save_path = FU_CONF_UPLOADDIR . '/' . $tmp_save_name;
+    $im_crop = new ImageCrop( $tmp_save_path );
+    $im_crop -> setSave_name( $tmp_save_path );
+    $im_crop -> setSave_width( $width );
+    $im_crop -> setSave_height( $height );
+
+    if( $width > 800 ) {
+        $im_crop -> setSave_scale( 800/$width );
+    }
+    else {
+        $im_crop -> setSave_scale( 1 );
+    }
+
+    if( ! $im_crop -> doResize() ) {
+        print_r( $im_crop -> getErrorMessage() );
+        exit;
+    }//pre_resize end
+    $_SESSION[ 'uploaded_file' ] = $tmp_save_name;
+    $_SESSION[ 'id' ] = $all_url_vars[ 'id' ];
+    @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=crop_preview' );
+
+    exit;
+break;
 case 'crop_preview':
 	
 	if( !empty( $_SESSION[ 'uploaded_file' ] ) )
