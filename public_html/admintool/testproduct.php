@@ -218,13 +218,57 @@ case 'save':
 		
 		$testproduct -> setactive( $all_url_vars[ 'active' ] );
 		$testproduct -> save();
-		
+
+
 		if( !empty($cropping_files_array) )
 		{
-                        $_SESSION['CROP_FILES']=$cropping_files_array;
-                        @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
+                    $k=0;
+                    $all_crop_info=array();
+                    foreach ($cropping_files_array as $filebase) {
+                        $input_post_filename=$filebase.'_imagefile_0';
+                        $fu = new FileUpload( $_FILES[ $input_post_filename ] );
+                        $fu -> setSave_name( 'TestProduct_'.substr( md5( '0_'.$k . date( 'Y-m-d H:i:s' ) . $_FILES[ $input_post_filename ][ 'name' ] ), 0, 12 ) );
+                        $fu -> setSave_path( FU_CONF_UPLOADDIR );//pre_resize start
+                        $width = '';
+                        $height = '';
+                        $extension = $fu -> getExt();
+                        $input_image = FU_CONF_UPLOADDIR . $fu -> getSave_name() . '.' . $extension;
+                        move_uploaded_file( $_FILES[ $input_post_filename ][ 'tmp_name' ], $input_image ) ;
+                        @chmod( $input_image, 0666 );
+                        list( $width, $height, $type, $attr ) = getimagesize( $input_image );
+                        $tmp_save_name = $fu -> getSave_name() . '.' . $fu -> getExt();
+                        $tmp_save_path = FU_CONF_UPLOADDIR . '/' . $tmp_save_name;
+                        $im_crop = new ImageCrop( $tmp_save_path );
+                        $im_crop -> setSave_name( $tmp_save_path );
+                        $im_crop -> setSave_width( $width );
+                        $im_crop -> setSave_height( $height );
 
-                        exit;
+                        if( $width > 800 ) {
+                            $im_crop -> setSave_scale( 800/$width );
+                        }
+                        else {
+                            $im_crop -> setSave_scale( 1 );
+                        }
+
+                        if( ! $im_crop -> doResize() ) {
+                            print_r( $im_crop -> getErrorMessage() );
+                            exit;
+                        };//pre_resize end
+                        $crop_item=array();
+                        $crop_item['tmpfile']=$tmp_save_name;
+                        $crop_item['filebase']=$filebase;
+                        $all_crop_info[$k]=$crop_item;
+                        $k=$k+1;
+                    };
+
+
+                    $_SESSION['CROP_INFO']=$all_crop_info;
+                    $_SESSION[ 'id' ] = $all_url_vars[ 'id' ];
+
+                    
+                    @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
+
+                    exit;
 		};
                 
 		unset( $_SESSION[ 'err' ] );
@@ -246,46 +290,26 @@ case 'save':
 
 case 'prepare_crop_preview':
 
-    $filebase=array_pop($_SESSION['CROP_FILES']);
-    $input_post_filename=$filebase.'_imagefile_0';
-    $fu = new FileUpload( $_FILES[ $input_post_filename ] );
-    $fu -> setSave_name( 'TestProduct_' . substr( md5( '0_' . date( 'Y-m-d H:i:s' ) . $_FILES[ 'imagefile_0' ][ 'name' ] ), 0, 12 ) );
-    $fu -> setSave_path( FU_CONF_UPLOADDIR );//pre_resize start
-    $width = '';
-    $height = '';
-    $extension = $fu -> getExt();
-    $input_image = FU_CONF_UPLOADDIR . $fu -> getSave_name() . '.' . $extension;
-    move_uploaded_file( $_FILES[ $input_post_filename ][ 'tmp_name' ], $input_image ) ;
-    @chmod( $input_image, 0666 );
-    list( $width, $height, $type, $attr ) = getimagesize( $input_image );
-    $tmp_save_name = $fu -> getSave_name() . '.' . $fu -> getExt();
-    $tmp_save_path = FU_CONF_UPLOADDIR . '/' . $tmp_save_name;
-    $im_crop = new ImageCrop( $tmp_save_path );
-    $im_crop -> setSave_name( $tmp_save_path );
-    $im_crop -> setSave_width( $width );
-    $im_crop -> setSave_height( $height );
+    $crop_item=array_shift($_SESSION['CROP_INFO']);
 
-    if( $width > 800 ) {
-        $im_crop -> setSave_scale( 800/$width );
-    }
-    else {
-        $im_crop -> setSave_scale( 1 );
+    if (empty($crop_item)){
+        @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=list' );
+	exit;
     }
 
-    if( ! $im_crop -> doResize() ) {
-        print_r( $im_crop -> getErrorMessage() );
-        exit;
-    }//pre_resize end
-    $_SESSION[ 'uploaded_file' ] = $tmp_save_name;
-    $_SESSION[ 'id' ] = $all_url_vars[ 'id' ];
+    $_SESSION[ 'uploaded_file' ] = $crop_item['tmpfile'];
+    $_SESSION[ 'base' ]=$crop_item['filebase'];
+
     @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=crop_preview' );
-
     exit;
 break;
 case 'crop_preview':
+    //           print(__FILE__." : ".__LINE__.'<br> <pre>');var_dump($_SESSION);print('</pre><br><br> ($_SESSION)');exit;//TODO: remove print $_SESSION
+    
 	
 	if( !empty( $_SESSION[ 'uploaded_file' ] ) )
 	{
+            
 		$ft -> define( array( 'main' => 'template_index.html', 'content' => 'upload_preview.html' ) );
 		$ft -> assign( 'PIC', FU_CONF_UPLOADURL . $_SESSION[ 'uploaded_file' ] );
 		$ft -> assign( 'TH_WIDTH', $thumb_width );
@@ -335,8 +359,23 @@ case 'save_crop'://Get the new coordinates to crop the image.
 	}
 	
 	$testproduct = new TestProduct( $_SESSION[ 'id' ], $LANG );
-	$testproduct -> setfileupload( $_SESSION[ 'uploaded_file' ] );
+
+        
+        switch($_SESSION['base']){
+            case 'descriptionshort':$testproduct -> setdescriptionshort( $_SESSION[ 'uploaded_file' ] );
+//                   print(__LINE__."d!! ".$_SESSION['uploaded_file']."  ".$_SESSION['id']);exit;//TODO: remove
+                break;
+            case 'fileupload':$testproduct -> setfileupload( $_SESSION[ 'uploaded_file' ] );
+//                   print(__LINE__."f!! ".$_SESSION['uploaded_file']."  ".$_SESSION['id']);exit;//TODO: remove
+                break;
+        };
 	$testproduct -> save();
+
+        if (!empty($_SESSION['CROP_INFO'])){
+            @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
+            exit;
+        }
+
 	@header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=list' );
 	exit;
 	break;
