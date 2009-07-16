@@ -123,31 +123,33 @@ class Util{
 
 
 	public function getUploadImagesHtml($n_images,$files_string,$labels,$image_path,$basename=""){
-	    $result="";
-		for ($i=0;$i<$n_images;$i++){
-			$result.="<div><label for='image'>".$labels[$i]."</label><input name='".$basename."_imagefile_".$i."' id='".$basename."_imagefile_".$i."' type='file' title='' />\n";
+            $result="";
+            for ($i=0;$i<$n_images;$i++) {
+                $id_browse=$basename."_imagefile_".$i;
+                $result.="<div><label for='image'>".$labels[$i]."</label><input name='".$id_browse."' id='".$id_browse."' type='file' title='' />\n";
 
-			$image_filename="spacer.gif";
-			if (!empty($files_string)){
-				$tmppos=strpos($files_string,";");
-				if ($tmppos===false){
-					$end=strlen($files_string);
-				}else{
-					$end=$tmppos;
-				};
-				$original_image_filename=substr($files_string,0,$end);
-				$image_filename="thumb_".substr($files_string,0,$end);
-				$files_string=substr($files_string,$end+1);
+                $image_filename="spacer.gif";
+                if (!empty($files_string)) {
+                    $tmppos=strpos($files_string,";");
+                    if ($tmppos===false) {
+                        $end=strlen($files_string);
+                    }else {
+                        $end=$tmppos;
+                    };
+                    $original_image_filename=substr($files_string,0,$end);
+                    $image_filename="thumb_".substr($files_string,0,$end);
+                    $files_string=substr($files_string,$end+1);
 
-				$result.="<input name='".$basename."_imagefile_old_".$i."' type='hidden' id='".$basename."_imagefile_old_".$i."' value='".$original_image_filename."'/>";
-			};
-			$result.="<br/><a href='#' onclick='return showDialog()' class=''modal'><div style=\"display: none;\" id=\"".$basename."_bigpicture\" title=\"".LANG_ADMIN_BIGIMAGE."\"><img src='".$image_path.$original_image_filename."' /></div><img src='".$image_path.$image_filename."' /></a></div>";
-		};
-		//
-                $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_EDIT."</small></label><input name='".$basename."_check' id='".$basename."_check' type='checkbox' value='1'/></div>";
-                $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_DELETE."</small></label><input name='".$basename."_delete' id='".$basename."_delete' type='checkbox' value='1'/></div>";
-		$result.="<input name='".$basename."_imagefile_n' id='".$basename."_imagefile_n' type='hidden' value='".$n_images."' />";
+                    $result.="<input name='".$basename."_imagefile_old_".$i."' type='hidden' id='".$basename."_imagefile_old_".$i."' value='".$original_image_filename."'/>";
+                };
+                $result.="<br/><a href='#' onclick='return showDialog()' class=''modal'><div style=\"display: none;\" id=\"".$basename."_bigpicture\" title=\"".LANG_ADMIN_BIGIMAGE."\"><img src='".$image_path.$original_image_filename."' /></div><img src='".$image_path.$image_filename."' /></a></div>";
+                $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_EDIT."</small></label><input name='".$basename."_check' id='".$basename."_check' type='checkbox' value=' '/></div>";
                 
+            };
+            //
+            $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_DELETE."</small></label><input name='".$basename."_delete' id='".$basename."_delete' type='checkbox' value='1' onclick=\"var dis=document.getElementById('".$basename."_delete').checked;  var browse=document.getElementById('".$id_browse."');browse.disabled=dis; var check=document.getElementById('".$basename."_check');check.disabled=dis;\"/></div>";
+            $result.="<input name='".$basename."_imagefile_n' id='".$basename."_imagefile_n' type='hidden' value='".$n_images."' />";
+            $result.="</div>";
                 
 	    return $result;
 	}
