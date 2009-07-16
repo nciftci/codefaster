@@ -184,7 +184,7 @@ case "mod":
         <!-- IFDEF: ISBROWSE -->
 		$labels = array();
  		array_push($labels, LANG_ADMIN_UPLOAD);  //TODO: for multiple upload, need multiple name       
-        $ft->assign("BROWSE_{FORM_ELEMSUPPER}",$util->getUploadImagesHtml(1,{VARR}->get{FORM_ELEMS}(),$labels,FU_CONF_UPLOADURL));
+        $ft->assign("BROWSE_{FORM_ELEMSUPPER}",$util->getUploadImagesHtml(1,{VARR}->get{FORM_ELEMS}(),$labels,FU_CONF_UPLOADURL,"{FORM_ELEMS}"));
         <!-- ENDIF --> 
 		<!-- END DYNAMIC BLOCK: get_elements -->
 		$ft->assign("{".strtoupper("{FUNC_NAME1ELEMENT}")."}",$all_url_vars["{FUNC_NAME1ELEMENT}"]);
@@ -216,7 +216,9 @@ case "save":
                 header("Location: ".$_SERVER['HTTP_REFERER']);	
             }
 		else
-            {			      
+            {
+
+            $cropping_files_array=array();
             $ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
             if(empty($all_url_vars["{FUNC_NAME1ELEMENT}"]))
                 // value is empty, new items will be INSERTed
@@ -244,18 +246,28 @@ case "save":
             {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
             <!-- IFDEF: ISBROWSE_SAVE -->
-            $upload_image_check=!empty($all_url_vars["check"]); //TODO: De unde vine?
-            if (!$upload_image_check) {
-            {VARR}->set{FORM_ELEMS}($util->uploadAllImages('{CLS}' ,FU_CONF_UPLOADDIR));
-            }
+            $upload_image_check=!empty($all_url_vars["{FORM_ELEMS}_check"]);
+            if ($upload_image_check) {
+                array_push($cropping_files_array,"{FORM_ELEMS}");
+            }else{
+                {VARR}->set{FORM_ELEMS}($util->uploadAllImages('{CLS}' ,FU_CONF_UPLOADDIR,"{FORM_ELEMS}"));
+            };
+            if (!empty($all_url_vars["{FORM_ELEMS}_delete"])){
+                {VARR}->set{FORM_ELEMS}("");
+            };
             <!-- ENDIF --> 
             <!-- END DYNAMIC BLOCK: set_elements -->
             {VARR}->save();
+
             
-            if ($upload_image_check) { 
-				// TODO review for custom field names and ONLY if upload field
-                $fu = new FileUpload($_FILES["imagefile_0"]);
-                $fu->setSave_name("{CLS}_".substr(md5("0_".date("Y-m-d H:i:s").$_FILES["imagefile_0"]["name"]),0,12));
+            if( !empty($cropping_files_array) )
+		{
+                $k=0;
+                $all_crop_info=array();
+                foreach ($cropping_files_array as $filebase) {
+                $input_post_filename=$filebase.'_imagefile_0';
+                $fu = new FileUpload( $_FILES[ $input_post_filename ] );
+                $fu -> setSave_name( 'TestProduct_'.substr( md5( '0_'.$k . date( 'Y-m-d H:i:s' ) . $_FILES[ $input_post_filename ][ 'name' ] ), 0, 12 ) );
                 $fu->setSave_path(FU_CONF_UPLOADDIR);
 
                 //pre_resize start
@@ -264,7 +276,7 @@ case "save":
                 $extension=$fu->getExt();
                 $input_image=FU_CONF_UPLOADDIR.$fu->getSave_name().".".$extension;
 
-                move_uploaded_file( $_FILES["imagefile_0"]["tmp_name"], $input_image ) ;
+                move_uploaded_file( $_FILES[$input_post_filename]["tmp_name"], $input_image ) ;
                 @chmod ($input_image,0666);
 
                 list($width, $height, $type, $attr) = getimagesize($input_image);
@@ -274,21 +286,29 @@ case "save":
                 $im_crop->setSave_name($tmp_save_path);
                 $im_crop->setSave_width($width);
                 $im_crop->setSave_height($height);
-                if ($width > 800) {
+                if ($width > 800)
+                {
                     $im_crop->setSave_scale (800/$width);
                 }
                 else {
                     $im_crop->setSave_scale(1);
                 }
-                if (! $im_crop->doResize ()) {
+                if (! $im_crop->doResize ())
+                {
                     print_r ( $im_crop->getErrorMessage () );
                     exit;
-                }
-                //pre_resize end
 
-                $_SESSION["uploaded_file"] = $tmp_save_name;
+                };//pre_resize end
+                $crop_item=array();
+                $crop_item['tmpfile']=$tmp_save_name;
+                $crop_item['filebase']=$filebase;
+                $all_crop_info[$k]=$crop_item;
+                $k=$k+1;
+                };
+
+                $_SESSION['CROP_INFO']=$all_crop_info;
                 $_SESSION['{FUNC_NAME1ELEMENT}'] =  $all_url_vars[ '{FUNC_NAME1ELEMENT}' ];
-                @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=crop_preview' );
+                @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
                 exit;
             };
             
@@ -306,6 +326,22 @@ case "save":
      
      
      // TODO move into IF file upload exist, generate, else not.
+
+     case 'prepare_crop_preview':
+
+     $crop_item=array_shift($_SESSION['CROP_INFO']);
+
+     if (empty($crop_item)){
+     @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=list' );
+	exit;
+     }
+
+     $_SESSION[ 'uploaded_file' ] = $crop_item['tmpfile'];
+     $_SESSION[ 'base' ]=$crop_item['filebase'];
+
+     @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=crop_preview' );
+     exit;
+     break;
      case "crop_preview":
         if(!empty($_SESSION["uploaded_file"])) {
             $ft->define(array("main"=>"template_index.html", "content"=>"upload_preview.html"));
@@ -365,9 +401,21 @@ case "save":
 
         {VARR} = new {CLS}( $_SESSION[ '{FUNC_NAME1ELEMENT}' ], $LANG );
 
-        {VARR} -> setfileupload( $_SESSION[ 'uploaded_file' ] );
+        switch($_SESSION['base']){
+        <!-- BEGIN DYNAMIC BLOCK: switchelements -->
+            case '{FORM_ELEMS}':{VARR} -> set{FORM_ELEMS}( $_SESSION[ 'uploaded_file' ] );
+                break;
+        <!-- END DYNAMIC BLOCK: switchelements -->
+
+        };
+
+
         {VARR} -> save();
 
+    if (!empty($_SESSION['CROP_INFO'])){
+            @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
+            exit;
+        }
 
             @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=list' );
             exit;

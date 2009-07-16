@@ -144,7 +144,8 @@ class Util{
 			$result.="<br/><a href='#' onclick='return showDialog()' class=''modal'><div style=\"display: none;\" id=\"".$basename."_bigpicture\" title=\"".LANG_ADMIN_BIGIMAGE."\"><img src='".$image_path.$original_image_filename."' /></div><img src='".$image_path.$image_filename."' /></a></div>";
 		};
 		//
-        $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_EDIT."</small></label><input name='".$basename."_check' id='".$basename."_check' type='checkbox' value='1'/></div>";
+                $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_EDIT."</small></label><input name='".$basename."_check' id='".$basename."_check' type='checkbox' value='1'/></div>";
+                $result.="<div><label for='check'><small>".LANG_ADMIN_CHECK_TO_DELETE."</small></label><input name='".$basename."_delete' id='".$basename."_delete' type='checkbox' value='1'/></div>";
 		$result.="<input name='".$basename."_imagefile_n' id='".$basename."_imagefile_n' type='hidden' value='".$n_images."' />";
                 
                 

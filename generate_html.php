@@ -455,6 +455,7 @@ if ($action == "generate_html") {
 	$ftphp->define_dynamic ( "errmodformelements", "main" );
 	$ftphp->define_dynamic ( "unsetformelements", "main" );
 	$ftphp->define_dynamic ( "langerrformelements", "main" );
+        $ftphp->define_dynamic ( "switchelements", "main" );
 	// for required fields in PHP error.
 	$tmp_required = $session->get ( "required" );
 
@@ -496,6 +497,9 @@ if ($action == "generate_html") {
 		$ftphp->parse ( "ERRFORMELEMENTS", ".errformelements" );
 		$ftphp->parse ( "ERRMODFORMELEMENTS", ".errmodformelements" );
 		$ftphp->parse ( "UNSETFORMELEMENTS", ".unsetformelements" );
+                if ($it=="browse") {
+                    $ftphp->parse ( "SWITCHELEMENTS", ".switchelements" );
+                };
 
 		$k++;
 	}
