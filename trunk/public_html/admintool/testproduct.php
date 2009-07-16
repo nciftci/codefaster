@@ -191,15 +191,25 @@ case 'save':
 		
 		$testproduct -> setid( $all_url_vars[ 'id' ] );
 		$testproduct -> setname( $all_url_vars[ 'name' ] );
-		$upload_image_check = !empty( $all_url_vars[ 'descriptionshort_check' ] );
 		
-		if( $upload_image_check )
+		if( $util -> is_image_file( 'descriptionshort' ) )
 		{
-			array_push( $cropping_files_array, 'descriptionshort' );
+			$upload_image_check = !empty( $all_url_vars[ 'descriptionshort_check' ] );
+			
+			if( $upload_image_check )
+			{
+				array_push( $cropping_files_array, 'descriptionshort' );
+			}
+			else
+			{
+				$testproduct -> setdescriptionshort( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR, 'descriptionshort' ) );
+			}
+			
+			;
 		}
 		else
 		{
-			$testproduct -> setdescriptionshort( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR, 'descriptionshort' ) );
+			$testproduct -> setdescriptionshort( $util -> uploadAllFiles( 'TestProduct', FU_CONF_UPLOADDIR, 'descriptionshort' ) );
 		}
 		
 		;
@@ -214,15 +224,25 @@ case 'save':
 		$testproduct -> setcategoryid( $all_url_vars[ 'categoryid' ] );
 		$testproduct -> setisthisreal( $all_url_vars[ 'isthisreal' ] );
 		$testproduct -> settermsagree( $all_url_vars[ 'termsagree' ] );
-		$upload_image_check = !empty( $all_url_vars[ 'fileupload_check' ] );
 		
-		if( $upload_image_check )
+		if( $util -> is_image_file( 'fileupload' ) )
 		{
-			array_push( $cropping_files_array, 'fileupload' );
+			$upload_image_check = !empty( $all_url_vars[ 'fileupload_check' ] );
+			
+			if( $upload_image_check )
+			{
+				array_push( $cropping_files_array, 'fileupload' );
+			}
+			else
+			{
+				$testproduct -> setfileupload( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR, 'fileupload' ) );
+			}
+			
+			;
 		}
 		else
 		{
-			$testproduct -> setfileupload( $util -> uploadAllImages( 'TestProduct', FU_CONF_UPLOADDIR, 'fileupload' ) );
+			$testproduct -> setfileupload( $util -> uploadAllFiles( 'TestProduct', FU_CONF_UPLOADDIR, 'fileupload' ) );
 		}
 		
 		;
