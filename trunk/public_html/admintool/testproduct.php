@@ -304,7 +304,6 @@ case 'prepare_crop_preview':
     exit;
 break;
 case 'crop_preview':
-    //           print(__FILE__." : ".__LINE__.'<br> <pre>');var_dump($_SESSION);print('</pre><br><br> ($_SESSION)');exit;//TODO: remove print $_SESSION
     
 	
 	if( !empty( $_SESSION[ 'uploaded_file' ] ) )
@@ -363,10 +362,8 @@ case 'save_crop'://Get the new coordinates to crop the image.
         
         switch($_SESSION['base']){
             case 'descriptionshort':$testproduct -> setdescriptionshort( $_SESSION[ 'uploaded_file' ] );
-//                   print(__LINE__."d!! ".$_SESSION['uploaded_file']."  ".$_SESSION['id']);exit;//TODO: remove
                 break;
             case 'fileupload':$testproduct -> setfileupload( $_SESSION[ 'uploaded_file' ] );
-//                   print(__LINE__."f!! ".$_SESSION['uploaded_file']."  ".$_SESSION['id']);exit;//TODO: remove
                 break;
         };
 	$testproduct -> save();
