@@ -190,7 +190,6 @@ class Util{
 		};
 
 	}
-
 	public function uploadAllImages($prefix_stored_filename, $path,$basename=""){
 		$imagefile_n=$_REQUEST[$basename.'_imagefile_n'];
 		$result="";
@@ -218,6 +217,53 @@ class Util{
 	}
 
 
+
+        private function uploadFile($prefix_stored_filename,$input_filename,$path){
+		$save_name = $prefix_stored_filename."_".substr(md5("0_".date("Y-m-d H:i:s").$input_filename),0,12);
+
+                $output_file = FU_CONF_UPLOADDIR . $save_name;
+                
+                $res=move_uploaded_file( $_FILES[ $input_filename ][ 'tmp_name' ], $output_file ) ;
+                @chmod( $output_file, 0666 );
+
+                if ($res) return $save_name;
+                return false;
+
+           
+	}
+	public function uploadAllFiles($prefix_stored_filename, $path,$basename=""){
+		$filefile_n=$_REQUEST[$basename.'_imagefile_n'];
+		$result="";
+		for ($i=0;$i<$filefile_n;$i++){
+			$filename=$basename.'_imagefile_'.$i;
+			$old_file=$_REQUEST[$basename.'_imagefile_old_'.$i];
+			$r=$this->uploadFile($prefix_stored_filename,$filename,$path);
+			if ($r) {
+				if (!empty($old_file)){
+					@unlink($path.$old_file);
+				};
+			}else{
+				if (!empty($old_file)){
+					$r=$old_file;
+				};
+			};
+
+			if ($r){
+				if (!empty($result)) $result.=";";
+				$result.=$r;
+			};
+		};
+		return $result;
+	}
+
+
+
+        public function is_image_file($imagebase_name) {
+            $imgname = $imagebase_name. '_imagefile_0';
+            $tmpfilename=$_FILES[$imgname]['tmp_name'];
+            return(exif_imagetype($tmpfilename));
+
+        }
 
 }
 ?>
