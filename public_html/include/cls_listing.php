@@ -43,12 +43,19 @@
 /**
  * This funciton makes cls_listing to get the data from mysql table
  *
- * @param string $source_table The table which is used
+ * @param string $source_table_or_query The table which is used
  * @param array $fields The fields which are used from the table; the first is primary key
+ *
+ * if the user wants to use own sql command for the first parameter, the second parameter must be null
  */
-		public function init_mysql($source_table,$fields){
+		public function init_mysql($source_table_or_query,$fields=NULL){
 			$this->mode="mysql";
-			$query="SELECT ".implode(",",$fields)." from $source_table ORDER BY 1 DESC";
+                        $query="";
+                        if ($fields==NULL){
+                            $query=$source_table_or_query;
+                        }else{
+                            $query="SELECT ".implode(",",$fields)." FROM $source_table_or_query ORDER BY 1 DESC";
+                        };
 			$this->sql=$query;
 			$this->fields[0]="";
 			$this->rs=mysql_query($this->sql);
