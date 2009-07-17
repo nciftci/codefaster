@@ -1,0 +1,390 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Basic HTML styles */
+body{
+	margin:0px;
+	padding:0px;
+	background-image:url(../images/body-bg.jpg);
+	background-position:top;
+	/*background-repeat:no-repeat;*/
+	background-color:#fff;
+	font-family:Georgia, "Times New Roman", Times, serif;
+}
+
+form, input{
+	margin:0px;
+	padding:0px;
+}
+
+h1, h2, h3, h4, h5, h6{
+	margin:0px;
+	padding:0px;
+	font-weight:normal;
+}
+
+p{
+	margin:0px;
+	padding:0px;
+}
+
+img{
+	border:0px;
+}
+
+a{
+	text-decoration:none;
+}
+
+ul{
+	margin:0px;
+	padding:0px;
+}
+
+li{
+	margin:0px;
+	padding:0px;
+}
+/*End of Basic HTML styles */
+
+/*Containers*/
+
+#page{
+	margin:0px auto;
+	width:960px;
+	
+	background-color:#CCCCCC; /* Temporal */
+}
+
+/*Header*/
+#header{
+	width:960px;
+	height:350px;
+	float:left;
+	
+	background-image:url(../images/header-bg.jpg);
+	background-repeat:no-repeat;	
+}
+
+	#logo{
+		width:310px;
+		height:190px;
+		float:left;
+		
+		padding-top:45px;
+		padding-left:120px;
+		
+	}
+	
+	/*Pages navigation*/	
+	#pages_nav{
+		width:450px;
+		float:left;
+		padding-top:45px;
+		padding-bottom:8px!important; /* to see the hover effect on IE7 */
+		padding-left:440px;
+	}
+	
+		#pages_nav li{
+			display:inline;
+			margin:0px;
+			padding:0px;
+			padding-bottom:8px;
+		}
+		
+		#pages_nav li a{						
+			padding-right:25px;
+			padding-bottom:8px;
+			
+			color:#fff;
+			font-family:Georgia, "Times New Roman", Times, serif;
+			font-size:20px;
+			font-style:italic;
+		}
+		
+			#pages_nav li a:hover{
+				color:#e3e3e3;
+				background-image:url(../images/pages-hover.png);
+				background-position:5px 22px;
+				background-repeat:no-repeat;
+			}
+	/*End of Pages navigation*/
+
+/*Body*/
+#page_body{
+	width:960px;
+	float:left;
+	
+	background-image:url(../images/page-body-bg.jpg);
+	background-repeat:repeat-y;
+	background-color:#fff;
+}
+
+	#content{
+		width:640px;
+		float:left;
+		background-image:url(../images/content-bg.jpg);
+		background-repeat:no-repeat;
+	}
+
+	#content_inside{
+		width:580px;
+		float:left;
+		background-image:url(../images/content-bg.jpg);
+		background-repeat:no-repeat;
+		padding:30px;
+	}	
+	
+	#sidebar{
+		width:320px;
+		float:left;
+		background-image:url(../images/sidebar-bg.jpg);
+		background-repeat:repeat-y;
+	}
+	
+		#search{
+			width:320px!important;
+			height:112px!important;
+			
+			padding-top:55px!important;
+			background-image:url(../images/search-sidebar-bg.jpg);
+			background-repeat:no-repeat;
+		}
+			#search form{
+				padding-top:10px;
+				padding-left:35px;
+			}
+			
+			#search input.search_text{
+				width:150px;
+				height:35px;
+				margin-right:25px;
+				padding-bottom:7px!important;
+				
+				border:none;
+				background:none;
+				
+				color:#000;
+				font-family:Georgia, "Times New Roman", Times, serif;
+				font-size:12px;
+				vertical-align:middle;
+			}
+			
+			#search input.search_button{
+				border:none;
+				height:35px;
+			}
+	
+		#categories{
+			padding-top:10px;
+			/*background-image:url(../images/categories-bg.jpg);
+			background-position:top left;
+			background-repeat:no-repeat;*/
+		}
+		
+		#archives{
+			padding-top:25px;
+			/*background-image:url(../images/archives-bg.jpg);
+			background-position:top left;
+			background-repeat:no-repeat;*/
+		}
+		
+		#blogroll{
+			padding-top:25px;
+			/*background-image:url(../images/blogroll-bg.jpg);
+			background-position:top left;
+			background-repeat:no-repeat;*/
+		}
+		
+		
+	
+		#sidebar_footer{
+			width:320px!important;
+			height:190px!important;
+			background-image:url(../images/sidebar-footer-bg.jpg);
+			background-repeat:no-repeat;
+		}
+	/*Sidebar commons*/	
+	#sidebar h2{
+		padding-left:45px;
+		color:#D5A934;
+		font-family:Georgia, "Times New Roman", Times, serif;
+		font-size:26px;
+		font-style:italic;
+	}
+	
+	#sidebar ul{
+		padding-left:25px;
+		padding-top:5px;
+	}
+	
+	#sidebar ul li{
+		padding-left:20px;
+		margin-bottom:3px;
+		list-style:none;
+	}
+	
+	#sidebar ul li a{
+		padding:5px 5px 5px 20px;
+
+		color:#000;
+		
+		font-family:Georgia, "Times New Roman", Times, serif;
+		font-size:14px;
+	}
+		#sidebar ul li a:hover{
+			color:#ff0000;
+			background-image:url(../images/sidebar-a-hover.gif);
+			background-position:left;
+			background-repeat:no-repeat;
+		}
+	/*end of sidebar commons */	
+	
+
+	/*item*/
+	
+	.item{
+		width:565px!important;
+		float:left;
+		
+		padding-left:50px!important;
+		padding-right:25px!important;
+		padding-bottom:15px;
+	}
+	
+		.item h2{
+			width:460px;
+			padding-bottom:5px;
+			color:#999;
+			font-family:Georgia, "Times New Roman", Times, serif;
+			font-style:italic;
+			font-size:36px;
+		}
+		
+			.item h2 a{
+				color:#999;
+			}
+			
+			.item h2 a:hover{
+				color:#ff0000;
+			}
+		
+		.item .comments{
+			width:95px;
+			height:65px;
+			float:right;
+			
+			margin-top:-45px;
+			
+			padding-top:3px;
+			padding-bottom:10px;
+					
+			background-image:url(../images/comments-bg.png);
+			background-repeat:no-repeat;
+			
+			color:#000;
+			font-size:38px;
+			text-align:center;			
+		}
+		
+			.item .comments a{
+				color:#000;		
+			}
+		
+		.item .meta{
+			width:440px;
+			float:left;
+			
+			padding-top:3px;
+			padding-left:20px;
+			padding-bottom:15px;
+			
+			color:#999;
+			background-image:url(../images/meta-star.gif);
+			background-repeat:no-repeat;
+			
+			font-size:12px;
+		}
+		
+		.item .preview_image{
+			float:left;
+			margin-right:15px;
+		}
+		
+			.item .preview_image img{
+				width:200px;
+				height:200px;
+				border:1px solid #DBD9CC;
+			}
+			
+			.item .preview_image img:hover{
+				border:1px solid #FFC337;
+			}
+			
+		.item .meta_categories{
+			width:340px!important;
+			float:left!important;
+			
+			padding-top:10px;
+			padding-bottom:10px;
+			padding-left:25px;
+			
+			color:#999;
+			font-size:12px;
+			border-bottom:1px solid #163656;
+			background-image:url(../images/meta-star.gif);
+			background-position:5px 8px;
+			background-repeat:no-repeat;
+		}
+		
+			.item .meta_categories a{
+			}	
+			
+			.item .meta_categories a:hover{
+				text-decoration:underline;
+			}		
+		/*common*/
+		.item p{
+			color:#000;
+			font-size:13px;
+			
+			text-align:justify;
+		}
+		
+			.item p a{
+			}	
+			
+			.item p a:hover{
+				text-decoration:underline;
+			}	
+		
+		.item a{
+			color:#666;
+		}
+		
+		.item a:hover{
+			color:#333;
+		}
+		/*end of common*/
+	
+	/*end of item*/
+
+#footer{
+	width:960px;
+	height:258px;
+	float:left;
+	
+	background-image:url(../images/footer-bg.jpg);
+	background-repeat:no-repeat;
+}
+
+
+	#footer p{
+	color:#999;
+	float:right;
+	padding-right: 30px;
+	}
+/*End of containers*/
+
+
+
