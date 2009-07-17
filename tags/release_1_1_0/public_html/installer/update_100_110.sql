@@ -1,0 +1,1 @@
+ALTER TABLE `modules` ADD COLUMN `restriction_name` VARCHAR(50) CHARSET utf8 COLLATE utf8_bin NOT NULL AFTER `extra_menu`;
