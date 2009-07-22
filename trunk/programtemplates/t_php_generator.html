@@ -108,9 +108,9 @@ case "list":
 	$Obj->setLimit($limit);
 	$field= {FLDS}
 	$Obj->setFields($field);
-    $offset=$Obj->getOffset($gpos*$max);
+        $offset = $Obj -> getOffset( ($gpos+$limit)/$limit );
 	//set link css
-    $Obj->setFirstID("{FUNC_NAME1ELEMENT}");
+        $Obj->setFirstID("{FUNC_NAME1ELEMENT}");
 	$Obj->setStyle("gotopage");
 	//enable active column on listing
  		<!-- IFDEF: ISACTIVATED -->
@@ -183,7 +183,7 @@ case "mod":
         <!-- ENDIF --> 
         <!-- IFDEF: ISBROWSE -->
 		$labels = array();
- 		array_push($labels, LANG_ADMIN_UPLOAD);  //TODO: for multiple upload, need multiple name       
+ 		array_push($labels, LANG_ADMIN_UPLOAD);       
         $ft->assign("BROWSE_{FORM_ELEMSUPPER}",$util->getUploadImagesHtml(1,{VARR}->get{FORM_ELEMS}(),$labels,FU_CONF_UPLOADURL,"{FORM_ELEMS}"));
         <!-- ENDIF --> 
 		<!-- END DYNAMIC BLOCK: get_elements -->
