@@ -1,4 +1,6 @@
 <?php
+
+
 /*
 CODE GENERATOR BY: GRAFXSOFTWARE CODE GENERATOR
 http://www.grafxsoftware.com
@@ -18,9 +20,14 @@ include_once (INCLUDE_PATH . "cls_string.php");
 include_once (INCLUDE_PATH . "cls_session.php");
 include_once (INCLUDE_PATH . "PhpBeautifier.inc.php");
 
+
 $stringutil = new String ( );
+
 $session = new MYSession ( );
+
 $xml = new Xml ( );
+
+
 
 $all_url_vars = $stringutil->parse_all ();
 
@@ -32,6 +39,8 @@ $items = $all_url_vars ['items'];
  * @desc     - 
  * @vers     - 1.0
  **/
+
+ 
 $functions = $session->get ( "functions", $functions );
 $fields = $session->get ( "fields", $fields );
 $projectname = $session->get ( "projectname" );
@@ -101,6 +110,9 @@ $k = 0;
  * @desc     - Starting to create the form for the ADMIN
  * @vers     - 1.0
  **/
+
+
+
 foreach ( $fields as $field ) {
 	$ft->assign ( "NDBITEM", $k );
 	$ft->assign ( "DBITEM", $field );
@@ -278,6 +290,66 @@ foreach ( $fields as $field ) {
 		$ft->parse ( "DBACTIVELISTING", ".dbactivelisting" );
 		$ft->parse ( "DBITEM", ".dbitem" );
 	} else {
+                if (!empty($_SESSION['XMLDATA'])){
+                    $xmldata=$session->get('XMLDATA');
+                    $xmldata=$xmldata['data'];
+                    $itemdata=null;
+                    foreach ($xmldata as $item) {
+                        if ($item['name']==$field){
+                            $itemdata=$item;
+                            break;
+                        }
+                    };
+                    if ($itemdata){
+                        //items
+                        $ft->assign("HIDDEN_SELECTED","");
+                        $ft->assign("TEXTFIELD_SELECTED","");
+                        $ft->assign("TEXTAREA_SELECTED","");
+                        $ft->assign("DROPDOWN_SELECTED","");
+                        $ft->assign("RADIO_SELECTED","");
+                        $ft->assign("CHECKBOX_SELECTED","");
+                        $ft->assign("BROWSE_SELECTED","");
+                        switch ($itemdata['type']) {
+                            case 'hidden':
+                                $ft->assign("HIDDEN_SELECTED"," selected ");
+                                break;
+                            case 'textfield':
+                                $ft->assign("TEXTFIELD_SELECTED"," selected ");
+                                break;
+                            case 'textarea':
+                                $ft->assign("TEXTAREA_SELECTED"," selected ");
+                                break;
+                            case 'dropdown':
+                                $ft->assign("DROPDOWN_SELECTED"," selected ");
+                                break;
+                            case 'radio':
+                                $ft->assign("RADIO_SELECTED"," selected ");
+                                break;
+                            case 'checkbox':
+                                $ft->assign("CHECKBOX_SELECTED"," selected ");
+                                break;
+                            case 'browse':
+                                $ft->assign("BROWSE_SELECTED"," selected ");
+                                break;
+
+                            default:
+                                break;
+                        };
+
+                        
+                        
+                       //listing
+                       $listing_checked="";
+                       if (!empty($item['listing'])){
+                            $listing_checked=" checked ";
+                       };
+                       
+                       $ft->assign('LISTING_CHECKED',$listing_checked);
+                    };
+                    
+                
+                };
+
 		$ft->assign ( "DBITEM_TYPE", $field );
 		$ft->parse ( "DBITEM", ".dbitem" );
 	}
