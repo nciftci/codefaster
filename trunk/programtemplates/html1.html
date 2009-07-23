@@ -14,16 +14,16 @@
 			<td>{NDBITEM}</td>
 			<td><strong>{DBITEM}</strong></td>
 			<td> <select name="items[{DBITEM}]"> 
-					<option value="hidden">Hidden Field</option>
-					<option value="textfield">Textfield</option>
-					<option value="textarea">Textarea</option>
-                    <option value="dropdown">Dropdown</option>
-					<option value="radio">Radio Buttons</option>
-					<option value="checkbox">Checkbox</option>                    
-					<option value="browse">Browse Field</option>
+					<option value="hidden" {HIDDEN_SELECTED}>Hidden Field</option>
+					<option value="textfield" {TEXTFIELD_SELECTED}>Textfield</option>
+					<option value="textarea" {TEXTAREA_SELECTED}>Textarea</option>
+					<option value="dropdown" {DROPDOWN_SELECTED}>Dropdown</option>
+					<option value="radio" {RADIO_SELECTED}>Radio Buttons</option>
+					<option value="checkbox" {CHECKBOX_SELECTED}>Checkbox</option>                    
+					<option value="browse" {BROWSE_SELECTED}>Browse Field</option>
 				</select> </td>
              <td>
-				 <input type="checkbox" name="listing[{DBITEM}]" id="listing" />
+				 <input type="checkbox" name="listing[{DBITEM}]" id="listing" {LISTING_CHECKED}/>
              </td>
 			 <td><input type="checkbox" name="required[{DBITEM}]" id="required" /></td>  
 			 <td><input type="text" name="requiredset[{DBITEM}]" id="requiredset" /> (ex: email,min:20)</td> 

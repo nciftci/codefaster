@@ -15,7 +15,8 @@ class MYSession {
 	public function __construct()
 	{
 		// Use $HTTP_SESSION_VARS with PHP 4.0.6 or less
-		 $session_state = session_start ();
+
+                 $session_state = session_start ();
 		 if(!$session_state)
 			return 0;
 		 else

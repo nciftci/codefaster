@@ -77,7 +77,8 @@ if($all_url_vars['fieldnames'][strlen($all_url_vars['fieldnames'])-1] == ";") {
 	$all_url_vars['fieldnames']=substr($all_url_vars['fieldnames'],0,-1);
 }
 
-$fields =explode(";",$all_url_vars['fieldnames']);
+$fields =explode(";",$all_url_vars['fieldnames_en']);
+
 $fields_en =explode(";",$all_url_vars['fieldnames_en']);
 
 foreach($fields as $key=>$value)

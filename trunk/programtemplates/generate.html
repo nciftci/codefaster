@@ -5,35 +5,35 @@
   <table width="939" border="0" cellpadding="3" cellspacing="3">
    <tr>
       <td width="28%" valign="top"><div align="right">Developer name </div></td>
-            <td width="72%"><input name="author" type="text" value="Test Developer" />
+	  <td width="72%"><input name="author" type="text" value="{DEV_NAME}" />
         (ex. John Smith) </td>
    </tr>
    <tr>
       <td width="28%" valign="top"><div align="right">Project name </div></td>
-            <td width="72%"><input name="projectname" type="text" value="Test Product" />
+	  <td width="72%"><input name="projectname" type="text" value="{PROJECT_NAME}" />
         (ex. Rating Script) </td>
    </tr>
    <tr>
       <td valign="top"><div align="right">CLASS name </div></td>
-            <td><input name="name" type="text" value="TestProduct" />
+	  <td><input name="name" type="text" value="{CLASS_NAME}" />
         (ex. classProduct) </td>
    </tr>
           <tr>
             <td valign="top"><div align="right">VARIABLE name </div></td>
-            <td><input name="varname" type="text" value="testproduct" />
+			<td><input name="varname" type="text" value="{VAR_NAME}" />
         (ex. cp) </td>
           </tr>
           <tr>
             <td valign="top"><div align="right">TABLE name </div></td>
-            <td><input name="table" type="text" id="table" size="50" value="{TABLE}" disabled="disabled" /> 
+			<td><input name="table" type="text" id="table" size="50" value="{TABLE}" {DISABLE_SOME_FIELDS} /> 
 			<input name="table" type="hidden" id="table" value="{TABLE}">       </td>
           </tr>
           <tr>
             <td valign="top"><div align="right">DB fields </div></td>
             <td>
-            <input name="fieldnames_en" type="text" id="fieldnames_en" size="100" value="{DBFIELDS_EN}" disabled="disabled" />
-			<input name="fieldnames" type="hidden" id="fieldnames" value="{DBFIELDS}"> 
-            <input name="fieldnames_en" type="hidden" id="fieldnames_en" value="{DBFIELDS_EN}">    
+				<input name="fieldnames_en" type="text" id="fieldnames_en" size="100" value="{DBFIELDS_EN}" {DISABLE_SOME_FIELDS} />
+<!--			<input name="fieldnames" type="hidden" id="fieldnames" value="{DBFIELDS}"> 
+<input name="fieldnames_en" type="hidden" id="fieldnames_en" value="{DBFIELDS_EN}">    -->
             </td>
           </tr>
           <tr>
