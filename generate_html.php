@@ -345,7 +345,24 @@ foreach ( $fields as $field ) {
                        };
                        
                        $ft->assign('LISTING_CHECKED',$listing_checked);
-                    };
+
+                       //required
+                       $required_checked="";
+                       if (!empty($item['required'])) {
+                           $required_checked=" checked ";
+                       };
+
+                       $ft->assign('REQUIRED_CHECKED',$required_checked);
+
+                       //requiredset
+                       $requiredset_text="";
+                       if (!empty($item['requiredset'])) {                          
+                           $requiredset_text=$item['requiredset'];                      
+                       };
+
+                       $ft->assign('REQUIREDSET_TEXT',$requiredset_text);
+
+                   };
                     
                 
                 };
