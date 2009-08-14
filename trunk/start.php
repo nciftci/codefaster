@@ -29,8 +29,8 @@ $ft->define(array(
     )
 );
 
+
 if (!empty($all_url_vars['table'])) {
-    $ft->assign("TABLE", $firsttok);
     $all_url_vars['table'] = $stringutil->changeBRtoEnter($all_url_vars['table']);
     $all_url_vars['table'] = strtolower($all_url_vars['table']);
 
@@ -52,6 +52,7 @@ if (!empty($all_url_vars['table'])) {
     if($firsttok[strlen($firsttok) - 1] == "`") {
         $firsttok=substr($firsttok, 0, strlen($firsttok) -1);
     }
+    $ft->assign("TABLE", $firsttok);
     $ft->assign("DEV_NAME","Test Developer");
     $ft->assign("PROJECT_NAME","Test Product");
     $ft->assign("CLASS_NAME","TestProduct");
@@ -87,60 +88,72 @@ if (!empty($all_url_vars['table'])) {
             $field = substr($field, 0, strlen($field) - 1);
         }
 
-        if(!in_array($field, $field_types)) {
+        if(!in_array($field, $field_types)) {			
             $fields .= $field . ";";
         }
     }    
-    $example    = "";
+
+	$ft->assign("DBFIELDS_EN",$fields);
+
+	$fields_noen=str_replace("_en","",$fields);
+	$ft->assign("DBFIELDS",$fields_noen);
+
+	$tokexample = explode(";", $fields_noen);
+	$tokenr     = sizeof($tokexample);
+	$example = "";
+
+	for($i = 0; $i < $tokenr-1; $i++) {
+		if (!empty($example)) $example.=";";
+		$example.=ucwords($tokexample[$i]);
+	};
 
 
-    for($i = 0; $i < $tokenr-1; $i++) {
-        $example.=ucwords($tokexample[$i]);
-        $example.=";";
-    }
+
+	$ft->assign("EXAMPLE",$example);
+
 
 }else{
 
-    
-    $xmlfilename=$all_url_vars['xmlfile'];
-    if (!empty($xmlfilename)) {
-        $xml=new Xml();
-        $xml->setXMLFile(INDEX_PATH."/schema/".$xmlfilename);
-        $xmlarray=$xml->loadArray();
-        $session->set('XMLDATA',$xmlarray);
-        
-//        print(__FILE__." : ".__LINE__.'<br> <pre>');var_dump($_SESSION);print('</pre><br><br>');exit;//TODO: remove print $_SESSION
-        
-        $fields="";
-        $example="";
-        foreach ($xmlarray['data'] as $item) {
-            if (!empty($fields)) $fields.=";";
-            $fields.=$item['name'];
-            if (!empty($example)) $example.=";";
-            $example.=$item['function'];
-        };
-        $ft->assign("DEV_NAME",$xmlarray['name']);
-        $ft->assign("PROJECT_NAME",$xmlarray['project_name']);
-        $ft->assign("CLASS_NAME",$xmlarray['class_name']);
-        $ft->assign("VAR_NAME",$xmlarray['var_name']);
-        $ft->assign("TABLE", $xmlarray['table_name']);
-        $ft->assign("DISABLE_SOME_FIELDS",' ');
-    }else{
-        header("Location: index.php");
-        exit;
-    }
+
+	$xmlfilename=$all_url_vars['xmlfile'];
+	if (!empty($xmlfilename)) {
+		$xml=new Xml();
+		$xml->setXMLFile(INDEX_PATH."/schema/".$xmlfilename);
+		$xmlarray=$xml->loadArray();
+		$session->set('XMLDATA',$xmlarray);
+
+
+		$fields="";
+		$example="";
+		foreach ($xmlarray['data'] as $item) {
+			if (!empty($fields)) $fields.=";";
+			$fields.=$item['name'];
+			if (!empty($example)) $example.=";";
+			$example.=$item['function'];
+		};
+		$ft->assign("DEV_NAME",$xmlarray['name']);
+		$ft->assign("PROJECT_NAME",$xmlarray['project_name']);
+		$ft->assign("CLASS_NAME",$xmlarray['class_name']);
+		$ft->assign("VAR_NAME",$xmlarray['var_name']);
+		$ft->assign("TABLE", $xmlarray['table_name']);
+		$ft->assign("DISABLE_SOME_FIELDS",' ');
+		$ft->assign("DBFIELDS_EN",$fields);
+
+		$fields_noen=str_replace("_en","",$fields);
+		$ft->assign("DBFIELDS",$fields_noen);
+
+		$tokexample = explode(";", $fields_noen);
+		$tokenr     = sizeof($tokexample);
+
+		$ft->assign("EXAMPLE",$example);
+
+	}else{
+		header("Location: index.php");
+		exit;
+	}
 };
 
 
-$ft->assign("DBFIELDS_EN",$fields);
-
-$fields_noen=str_replace("_en","",$fields);
-$ft->assign("DBFIELDS",$fields_noen);
-
-$tokexample = explode(";", $fields_noen);
-$tokenr     = sizeof($tokexample);
-
-$ft->assign("EXAMPLE",$example);
 $ft->parse("BODY", array("content", "main"));
 
 print $ft->fetch("BODY");
