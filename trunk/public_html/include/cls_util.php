@@ -261,8 +261,23 @@ class Util{
         public function is_image_file($imagebase_name) {
             $imgname = $imagebase_name. '_imagefile_0';
             $tmpfilename=$_FILES[$imgname]['tmp_name'];
-            return(exif_imagetype($tmpfilename));
-
+			if ( ! function_exists( 'exif_imagetype' ) )
+            {
+               $ext = substr($tmpfilename, strrpos($tmpfilename, '.') + 1);
+               $ext1 = array_diff(array($ext), $ALLOWED_EXT);
+               if(empty($ext1))
+               {
+                    return true;
+               }
+               else
+               {
+                    return false;
+               }
+            }
+            else
+            {
+                return(exif_imagetype($tmpfilename));
+            }
         }
 
 }
