@@ -73,10 +73,13 @@ if (empty($history_table)) {
 // getting the variable names
 $all_url_vars['fieldnames'] = str_replace(" ", "", $all_url_vars['fieldnames']);
 
-if($all_url_vars['fieldnames'][strlen($all_url_vars['fieldnames'])-1] == ";") { 
-	$all_url_vars['fieldnames']=substr($all_url_vars['fieldnames'],0,-1);
-}
+//if($all_url_vars['fieldnames'][strlen($all_url_vars['fieldnames'])-1] == ";") { 
+	//$all_url_vars['fieldnames']=substr($all_url_vars['fieldnames'],0,-1);
+//}
 
+if($all_url_vars['fieldnames_en'][strlen($all_url_vars['fieldnames_en'])-1] == ";") { 
+$all_url_vars['fieldnames_en']=substr($all_url_vars['fieldnames_en'],0,-1);
+}
 $fields =explode(";",$all_url_vars['fieldnames_en']);
 
 $fields_en =explode(";",$all_url_vars['fieldnames_en']);
