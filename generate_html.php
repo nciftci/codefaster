@@ -528,6 +528,7 @@ if ($action == "generate_html") {
 	$ftphp->assign ( "CLS", $session->get ( "name" ) );
 	$ftphp->assign ( "VARR", "$" . $session->get ( "variable" ) );
 	$ftphp->assign ( "FUNC_NAME1ELEMENT", $fields [0] );
+	$ftphp->assign ( "FUNC_NAME1ELEMENT_UCF", ucfirst($fields [0] )); //Kszili UC FIRST field for get Method
 	$ftphp->assign ( "FLDS", $flds );
 	$ftphp->assign ( "TBL_NAME", $session->get ( "tablename" ) );
 	$ftphp->assign ( "PROJECT_USER_BASE_FILENAME", $session->get ( "name" ) );
