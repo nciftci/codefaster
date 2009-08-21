@@ -311,7 +311,8 @@ case "save":
                 };
 
                 $_SESSION['CROP_INFO']=$all_crop_info;
-                $_SESSION['{FUNC_NAME1ELEMENT}'] =  $all_url_vars[ '{FUNC_NAME1ELEMENT}' ];
+			//	$_SESSION['{FUNC_NAME1ELEMENT}'] = $all_url_vars[ '{FUNC_NAME1ELEMENT}' ];
+                $_SESSION['{FUNC_NAME1ELEMENT}'] = {VARR}->get{FUNC_NAME1ELEMENT_UCF}(); //Kszili Crop invalid if $all_url_vars is used 
                 @header( 'Location: ' . $_SERVER[ 'PHP_SELF' ] . '?do=prepare_crop_preview' );
                 exit;
             };
