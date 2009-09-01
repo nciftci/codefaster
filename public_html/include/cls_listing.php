@@ -2,6 +2,7 @@
 
 	class Listing {
 		protected $sql;
+                protected $sql_sort_query;
 		protected $rs;
 		protected $numrows;
 		protected $numfields;
@@ -23,6 +24,12 @@
 		protected $replace_table;
 		protected $extra_fields;
                 protected $array_data;
+                private $field_results;
+
+                protected $sort_column;
+                protected $sort_reverse;
+
+                protected $search_term;
 
 		private $object_results;
 		private $mode;
@@ -39,7 +46,53 @@
 			$this->numrows=0;
 			$this->numfields=0;
 			$this->mode="";
+                        $this->sort_column=null;
+                        $this->sort_reverse=false;
+                        $this->search_term="";
 		}
+                
+                
+/**
+ * Set sort column
+ *
+ * @param int $sort_column The order of the column
+ * @param boolean $sort_reverse Sort order: (true for reverse)
+ */
+                public function set_sort($sort_column,$sort_reverse=false){
+                        $this->$sort_column=$sort_column;
+                        $this->$sort_reverse=$sort_reverse;
+                        if ($this->mode=="sql"){
+                            $this->sql_sort_query="ORDER BY $sort_column ";
+                            if ($sort_reverse) $this->sql_sort_query.="DESC ";
+                        };
+
+                }
+
+/**
+ * Disable sorting
+ */
+
+                public function reset_sort(){
+                        $this->sort_column=null;
+                        $this->sort_reverse=false;
+                        $this->sql_sort_query="";
+                }
+
+/**
+ * Set search term
+ * @param string $search_term
+ */
+                public function set_search($search_term){
+                        $this->search_term=$search_term;
+                }
+
+/**
+ * Reset searching
+ */
+                public function reset_search(){
+                        $this->search_term=null;
+                }
+
 /**
  * This funciton makes cls_listing to get the data from mysql table
  *
@@ -51,16 +104,29 @@
 		public function init_mysql($source_table_or_query,$fields=NULL){
 			$this->mode="mysql";
                         $query="";
+                        $query_sort="";
                         if ($fields==NULL){
                             $query=$source_table_or_query;
+                            //@todo: if it already contains "order by", the sorting will not work
                         }else{
-                            $query="SELECT ".implode(",",$fields)." FROM $source_table_or_query ORDER BY 1 DESC";
+                            $query="SELECT ".implode(",",$fields)." FROM $source_table_or_query ";
+                            $query_sort="ORDER BY 1 DESC ";
                         };
 			$this->sql=$query;
+                        $this->sql_sort_query=$query_sort;
 			$this->fields[0]="";
 			$this->rs=mysql_query($this->sql);
 			$this->numrows=mysql_num_rows($this->rs);
 			$this->numfields=mysql_num_fields($this->rs);
+
+
+                        $fields=array();
+                        for ($k=0;$k<$this->numfields;$k++){
+                            $tmp=mysql_fetch_field($this->rs,$k);
+                            $fields[$k]=$tmp->name;
+                        };
+
+                        $this->field_results=$fields;
 		}
 
 /**
@@ -199,12 +265,27 @@
  *
  * @return array
  */
-		private function get_data(){
+		private function get_data($search_columns,$search_columns_names){
 			$stringutil = new String();
 			$result=array();
 			if ($this->mode=="mysql"){
-				$limited=$this->sql." limit ".$this->offset." , ".$this->limit;
+                                $sql=$this->sql;
+                                if ($this->sort_column) $sql.=$this->sql_sort_query;
+                                $search_where="";
+                                foreach($search_columns as $key=>$search_column){
+                                    $name=$search_columns_names[$key];
+                                    if (!empty($search_column)) {
+                                        if (!empty($search_where)) $search_where.="AND ";
+                                        $search_where.="`$name` LIKE '%$search_column%' ";
+                                    }
+                                };
+                                if (!empty($search_where)) {
+                                    if (!stristr($this->sql," where ")) $search_where=" WHERE ".$search_where;
+                                        else $search_where="";
+                                }
 
+				$limited=$sql.$search_where." limit ".$this->offset." , ".$this->limit;
+                                
 				$this->rs=mysql_query($limited) or die(mysql_error());
 
 				if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
@@ -216,7 +297,6 @@
 					$max=sizeof($rows);
 					$i=0;
 					while($i<$max) {
-
 						$field_name=mysql_field_name($this->rs,$i);
 						$resultrow[$i]=$stringutil->clean_value($this->getRealValue($rows[$i],$field_name));
 						$i=$i+1;
@@ -245,6 +325,7 @@
 					$result[$k]=$resultrow;
 					$k=$k+1;
 				};
+
 //				print("<pre>");print_r($result);print("</pre>");
 			};
 
@@ -257,181 +338,184 @@
 
 		public function listPages() {
 
-			$alldata=$this->get_data();
+                    $search_columns=$_REQUEST["search_columns"];
+                    $search_columns_names=$_REQUEST["search_columns_name"];
 
-			$stringutil = new String();
+                    $alldata=$this->get_data($search_columns,$search_columns_names);
 
-			$data="<table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
-			$data.="<tr class=\"theader\">";
-			$n=0;
+                    $stringutil = new String();
 
-			$max_fields=sizeof($this->fields);
-			$max_extra_fields=sizeof($this->extra_fields);
-			//$max=sizeof($this->fields);
-			$max=$max_fields+$max_extra_fields;
+                    $self_page=$_SERVER['REQUEST_URI'];
 
-			$all_fields_array=array();
-			for ($i=0;$i<$max_fields;$i++){
-				$field=array();
-				$field["mode"]="field";
-				$field["index"]=$i;
-				$tmp=sprintf("%05d",$i);
-				$all_fields_array["$tmp"."_0"]=$field;
-			};
+                    $data="<form action='$self_page' method='post' id='form1'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
+                    $data.="<tr class=\"theader\">";
+                    $n=0;
 
-			$i=0;
-			foreach ($this->extra_fields as $key => $ef){
-				$field=array();
-				$field["mode"]="extra";
-				$field["index"]=$key;
-				$tmp=sprintf("%05d",$ef["pos"]);
-				$all_fields_array["$tmp"."_1"."$i"]=$field;
-				$i=$i+1;
-			};
-			ksort($all_fields_array);
+                    $max_fields=sizeof($this->fields);
+                    $max_extra_fields=sizeof($this->extra_fields);
+                    //$max=sizeof($this->fields);
+                    $max=$max_fields+$max_extra_fields;
 
-			//echo $max."sd";
-			//print_R($this->fields);
-//			$n_field=0;
-//			$n_extra_field=0;
+                    $all_fields_array=array();
+                    for ($i=0;$i<$max_fields;$i++) {
+                        $field=array();
+                        $field["mode"]="field";
+                        $field["index"]=$i;
+                        $tmp=sprintf("%05d",$i);
+                        $all_fields_array["$tmp"."_0"]=$field;
+                    };
 
-			foreach($all_fields_array as $field)
-			{
-				$n_field=$field["index"];
-				if ($field["mode"]=="field"){
-					if(trim($this->fields[$n_field])=="")
-						$data.="<th nowrap>&nbsp;</th>";
-					else
-						$data.="<th nowrap>".$this->fields[$n_field]."</th>";
-				};
+                    $i=0;
+                    foreach ($this->extra_fields as $key => $ef) {
+                        $field=array();
+                        $field["mode"]="extra";
+                        $field["index"]=$key;
+                        $tmp=sprintf("%05d",$ef["pos"]);
+                        $all_fields_array["$tmp"."_1"."$i"]=$field;
+                        $i=$i+1;
+                    };
+                    ksort($all_fields_array);
 
-				if ($field["mode"]=="extra"){
-					$data.="<th nowrap>".$this->extra_fields[$n_field]["title"]."</th>";
-				}
-			}
-			//+2
+                    foreach($all_fields_array as $field) {
+                        $n_field=$field["index"];
+                        if ($field["mode"]=="field") {
+                            if(trim($this->fields[$n_field])=="")
+                                $data.="<th nowrap>&nbsp;</th>";
+                            else
+                                $data.="<th nowrap>".$this->fields[$n_field]."</th>";
+                        };
 
-			if ($this->getActivateListing() == 1)
-			{
-				$data.="<th nowrap>&nbsp;</th>";
-			}
-			if ($this->enableMod == 0)
-			{
-				$data.="<th nowrap>&nbsp;</th>";
-			}
-			if ($this->enableDel == 0)
-			{
-				$data.="<th nowrap>&nbsp;</th>";
-			}
+                        if ($field["mode"]=="extra") {
+                            $data.="<th nowrap>".$this->extra_fields[$n_field]["title"]."</th>";
+                        }
+                    }
+                    //+2
 
-			$data.="</tr>";
-			$col0;
+                    if ($this->getActivateListing() == 1) {
+                        $data.="<th nowrap>&nbsp;</th>";
+                    }
+                    if ($this->enableMod == 0) {
+                        $data.="<th nowrap>&nbsp;</th>";
+                    }
+                    if ($this->enableDel == 0) {
+                        $data.="<th nowrap>&nbsp;</th>";
+                    }
 
-			if (!$alldata) "<br />".LANG_ADMIN_NODATA."<br />";
+                    $data.="</tr>";
+                    $col0;
 
+                    if (!$alldata) "<br />".LANG_ADMIN_NODATA."<br />";
 
-			$item_k=1;
-			foreach($alldata as $datarow)
-			{
+                    //search columns
+                    $ncolumns=sizeof($alldata[0]);
 
+                    $data.="<tr><td> </td>";
 
-				$normal_fields=array();
-				if($col%2)
-					$data.="<tr class=\"darkcolor\">";
-				else
-					$data.="<tr class=\"lightcolor\">";
-				$i=0;
+                    for($i=1;$i<$this->numfields;$i++) {
+                        $field_name="";
+                        foreach($all_fields_array as $field){
+                            if (($field["index"]==$i)&&($field["mode"]=="field")){
+                                $field_name=$this->field_results[$i];
+                            };
+                        };
+                        $data.="<td><input type=text size=10 id='search_columns[$i]' name='search_columns[$i]' value='".$search_columns[$i]."'></input><input type=hidden id='search_columns_name[$i]' name='search_columns_name[$i]' value='$field_name'></input></td>";
+                    }
+                    $data.="<td><input value='S' type='submit'/></td></tr>";
 
-				//$max=($this->activatelisting==1)?sizeof($rows)-1:sizeof($rows);
-				//$max=($this->activatelisting==1)?sizeof($datarow)-1:sizeof($rows);
-				$max=sizeof($datarow);
+                    $item_k=1;
+                    foreach($alldata as $datarow) {
+                        $normal_fields=array();
+                        if($col%2)
+                            $data.="<tr class=\"darkcolor\">";
+                        else
+                            $data.="<tr class=\"lightcolor\">";
+                        $i=0;
 
-
-				while($i<$max)
-				{
-					//$str = $stringutil->clean_value($this->getRealValue($rows[$i],$field_name));
-					//$str = $stringutil->clean_value($this->getRealValue($datarow[$i]['data'],$field_name));
-					$str = $datarow[$i];
-					if(strlen($str) > $this->limit_display)
-					{
-						$str=substr($str,0,$this->limit_display)." ...";
-					};
-
-					$normal_fields[$i]=$str;
-
-					$i++;
-				}
+                        //$max=($this->activatelisting==1)?sizeof($rows)-1:sizeof($rows);
+                        //$max=($this->activatelisting==1)?sizeof($datarow)-1:sizeof($rows);
+                        $max=sizeof($datarow);
 
 
-				$item_id=$stringutil->str_hex($datarow[0]);
+                        while($i<$max) {
+                        //$str = $stringutil->clean_value($this->getRealValue($rows[$i],$field_name));
+                        //$str = $stringutil->clean_value($this->getRealValue($datarow[$i]['data'],$field_name));
+                            $str = $datarow[$i];
+                            if(strlen($str) > $this->limit_display) {
+                                $str=substr($str,0,$this->limit_display)." ...";
+                            };
 
-			foreach($all_fields_array as $field)
-			{
-				$str="";
-				$n_field=$field["index"];
+                            $normal_fields[$i]=$str;
 
-				if ($field["mode"]=="field"){
-					$str=$normal_fields[$n_field];
-				};
-				if ($field["mode"]=="extra"){
-					$function=$this->extra_fields[$n_field]["function"];
-					$function_class_or_object=$function["class_or_object"];
-					$function_name=$function["function"];
-					$parameter=$datarow[0];
-					$function_call="";
-					if (empty($function_class_or_object)){
-						$function_call=$function_name;
-					}else{
-						$function_call=array($function_class_or_object,$function_name);
-					};
+                            $i++;
+                        }
 
 
-					if (is_callable($function_call)){
-						$str=call_user_func_array($function_call,array($parameter));
-					}else{
-						$str="";//the function could not be called
-					};
-				};
-				if($str != ""){
-					$data.="<td class=\"bodytext\">".$stringutil->cleanDescription2($str)."</td>";
-                                }else{
-					$data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
+                        $item_id=$stringutil->str_hex($datarow[0]);
+
+                        foreach($all_fields_array as $field) {
+                            $str="";
+                            $n_field=$field["index"];
+
+                            if ($field["mode"]=="field") {
+                                $str=$normal_fields[$n_field];
+                            };
+                            if ($field["mode"]=="extra") {
+                                $function=$this->extra_fields[$n_field]["function"];
+                                $function_class_or_object=$function["class_or_object"];
+                                $function_name=$function["function"];
+                                $parameter=$datarow[0];
+                                $function_call="";
+                                if (empty($function_class_or_object)) {
+                                    $function_call=$function_name;
+                                }else {
+                                    $function_call=array($function_class_or_object,$function_name);
                                 };
 
-			};
 
-				// TODO: activ
-				if ($this->getActivateListing() == 1) {
-					if ( $datarow[$max-1] == 1) { //if is active, green
-					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.ico\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
-					}
-					else { //if inactive red
-					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.ico\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
-					}
-				}
+                                if (is_callable($function_call)) {
+                                    $str=call_user_func_array($function_call,array($parameter));
+                                }else {
+                                    $str="";//the function could not be called
+                                };
+                            };
+                            if($str != "") {
+                                $data.="<td class=\"bodytext\">".$stringutil->cleanDescription2($str)."</td>";
+                            }else {
+                                $data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
+                            };
 
-				if ($this->enableMod == 0)
-				{
-					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"mod\"  href=\"".$_SERVER['PHP_SELF']."?do=mod&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/mod.ico\" title=\"".LANG_ADMIN_MODIFY."\"></a></td>";
-				}
+                        };
 
+                        // TODO: activ
+                        if ($this->getActivateListing() == 1) {
+                            if ( $datarow[$max-1] == 1) { //if is active, green
+                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.ico\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
+                            }
+                            else { //if inactive red
+                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.ico\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
+                            }
+                        }
 
-				if ($this->enableDel == 0)
-				{
-					$data.="<td class=\"bodytext\" width=\"24\"><a class=\"del\"  href=\"".$_SERVER['PHP_SELF']."?do=del&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDELETE."')\"><img src=\"".CONF_INDEX_URL."images/admin/del.ico\" title=\"".LANG_ADMIN_DELETE."\" ></a></td>";
-				}
-
-
-				$data.="</tr>\n";
-				$col++;
-				$item_k=$item_k+1;
-			}
-
-			$data.="</table>";
+                        if ($this->enableMod == 0) {
+                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"mod\"  href=\"".$_SERVER['PHP_SELF']."?do=mod&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/mod.ico\" title=\"".LANG_ADMIN_MODIFY."\"></a></td>";
+                        }
 
 
+                        if ($this->enableDel == 0) {
+                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"del\"  href=\"".$_SERVER['PHP_SELF']."?do=del&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDELETE."')\"><img src=\"".CONF_INDEX_URL."images/admin/del.ico\" title=\"".LANG_ADMIN_DELETE."\" ></a></td>";
+                        }
 
-return $data;
+
+                        $data.="</tr>\n";
+                        $col++;
+                        $item_k=$item_k+1;
+                    }
+
+                    $data.="</table></form>";
+
+
+
+                    return $data;
 
 
 		}
