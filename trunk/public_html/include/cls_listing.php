@@ -28,6 +28,7 @@
 
                 protected $sort_column;
                 protected $sort_reverse;
+                protected $disable_sort_columns;
 
                 protected $search_term;
 
@@ -55,15 +56,16 @@
 /**
  * Set sort column
  *
- * @param int $sort_column The order of the column
+ * @param string $sort_column The column
  * @param boolean $sort_reverse Sort order: (true for reverse)
  */
                 public function set_sort($sort_column,$sort_reverse=false){
-                        $this->$sort_column=$sort_column;
-                        $this->$sort_reverse=$sort_reverse;
-                        if ($this->mode=="sql"){
-                            $this->sql_sort_query="ORDER BY $sort_column ";
+                        $this->sort_column=$sort_column;
+                        $this->sort_reverse=$sort_reverse;
+                        if ($this->mode=="mysql"){
+                            $this->sql_sort_query="ORDER BY `$sort_column` ";
                             if ($sort_reverse) $this->sql_sort_query.="DESC ";
+                        
                         };
 
                 }
@@ -270,7 +272,6 @@
 			$result=array();
 			if ($this->mode=="mysql"){
                                 $sql=$this->sql;
-                                if ($this->sort_column) $sql.=$this->sql_sort_query;
                                 $search_where="";
                                 foreach($search_columns as $key=>$search_column){
                                     $name=$search_columns_names[$key];
@@ -284,7 +285,9 @@
                                         else $search_where="";
                                 }
 
-				$limited=$sql.$search_where." limit ".$this->offset." , ".$this->limit;
+				$limited=$sql.$search_where;
+                                if ($this->sort_column) $limited.=$this->sql_sort_query;
+                                $limited.=" LIMIT ".$this->offset." , ".$this->limit;
                                 
 				$this->rs=mysql_query($limited) or die(mysql_error());
 
@@ -322,6 +325,18 @@
 					}else{
 						$resultrow[0]=$r;
 					};
+                                        if (!empty($search_columns)){
+                                            $notfound=false;
+                                            foreach($resultrow as $key=>$value){
+                                                $search_column=$search_columns[$key];
+                                                if (!empty($search_column)){
+                                                    if (!stristr($value,$search_column)){
+                                                        $notfound=true;
+                                                    }
+                                                }
+                                            };
+                                            if ($notfound) continue;
+                                        }
 					$result[$k]=$resultrow;
 					$k=$k+1;
 				};
@@ -340,12 +355,26 @@
 
                     $search_columns=$_REQUEST["search_columns"];
                     $search_columns_names=$_REQUEST["search_columns_name"];
+                    $self_page=$_SERVER['REQUEST_URI'];
+                    
+                    $search_session_name="search_".$_SERVER['SCRIPT_FILENAME'];
+                                      
+                    if ($search_columns==null) $search_columns=$_SESSION[$search_session_name]["columns"];
+                        else $_SESSION[$search_session_name]["columns"]=$search_columns;
+                    if ($search_columns_names==null) $search_columns_names=$_SESSION[$search_session_name]["columns_name"];
+                        else  $_SESSION[$search_session_name]["columns_name"]=$search_columns_names;
+
+                    
+                    
+
+                    $sort_column=$_REQUEST["sort_column"];
+                    $sort_reverse=!(empty($_REQUEST["sort_reverse"]));
+                    if (!empty($sort_column)) $this->set_sort($sort_column,$sort_reverse);
 
                     $alldata=$this->get_data($search_columns,$search_columns_names);
 
                     $stringutil = new String();
 
-                    $self_page=$_SERVER['REQUEST_URI'];
 
                     $data="<form action='$self_page' method='post' id='form1'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
                     $data.="<tr class=\"theader\">";
@@ -378,11 +407,28 @@
 
                     foreach($all_fields_array as $field) {
                         $n_field=$field["index"];
+
+                        //make sort url
+                        $self_page_array=explode("&",$self_page);                        
+                        $new_self_page_array=array();
+                        foreach($self_page_array as $item){
+                            if (strstr($item,"sort_column=")) continue;
+                            if (strstr($item,"sort_reverse=")) continue;
+                            $new_self_page_array[]=$item;
+                        }
+                        $hrefurl=implode("&",$new_self_page_array);                        
+                        if (strstr($hrefurl,"?")) $hrefurl.="&";
+                            else $hrefurl.="?";
+                        $hrefurl.="sort_column=".$this->field_results[$n_field];
+                        if ((!$sort_reverse)&&($this->field_results[$n_field]==$sort_column)) $hrefurl.="&sort_reverse=1";
+                        
+
+
                         if ($field["mode"]=="field") {
                             if(trim($this->fields[$n_field])=="")
                                 $data.="<th nowrap>&nbsp;</th>";
                             else
-                                $data.="<th nowrap>".$this->fields[$n_field]."</th>";
+                                $data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."</a></th>";
                         };
 
                         if ($field["mode"]=="extra") {
