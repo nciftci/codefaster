@@ -199,7 +199,7 @@ foreach ( $fields as $field ) {
 			case 'dropdown' :
 				//TODO size="5" multiple="multiple"
 				$fielddata = $divstart . "<select name=\"" . $field . "\" id=\"" . $field . "\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" " . $class_value . ">
-					<option value=\"0\">(#_LANG_ADMIN_" . $NAMEUPPER . "PLEASECHOOSE" . $strupperfield . "_#)</option>
+					<option value=\"\">(#_LANG_ADMIN_" . $NAMEUPPER . "PLEASECHOOSE" . $strupperfield . "_#)</option>
 					#_" . $strupperfield . "_#</select>" . $divend;
 				break;
 			
