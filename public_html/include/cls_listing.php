@@ -28,9 +28,9 @@
 
                 protected $sort_column;
                 protected $sort_reverse;
-                protected $disable_sort_columns;
 
                 protected $search_term;
+                protected $disable_search_columns;
 
 		private $object_results;
 		private $mode;
@@ -50,6 +50,7 @@
                         $this->sort_column=null;
                         $this->sort_reverse=false;
                         $this->search_term="";
+                        $this->disable_search_columns=null;
 		}
                 
                 
@@ -94,6 +95,13 @@
                 public function reset_search(){
                         $this->search_term=null;
                 }
+/**
+ * Disable sorting columns
+ */
+                public function set_disable_search_columns($disable_sort_columns_array){
+                        $this->disable_search_columns=$disable_sort_columns_array;
+                }
+
 
 /**
  * This funciton makes cls_listing to get the data from mysql table
@@ -464,7 +472,12 @@
                                 $field_name=$this->field_results[$i];
                             };
                         };
-                        $data.="<td><input type=text size=10 id='search_columns[$i]' name='search_columns[$i]' value='".$search_columns[$i]."'></input><input type=hidden id='search_columns_name[$i]' name='search_columns_name[$i]' value='$field_name'></input></td>";
+                        
+                        if (in_array($this->field_results[$i],$this->disable_search_columns)){
+                            $data.="<td> </td>";
+                        }else{
+                            $data.="<td><input type=text size=10 id='search_columns[$i]' name='search_columns[$i]' value='".$search_columns[$i]."'></input><input type=hidden id='search_columns_name[$i]' name='search_columns_name[$i]' value='$field_name'></input></td>";
+                        };
                     }
                     $data.="<td><input value='S' type='submit'/></td></tr>";
 
