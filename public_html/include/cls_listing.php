@@ -51,7 +51,7 @@
                         $this->sort_column=null;
                         $this->sort_reverse=false;
                         $this->search_term="";
-                        $this->disable_search_columns=null;
+                        $this->disable_search_columns=array();
 		}
                 
                 
@@ -134,10 +134,13 @@
                         $fields=array();
                         for ($k=0;$k<$this->numfields;$k++){
                             $tmp=mysql_fetch_field($this->rs,$k);
-                            $fields[$k]=$tmp->name;
+                            $name=$tmp->name;
+                            if ($tmp->numeric) $this->disable_search_columns[]=$name;
+                            $fields[$k]=$name;
                         };
 
                         $this->field_results=$fields;
+                   
 		}
 
 /**
@@ -475,19 +478,23 @@
                     //search columns
                     $ncolumns=sizeof($alldata[0]);
 
-                    $data.="<tr><td> </td>";
+                    $data.="<tr>";
                      $k=0;
                      foreach($all_fields_array as $field) {
                          $n_field=$field["index"];
 
                         if ($field["mode"]=="field"){
                             $field_name=$this->field_results[$k];
-                            $data.="<td> <input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+                            if (in_array($field_name,$this->disable_search_columns)){
+                                $data.="<td> </td>";
+                            }else{
+                                $data.="<td> <input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+                            }
+                            $k=$k+1;
                         }else{
                             $data.="<td> </td>";
                         };
                         
-                        $k=$k+1;
                     }
                     $data.="<td><input value='S' type='submit'/></td></tr>";
 
