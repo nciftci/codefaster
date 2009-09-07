@@ -35,6 +35,7 @@
 		private $object_results;
 		private $mode;
 
+
 		public function __construct() {
 			$this->offset=0;
 			$this->page=1;
@@ -111,7 +112,7 @@
  *
  * if the user wants to use own sql command for the first parameter, the second parameter must be null
  */
-		public function init_mysql($source_table_or_query,$fields=NULL){
+		public function init_mysql($source_table_or_query,$fields=NULL){                   
 			$this->mode="mysql";
                         $query="";
                         $query_sort="";
@@ -276,11 +277,13 @@
  * @return array
  */
 		private function get_data($search_columns,$search_columns_names){
+
 			$stringutil = new String();
 			$result=array();
 			if ($this->mode=="mysql"){
                                 $sql=$this->sql;
                                 $search_where="";
+                                
                                 foreach($search_columns as $key=>$search_column){
                                     $name=$search_columns_names[$key];
                                     if (!empty($search_column)) {
@@ -289,13 +292,23 @@
                                     }
                                 };
                                 if (!empty($search_where)) {
-                                    if (!stristr($this->sql," where ")) $search_where=" WHERE ".$search_where;
-                                        else $search_where="";
+                                    if (!stristr($this->sql," where ")) {
+                                        $search_where=" WHERE ".$search_where;
+                                    } else {
+                                        $split=preg_split('/ where /i',$this->sql);
+                                        if (sizeof($split)==2){
+                                            $split[1]="$search_where AND ".$split[1];
+                                            $sql=implode(" WHERE ",$split);
+                                        
+                                        }
+                                        $search_where="";
+                                    }
                                 }
 
 				$limited=$sql.$search_where;
                                 if ($this->sort_column) $limited.=$this->sql_sort_query;
                                 $limited.=" LIMIT ".$this->offset." , ".$this->limit;
+
                                 
 				$this->rs=mysql_query($limited) or die(mysql_error());
 
@@ -372,8 +385,7 @@
                     if ($search_columns_names==null) $search_columns_names=$_SESSION[$search_session_name]["columns_name"];
                         else  $_SESSION[$search_session_name]["columns_name"]=$search_columns_names;
 
-                    
-                    
+
 
                     $sort_column=$_REQUEST["sort_column"];
                     $sort_reverse=!(empty($_REQUEST["sort_reverse"]));
@@ -464,20 +476,18 @@
                     $ncolumns=sizeof($alldata[0]);
 
                     $data.="<tr><td> </td>";
+                     $k=0;
+                     foreach($all_fields_array as $field) {
+                         $n_field=$field["index"];
 
-                    for($i=1;$i<$this->numfields;$i++) {
-                        $field_name="";
-                        foreach($all_fields_array as $field){
-                            if (($field["index"]==$i)&&($field["mode"]=="field")){
-                                $field_name=$this->field_results[$i];
-                            };
+                        if ($field["mode"]=="field"){
+                            $field_name=$this->field_results[$k];
+                            $data.="<td> <input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+                        }else{
+                            $data.="<td> </td>";
                         };
                         
-                        if (in_array($this->field_results[$i],$this->disable_search_columns)){
-                            $data.="<td> </td>";
-                        }else{
-                            $data.="<td><input type=text size=10 id='search_columns[$i]' name='search_columns[$i]' value='".$search_columns[$i]."'></input><input type=hidden id='search_columns_name[$i]' name='search_columns_name[$i]' value='$field_name'></input></td>";
-                        };
+                        $k=$k+1;
                     }
                     $data.="<td><input value='S' type='submit'/></td></tr>";
 
