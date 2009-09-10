@@ -489,17 +489,22 @@
                      $k=0;
                      foreach($all_fields_array as $field) {
                          $n_field=$field["index"];
-
+						//verify to be only the first column with text search.
+						if ($k!=0) {
+							$no_url_data="<td class='noborder'>&nbsp;</td>";
+						}else{
+							$no_url_data.="<td class='noborder small'>".LANG_ADMIN_SEARCH."</td>";
+						};
                         if ($field["mode"]=="field"){
                             $field_name=$this->field_results[$k];
                             if (in_array($field_name,$this->disable_search_columns)){
-                                $data.="<td class='noborder small'>".LANG_ADMIN_SEARCH."</td>";
+                                $data.=$no_url_data;
                             }else{
                                 $data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
                             }
                             $k=$k+1;
                         }else{
-                            $data.="<td class='noborder'>&nbsp;</td>";
+                            $data.=$no_url_data;
                         };
                         
                     }
