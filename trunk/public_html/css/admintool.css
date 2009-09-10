@@ -141,7 +141,11 @@ label {
 	cursor:pointer;
 	display: block;
 	float: left;
-	width: 125px; }
+	width: 125px;
+	}
+	
+label.editor {
+	float: none; }	
  
 /***** Links *****/
 a, a:link, a:visited {
@@ -177,6 +181,11 @@ a:hover { text-decoration:underline; }
 	background: #FE4818 url(../images/admin/header-bg_small.jpg) repeat-x top;
 	text-align:left; 
 	height: 50px; } 
+	
+	#listingtable td.noborder { border: 0px;
+		}	
+	#listingtable td.small { font-size:10px;
+		}
 		 
 /* Footer */
 #footer {
@@ -236,3 +245,17 @@ a:hover { text-decoration:underline; }
 	background: #fff url(../images/icons/cancel_48.png) no-repeat;
 	border: #cc0000 2px solid;
 	}
+	
+.asc {
+	background: url(../images/icons/arrowasc.png) no-repeat -5px;
+
+	padding-right:5px;
+	}
+	
+.desc {
+	background: url(../images/icons/arrowdesc.png) no-repeat -5px ;
+
+	padding-right:5px;
+	}	
+	
+
