@@ -399,7 +399,7 @@
                     $stringutil = new String();
 
 
-                    $data="<form action='$self_page' method='post' id='form1'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
+                    $data="<form action='$self_page' method='post' id='form'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
                     $data.="<tr class=\"theader\">";
                     $n=0;
 
@@ -443,15 +443,22 @@
                         if (strstr($hrefurl,"?")) $hrefurl.="&";
                             else $hrefurl.="?";
                         $hrefurl.="sort_column=".$this->field_results[$n_field];
-                        if ((!$sort_reverse)&&($this->field_results[$n_field]==$sort_column)) $hrefurl.="&sort_reverse=1";
-                        
+                        if ((!$sort_reverse)&&($this->field_results[$n_field]==$sort_column)) 
+						{ 
+							$hrefurl.="&sort_reverse=1";
+							$ascdesc = "desc";
+						}
+						else 
+						{
+						    $ascdesc = "asc";
+						}
 
 
                         if ($field["mode"]=="field") {
                             if(trim($this->fields[$n_field])=="")
                                 $data.="<th nowrap>&nbsp;</th>";
                             else
-                                $data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."</a></th>";
+                                $data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></a></th>";
                         };
 
                         if ($field["mode"]=="extra") {
@@ -486,17 +493,27 @@
                         if ($field["mode"]=="field"){
                             $field_name=$this->field_results[$k];
                             if (in_array($field_name,$this->disable_search_columns)){
-                                $data.="<td> </td>";
+                                $data.="<td class='noborder small'>".LANG_ADMIN_SEARCH."</td>";
                             }else{
-                                $data.="<td> <input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+                                $data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
                             }
                             $k=$k+1;
                         }else{
-                            $data.="<td> </td>";
+                            $data.="<td class='noborder'>&nbsp;</td>";
                         };
                         
                     }
-                    $data.="<td><input value='S' type='submit'/></td></tr>";
+                    $data.="<td class='noborder'>
+					<input name=\"".LANG_ADMIN_SEARCH."\" type=\"image\" value=\"".LANG_ADMIN_SEARCH."\" src=\"".CONF_INDEX_URL."images/admin/search.ico\" style=\"border:0\" alt=\"".LANG_ADMIN_SEARCH."\" />
+					</td>";
+					// colomns at the end to close the search.
+					if ($this->getActivateListing() == 1) {
+					$data.="<td class='noborder'>&nbsp;</td><td class='noborder'>&nbsp;</td>";
+					}
+					else {
+					$data.="<td class='noborder'>&nbsp;</td>";
+					} 
+					$data.="</tr>";
 
                     $item_k=1;
                     foreach($alldata as $datarow) {
