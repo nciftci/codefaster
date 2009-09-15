@@ -599,7 +599,7 @@
                                 };
                             };
                             if($str != "") {
-                                $data.="<td class=\"bodytext\">".$stringutil->cleanDescription2($str)."</td>";
+                                $data.="<td class=\"bodytext\">".$stringutil->cleanDescription2(htmlspecialchars_decode($str))."</td>";
                             }else {
                                 $data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
                             };
