@@ -3,7 +3,8 @@
 <head>
 <title>{LANG_ADMIN} {CONF_SITE_NAME}</title>
 <meta http-equiv="Content-Type" content="text/html; charset={CONF_CHARSET}" />
-<meta name="ROBOTS" content="NOINDEX,NOFOLLOW" />
+<meta name="ROBOTS" content="noindex,nofollow" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <!--[if IE]> <base href="{CONF_ADMIN_URL}"></base><![endif]-->
 <!--[if !IE]><base href="{CONF_ADMIN_URL}" /><![endif]-->
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/general_scripts.js"></script>
@@ -12,12 +13,11 @@
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jqueryui/jquery.cookie.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-colorize/jquery.colorize.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-validate/jquery.form.js"></script>
-<script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-validate/jquery.FCKEditor.pack.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-validate/jquery.metadata.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-validate/jquery.validate.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-validate/cmxforms.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-validate/additional-methods.js"></script>
-<script type="text/javascript" src="{CONF_INDEX_URL}javascript/editor/fckeditor.js"></script>
+<script type="text/javascript" src="{CONF_INDEX_URL}javascript/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="{CONF_INDEX_URL}javascript/jquery-crop/jquery.imgareaselect.js"></script>
 <link type="text/css" href="{CONF_INDEX_URL}javascript/jqueryui/css/smoothness/jquery-ui.css" rel="stylesheet" />
 <link type="text/css" href="{CONF_INDEX_URL}javascript/jquery-validate/css/screen.css" rel="stylesheet" />
@@ -51,7 +51,7 @@
 <div id="header">
   <div id="logo">
     <h1 title="{CONF_SITE_NAME}">{LANG_ADMIN} {CONF_SITE_NAME}</h1>
-    <p><a href="index.php">{LANG_ADMIN_HOME}</a> | <a href="config.php?action=index">{LANG_ADMIN_CONFIG_PAGE}</a> | <a href="login.php">{LANG_ADMIN_LOG_OFF}</a></p>
+    <p><a href="index.php">{LANG_ADMIN_HOME}</a> | <a href="config.php?action=index">{LANG_ADMIN_CONFIG_PAGE}</a> | <a href="template.php">{LANG_ADMIN_TEMPLATE_EDITOR}</a> | <a href="languageeditor.php">{LANG_ADMIN_LANGUAGE_EDITOR}</a> | <a href="config.php?action=index">{LANG_ADMIN_CONFIG_PAGE}</a> | <a href="login.php">{LANG_ADMIN_LOG_OFF}</a></p>
   </div>
 </div>
 <div class="clear"></div>
