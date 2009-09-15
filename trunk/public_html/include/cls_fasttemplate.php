@@ -1,7 +1,7 @@
 <?php
 /**
- *Version. 1.6.3
-    $Id: cls_fast_template.php 12147 2009-04-27 13:57:19Z zelteto $
+ *Version. 1.6.5
+    $Id: cls_fast_template.php 12712 2009-06-23 08:44:07Z lvalics $
  *
  * Original Perl module CGI::FastTemplate by Jason Moore jmoore@sober.com
  * PHP3 port by CDI cdi@thewebmasters.net
@@ -39,7 +39,7 @@
 # 2. WHITE SPACE IS COUNTED FROM LEFT EDGE {6} MEANS 6 WHITE SPACES NOT TABS
 # REASON IS EVERYONE HAS THEIR TABS SET UP DIFFERENTLY
 /*******************************-EXAMPLE-***************************************
-  {6}  FUNCTION USE_CACHE( $fname = "" )
+  {6}  function USE_CACHE( $fname = "" )
   {6}  {
   {10}     GLOBAL $php_errormsg; //GLOBAL
   {12}       $this->USE_CACHE = TRUE;//ASSIGN VAR
@@ -50,7 +50,7 @@
   {14}         $this->verify_cached_files($fname);
   {6}  }
  *******************************************************************************/
-# SAMPLE FUNCTION HEADER SHOULD BE AGAINST LEFT EDGE
+# SAMPLE function HEADER SHOULD BE AGAINST LEFT EDGE
 
 
 /**
@@ -76,7 +76,7 @@
  * @Mod vers -
  **/
 
-FUNCTION rewrite_link_href_callback($matches) {
+function rewrite_link_href_callback($matches) {
 	$insideRegex = "/href\s*=(.*?)[\\\"']?([^\\\"' >]+)[\\\"'> ]/is";
 	RETURN preg_replace ( $insideRegex, 'href="' . $GLOBALS ['REWRITE_SRC_PATH'] . '\\2"', implode ( ' ', $matches ) );
 }
@@ -270,7 +270,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 **/
-		FUNCTION FastTemplate($pathToTemplates = "") {
+		function FastTemplate($pathToTemplates = "") {
 			GLOBAL $php_errormsg; //if the track_errors configuration option is turned on (it defaults to off).
 			
 
@@ -292,7 +292,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 **/
-		FUNCTION parse_and_return($tpl_name) {
+		function parse_and_return($tpl_name) {
 			$HREF = 'TPL';
 			$this->parse ( $HREF, $tpl_name );
 			$result = trim ( $this->fetch ( $HREF ) );
@@ -312,7 +312,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 **/
-		FUNCTION set_root($root) {
+		function set_root($root) {
 			$trailer = substr ( $root, - 1 );
 			
 			if (! $this->WIN32) {
@@ -349,7 +349,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION get_root() {
+		function get_root() {
 			RETURN $this->ROOT;
 		} // End get_root()
 		
@@ -365,7 +365,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION utime() {
+		function utime() {
 			$time = explode ( " ", microtime () );
 			$usec = ( double ) $time [0];
 			$sec = ( double ) $time [1];
@@ -390,7 +390,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION strict() {
+		function strict() {
 			$this->STRICT = TRUE;
 		}
 		
@@ -412,7 +412,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION no_strict() {
+		function no_strict() {
 			$this->STRICT = FALSE;
 		}
 		
@@ -427,7 +427,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION php_in_html($value) {
+		function php_in_html($value) {
 			$this->PHP_IN_HTML = $value;
 		}
 		
@@ -444,7 +444,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION rewrite_src_path($contents) {
+		function rewrite_src_path($contents) {
 			#Rewrite src path regex using Heredoc
 			$regexPattern [] = "/src\s*=(.*?)[\\\"']?([^\\\"' >]+)[\\\"'> ]/is";
 			//$regexPattern[] = "/<\s*link\s+[^>]*href\s*=\s*[\\\"']?([^\\\"' >]+)[\\\"' >]/is"; //BUG in 1.5.1
@@ -456,7 +456,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				} else {
 					$contents = preg_replace ( $regexPattern [0], 'src="' . $this->REWRITE_SRC_PATH . '\\2"', $contents );
 				}
-				// preg_reclace_callback RETURN his result to a FUNCTION outside class body
+				// preg_reclace_callback RETURN his result to a function outside class body
 				$GLOBALS ['REWRITE_SRC_PATH'] = $this->REWRITE_SRC_PATH;
 				$contents = preg_replace_callback ( $regexPattern [1], 'rewrite_link_href_callback', $contents );
 				unset ( $GLOBALS ['REWRITE_SRC_PATH'] );
@@ -475,7 +475,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION set_output_rewrite_src_path($path) {
+		function set_output_rewrite_src_path($path) {
 			$this->REWRITE_SRC_PATH = $path;
 		}
 		
@@ -490,7 +490,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION get_template($template) {
+		function get_template($template) {
 			GLOBAL $php_errormsg; # if the track_errors configuration option is turned on (it defaults to off).
 			
 
@@ -550,7 +550,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION show_unknowns($Line) {
+		function show_unknowns($Line) {
 			$unknown = array ();
 			if (ereg ( "({[A-Z0-9_]+})", $Line, $unknown )) {
 				$UnkVar = $unknown [1];
@@ -579,7 +579,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION parseParamString($string) {
+		function parseParamString($string) {
 			$matches = array ();
 			if (preg_match_all ( '/\{([a-z0-9_]+)\}/i', $string, $matches )) {
 				
@@ -603,7 +603,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION value_defined($value, $field = '', $params = '') {
+		function value_defined($value, $field = '', $params = '') {
 			$var = $this->PARSEVARS [$value];
 			if ($field {0} == '.') {
 				$field = substr ( $field, 1 );
@@ -643,8 +643,8 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION parse_defined($template) {
-			$lines = split ( "\n", $template );
+		function parse_defined($template) {
+			$lines = explode ( "\n", $template );
 			$newTemplate = "";
 			$ifdefs = FALSE;
 			$depth = 0;
@@ -703,7 +703,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   - Artyem V. Shkondin artvs@clubpro.spb.ru, Comments by GRAFX
 		 * @Mod vers - 1.1.1
 		 */
-		FUNCTION parse_template($template, $ft_array) {
+		function parse_template($template, $ft_array) {
 			$matches = array ();
 			/* Parsing and replacing object statements {Object.field} */
 			if (preg_match_all ( '/\{([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)([a-zA-Z_][a-zA-Z0-9_]+)\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\}/i', $template, $matches )) {
@@ -760,9 +760,13 @@ if (! class_exists ( 'FastTemplate' )) {
 			
 			WHILE ( list ( $key, $val ) = each ( $ft_array ) ) {
 				if (! (empty ( $key ))) {
-					if (gettype ( $val ) != "string") {
-						settype ( $val, "string" );
-					}
+		    // add by Lubos
+                if(gettype ( $val ) == "object") continue;
+				if (gettype ( $val ) != "string") {
+                //echo gettype($val);
+                //settype ( $val, "string" );
+            }
+
 					
 					$key = '{' . "$key" . '}'; //php4 doesn't like '{$' combinations.
 					$template = str_replace ( "$key", "$val", "$template" ); //Correct using str_replace insted ereg_replace
@@ -771,7 +775,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			//if ( !$this->STRICT && ($this->STRICT && !$this->STRICT_DEBUG))
 			if (! $this->STRICT || ($this->STRICT && ! $this->STRICT_DEBUG)) { //Fixed error ^^ // by Voituk Vadim
 				// Silently remove anything not already found
-				$template = ereg_replace ( "{([A-Za-z0-9_\.]+)}", "", $template ); // by Voituk Vadim correct using str_replace insted ereg_replace, small addition a-z, thanx to Gabe Alack, the regex used in the line to remove unset variables only checked for all caps, while lowercase variables are allowed by the class. (1.6.2)
+				$template = str_replace ( "{([A-Za-z0-9_\.]+)}", "", $template ); // by Voituk Vadim correct using str_replace insted ereg_replace, small addition a-z, thanx to Gabe Alack, the regex used in the line to remove unset variables only checked for all caps, while lowercase variables are allowed by the class. (1.6.2)
 				// by Alex Tonkov: paste each define block in one line
 				$template = preg_replace ( "/(<!--\s*IFDEF:\s*([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)?([a-zA-Z_][a-zA-Z0-9_]+)?\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\s*-->)/i", "\n$0\n", $template );
 				$template = preg_replace ( "/(<!--\s*IFNDEF:\s*([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)?([a-zA-Z_][a-zA-Z0-9_]+)?\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\s*-->)/i", "\n$0\n", $template );
@@ -783,28 +787,26 @@ if (! class_exists ( 'FastTemplate' )) {
 				// TX to Martin Fasani
 				//$template = ereg_replace("([\n]+)", "\n", $template);
 				//by AiK: remove dynamic blocks
-				$lines = split ( "\n", $template );
-				$inside_block = FALSE;
+				$lines = explode ( "\n", $template );
+				//$inside_block = FALSE;
+				$inside_block=0;
 				// by Voituk Vadim
 				$ifdefs = FALSE;
 				$needparsedef = FALSE;
 				// end by Voituk Vadim
 				$template = "";
-				
+
 				WHILE ( list ( $num, $line ) = each ( $lines ) ) {
-					
 					if (substr_count ( $line, "<!-- BEGIN DYNAMIC BLOCK:" ) > 0) {
-						$inside_block = TRUE;
+						$inside_block++; // original: $inside_block=TRUE;
 					}
-					
-					if (! $inside_block) {
-						$template .= "$line\n";
+					if ($inside_block <= 0){ // original: if (!$inside_block)
+					// <=0 prevents unclean template design with a different number of BEGIN and END blocks
+					    $template .= "$line\n";
 					}
-					
-					if (substr_count ( $line, "<!-- END DYNAMIC BLOCK:" ) > 0) {
-						$inside_block = FALSE;
+					if (substr_count ( $line, "<!-- END DYNAMIC BLOCK:" ) > 0){
+						$inside_block--; // original: $inside_block=FALSE;
 					}
-				
 				}
 				
 				$template = $this->parse_defined ( $template );
@@ -812,7 +814,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			} else {
 				// Warn about unresolved template variables
 				if (ereg ( "({[A-Z0-9_]+})", $template )) {
-					$unknown = split ( "\n", $template );
+					$unknown = explode ( "\n", $template );
 					WHILE ( list ( $Element, $Line ) = each ( $unknown ) ) {
 						$UnkVar = $Line;
 						if (! (empty ( $UnkVar ))) {
@@ -830,7 +832,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		/**
 		 * @author   - Jason Moore
 		 * @type     - public
-		 * @desc     - This is the main FUNCTION in FastTemplate
+		 * @desc     - This is the main function in FastTemplate
 		 * 			   It accepts a new key value pair where the key is the TARGET and the values are the SOURCE templates.
 		 * 			   There are three forms this can be in:
 		 * 				<code>
@@ -853,7 +855,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * 				<code>
 		 * 					$tpl->parse(MAIN, array("table", "main"));
 		 * 				</code>
-		 * 			  this form saves FUNCTION calls and makes your code cleaner.
+		 * 			  this form saves function calls and makes your code cleaner.
 		 * 			  It is important to note that when you are using the compound form, each template after
 		 * 			  the first, must contain the variable that you are parsing the results into.
 		 * 			  In the above example, 'main' must contain the variable '{MAIN}', as that is where the parsed results of 'table' is stored.
@@ -870,7 +872,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION parse($ReturnVar, $FileTags) {
+		function parse($ReturnVar, $FileTags) {
 			// add multiple parse section
 			// these are the define assigns
 			FOREACH ( $this->PATTERN_VARS_DEFINE as $value )
@@ -954,7 +956,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION getfast($template = "") {
+		function getfast($template = "") {
 			if (empty ( $template )) {
 				$template = $this->LAST;
 			}
@@ -970,7 +972,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				if ($this->IE_UTF_INCLUDE) {
 					$user_agent = $_SERVER ['HTTP_USER_AGENT'];
 					// IE7.0
-					if (eregi ( "msie", $user_agent ) && eregi ( "[7]\.[0]", $user_agent ) && eregi ( "Windows", $user_agent ))
+				if (preg_match ( "/msie/i", $user_agent ) && preg_match ( "/[7]\.[0]/i", $user_agent ) && preg_match ( "/Windows/i", $user_agent ))
 						$this->$template = strstr ( $this->$template, '<' );
 				}
 				
@@ -1009,7 +1011,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION FastWrite($template = "", $outputfile) {
+		function FastWrite($template = "", $outputfile) {
 			$fp = fopen ( $outputfile, 'w' );
 			if ($fp) {
 				fwrite ( $fp, $this->getfast ( $template ) );
@@ -1044,7 +1046,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION FastPrint($template = "", $return = "") {
+		function FastPrint($template = "", $return = "") {
 			if (is_array ( $this->REWRITE_TEMPLATE_PATH ))
 				$tmp = str_replace ( $this->REWRITE_TEMPLATE_PATH [0], $this->REWRITE_TEMPLATE_PATH [1], $this->getfast ( $template ) );
 			else
@@ -1069,7 +1071,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION USE_CACHE($fname = "") {
+		function USE_CACHE($fname = "") {
 			$this->USE_CACHE = TRUE;
 			if ($fname) {
 				$this->CACHING = $this->cache_path ( $fname );
@@ -1087,7 +1089,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION setCacheTime($time) {
+		function setCacheTime($time) {
 			$this->UPDT_TIME = $time;
 		}
 		
@@ -1108,7 +1110,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers - 1.1.6 WHILE ( ($fname = readdir ( $dirlisting ))!=true ) { //boolean value was expected here
 		 **/
 		
-		FUNCTION DELETE_CACHE() {
+		function DELETE_CACHE() {
 			$this->DELETE_CACHE = TRUE;
 			$expired = time () - $this->UPDT_TIME;
 			$dir = $this->CACHE_PATH;
@@ -1138,7 +1140,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 *             include $this->self_script();
 		 **/
 		
-		FUNCTION verify_cached_files() {
+		function verify_cached_files() {
 			if (($this->USE_CACHE) && ($this->cache_file_is_updated ())) {
 				if (! $this->CACHING) {
 					include $this->self_script () . ".ft";
@@ -1164,7 +1166,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 *             RETURN $this->CACHE_PATH.'/'.$fname;
 		 **/
 		
-		FUNCTION self_script($relativePath = "") {
+		function self_script($relativePath = "") {
 			$fname = $_SERVER ['REQUEST_URI'];
 			//$fname = getenv('SCRIPT_NAME');
 			if (count ( $_SERVER ['argv'] )) {
@@ -1201,7 +1203,8 @@ if (! class_exists ( 'FastTemplate' )) {
 		 *             supply the trailing slash. old code follows:
 		 *             RETURN $_SERVER['DOCUMENT_ROOT'].$this->CACHE_PATH.'/'.basename($fname);
 		 **/
-		FUNCTION cache_path($fname) {
+
+		function cache_path($fname) {
 			RETURN $this->CACHE_PATH . basename ( $fname );
 		}
 		
@@ -1215,7 +1218,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 **/
-		FUNCTION self_script_in_cache_path() {
+		function self_script_in_cache_path() {
 			RETURN $this->cache_path ( basename ( $this->self_script () ) );
 		}
 		
@@ -1229,7 +1232,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 **/
-		FUNCTION cache_file_is_updated() {
+		function cache_file_is_updated() {
 			if (! $this->CACHING) {
 				$fname = $this->self_script_in_cache_path ();
 			} else {
@@ -1265,7 +1268,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers - 1.1.1
 		 **/
 		
-		FUNCTION cache_file($content = "") {
+		function cache_file($content = "") {
 			if (($this->USE_CACHE) && (! $this->cache_file_is_updated ())) {
 				if (! $this->CACHING) {
 					$fname = $this->self_script_in_cache_path ();
@@ -1312,7 +1315,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION fetch($template = "") {
+		function fetch($template = "") {
 			if (empty ( $template )) {
 				$template = $this->LAST;
 			}
@@ -1376,7 +1379,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION define_dynamic($Macro, $ParentName) {
+		function define_dynamic($Macro, $ParentName) {
 			$this->DYNAMIC ["$Macro"] = $ParentName;
 			RETURN TRUE;
 		}
@@ -1392,7 +1395,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION parse_dynamic($Macro, $MacroName) {
+		function parse_dynamic($Macro, $MacroName) {
 			// The file must already be in memory.
 			//echo "parse_dynamic $Macro::$MacroName";
 			$ParentTag = $this->DYNAMIC ["$Macro"];
@@ -1404,7 +1407,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			
 			if ($this->$ParentTag) {
 				$template = $this->$ParentTag;
-				$DataArray = split ( "\n", $template );
+				$DataArray = explode ( "\n", $template );
 				$newMacro = "";
 				$newParent = "";
 				$outside = TRUE;
@@ -1483,7 +1486,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION clear_dynamic($Macro = "") {
+		function clear_dynamic($Macro = "") {
 			if (empty ( $Macro )) {
 				RETURN FALSE;
 			}
@@ -1499,7 +1502,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			
 			if ($this->$ParentTag) {
 				$template = $this->$ParentTag;
-				$DataArray = split ( "\n", $template );
+				$DataArray = explode ( "\n", $template );
 				$newParent = "";
 				$outside = TRUE;
 				$start = FALSE;
@@ -1576,7 +1579,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION define($fileList, $value = null) {
+		function define($fileList, $value = null) {
 			if ((gettype ( $fileList ) != "array") && ! is_null ( $value ))
 				$fileList = array ($fileList => $value ); //added by Voituk Vadim
 			
@@ -1600,7 +1603,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION clear_parse($ReturnVar = "") {
+		function clear_parse($ReturnVar = "") {
 			$this->clear ( $ReturnVar );
 		}
 		
@@ -1632,7 +1635,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION clear($ReturnVar = "") {
+		function clear($ReturnVar = "") {
 			
 			if (! empty ( $ReturnVar )) {
 				if ((gettype ( $ReturnVar )) != "array") {
@@ -1678,7 +1681,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION clear_all() {
+		function clear_all() {
 			$this->clear ();
 			$this->clear_assign ();
 			$this->clear_define ();
@@ -1706,7 +1709,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION clear_tpl($fileHandle = "") {
+		function clear_tpl($fileHandle = "") {
 			if (empty ( $this->LOADED )) { // Nothing loaded, nothing to clear
 				RETURN TRUE;
 			}
@@ -1765,7 +1768,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers - 1.6.0
 		 */
 		
-		FUNCTION clear_define($FileTag = "") {
+		function clear_define($FileTag = "") {
 			if (empty ( $FileTag )) {
 				unset ( $this->FILELIST );
 				RETURN;
@@ -1792,7 +1795,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION clear_assign() {
+		function clear_assign() {
 			if (! (empty ( $this->PARSEVARS ))) {
 				WHILE ( list ( $Ref, $Val ) = each ( $this->PARSEVARS ) ) {
 					unset ( $this->PARSEVARS ["$Ref"] );
@@ -1821,7 +1824,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION clear_href($href) {
+		function clear_href($href) {
 			if (! empty ( $href )) {
 				if ((gettype ( $href )) != "array") {
 					unset ( $this->PARSEVARS [$href] );
@@ -1852,7 +1855,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION assign_from_array($Arr, $Keys) {
+		function assign_from_array($Arr, $Keys) {
 			if (gettype ( $Arr ) == "array") {
 				foreach ( $Keys as $k )
 					if (! empty ( $k ))
@@ -1883,7 +1886,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION assign($ft_array, $trailer = "") {
+		function assign($ft_array, $trailer = "") {
 			if (gettype ( $ft_array ) == "array") {
 				WHILE ( list ( $key, $val ) = each ( $ft_array ) ) {
 					if (! (empty ( $key ))) {
@@ -1929,7 +1932,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION get_assigned($ft_name = "") {
+		function get_assigned($ft_name = "") {
 			if (empty ( $ft_name )) {
 				RETURN FALSE;
 			}
@@ -1953,7 +1956,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION error($errorMsg, $die = 0) {
+		function error($errorMsg, $die = 0) {
 			$this->ERROR = $errorMsg;
 			
 			echo "ERROR: $this->ERROR <BR> \n";
@@ -1985,7 +1988,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION multiple_assign($pattern) {
+		function multiple_assign($pattern) {
 			WHILE ( list ( $key, $value ) = each ( $GLOBALS ) ) {
 				if (substr ( $key, 0, strlen ( $pattern ) ) == $pattern) {
 					$this->assign ( strtoupper ( $key ), $value );
@@ -2008,7 +2011,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION multiple_assign_define($pattern) {
+		function multiple_assign_define($pattern) {
 			$ar = get_defined_constants ();
 			FOREACH ( $ar as $key => $def )
 				if (substr ( $key, 0, strlen ( $pattern ) ) == $pattern)
@@ -2028,7 +2031,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION pre_filter($pattern, $replace) {
+		function pre_filter($pattern, $replace) {
 			$this->PRE_FILTER [0] = $pattern;
 			$this->PRE_FILTER [1] = $replace;
 		} // pre_filter
@@ -2049,7 +2052,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION showDebugInfo($Debug_type = null) {
+		function showDebugInfo($Debug_type = null) {
 			$tm = $this->utime () - $this->start;
 			if ($Debug_type != null) {
 				if ($Debug_type == 1) {
@@ -2102,7 +2105,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod by   -
 		 * @Mod vers -
 		 */
-		FUNCTION printarray($arr, $caption) {
+		function printarray($arr, $caption) {
 			if (count ( $arr ) != 0) {
 				print "
                         _debug_console.document.write('<font face=Tahoma color=#0000FF size=2><b>$caption</b> </font>');\n
@@ -2159,7 +2162,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION setPattern($pattern, $type = 1) {
+		function setPattern($pattern, $type = 1) {
 			/*
               $type = 1 we have defines
               $type = 0(or any other number) we have vars
@@ -2188,7 +2191,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION emptyPattern() {
+		function emptyPattern() {
 			$this->PATTERN_VARS_DEFINE [] = array ();
 			$this->PATTERN_VARS_VARIABLE [] = array ();
 		}
@@ -2205,7 +2208,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 * @Mod vers -
 		 */
 		
-		FUNCTION deletePattern($pattern, $type = 1) {
+		function deletePattern($pattern, $type = 1) {
 			if ($type)
 				unset ( $this->PATTERN_VARS_DEFINE ["$pattern"] );
 			else
