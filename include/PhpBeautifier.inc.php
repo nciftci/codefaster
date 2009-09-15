@@ -44,7 +44,7 @@ class PhpBeautifier
 	 * @param string $b
 	 * @return string
 	 */
-	private private function sort($a, $b)
+	private function sort($a, $b)
 	{
 		$lengthA = strlen($a);
 		$lengthB = strlen($b);
