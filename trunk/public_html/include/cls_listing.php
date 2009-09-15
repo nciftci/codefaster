@@ -23,17 +23,19 @@
 		protected $enableDel;
 		protected $replace_table;
 		protected $extra_fields;
-                protected $array_data;
-                private $field_results;
+		protected $array_data;
+		private $field_results;
 
-                protected $sort_column;
-                protected $sort_reverse;
+		protected $sort_column;
+		protected $sort_reverse;
 
-                protected $search_term;
-                protected $disable_search_columns;
+		protected $search_term;
+		protected $disable_search_columns;
+		private $disable_searching;
 
 		private $object_results;
 		private $mode;
+		private $disable_sorting;
 
 
 		public function __construct() {
@@ -48,16 +50,18 @@
 			$this->numrows=0;
 			$this->numfields=0;
 			$this->mode="";
-                        $this->sort_column=null;
-                        $this->sort_reverse=false;
-                        $this->search_term="";
-                        $this->disable_search_columns=array();
+			$this->sort_column=null;
+			$this->sort_reverse=false;
+			$this->search_term="";
+			$this->disable_search_columns=array();
+			$this->disable_sorting=false;
+			$this->disable_searching=false;
 		}
-                
-                
-/**
- * Set sort column
- *
+
+
+		/**
+		 * Set sort column
+		 *
  * @param string $sort_column The column
  * @param boolean $sort_reverse Sort order: (true for reverse)
  */
@@ -73,7 +77,7 @@
                 }
 
 /**
- * Disable sorting
+ * Reset sorting
  */
 
                 public function reset_sort(){
@@ -81,6 +85,13 @@
                         $this->sort_reverse=false;
                         $this->sql_sort_query="";
                 }
+
+/*
+ * Disable sorting
+ */
+				public function disable_sorting(){
+					$this->disable_sorting=true;
+				}
 
 /**
  * Set search term
@@ -97,12 +108,18 @@
                         $this->search_term=null;
                 }
 /**
- * Disable sorting columns
+ * Disable search columns
  */
                 public function set_disable_search_columns($disable_sort_columns_array){
                         $this->disable_search_columns=$disable_sort_columns_array;
                 }
 
+/*
+ * Disable searching
+ */
+				public function disable_searching(){
+					$this->disable_searching=true;
+				}
 
 /**
  * This funciton makes cls_listing to get the data from mysql table
@@ -428,43 +445,48 @@
                     };
                     ksort($all_fields_array);
 
-                    foreach($all_fields_array as $field) {
-                        $n_field=$field["index"];
+					foreach($all_fields_array as $field) {
+						$n_field=$field["index"];
 
-                        //make sort url
-                        $self_page_array=explode("&",$self_page);                        
-                        $new_self_page_array=array();
-                        foreach($self_page_array as $item){
-                            if (strstr($item,"sort_column=")) continue;
-                            if (strstr($item,"sort_reverse=")) continue;
-                            $new_self_page_array[]=$item;
-                        }
-                        $hrefurl=implode("&",$new_self_page_array);                        
-                        if (strstr($hrefurl,"?")) $hrefurl.="&";
-                            else $hrefurl.="?";
-                        $hrefurl.="sort_column=".$this->field_results[$n_field];
-                        if ((!$sort_reverse)&&($this->field_results[$n_field]==$sort_column)) 
+						//make sort url
+						$self_page_array=explode("&",$self_page);                        
+						$new_self_page_array=array();
+						foreach($self_page_array as $item){
+							if (strstr($item,"sort_column=")) continue;
+							if (strstr($item,"sort_reverse=")) continue;
+							$new_self_page_array[]=$item;
+						}
+						$hrefurl=implode("&",$new_self_page_array);                        
+						if (strstr($hrefurl,"?")) $hrefurl.="&";
+						else $hrefurl.="?";
+						$hrefurl.="sort_column=".$this->field_results[$n_field];
+						if ((!$sort_reverse)&&($this->field_results[$n_field]==$sort_column)) 
 						{ 
 							$hrefurl.="&sort_reverse=1";
 							$ascdesc = "desc";
 						}
 						else 
 						{
-						    $ascdesc = "asc";
+							$ascdesc = "asc";
 						}
 
 
-                        if ($field["mode"]=="field") {
-                            if(trim($this->fields[$n_field])=="")
-                                $data.="<th nowrap>&nbsp;</th>";
-                            else
-                                $data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></a></th>";
-                        };
+						if ($field["mode"]=="field") {
+							if(trim($this->fields[$n_field])==""){
+								$data.="<th nowrap>&nbsp;</th>";
+							} else {
+								if ($this->disable_sorting){
+									$data.="<th nowrap>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></th>";
+								}else{
+									$data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></a></th>";
+								};
+							};
+						};
 
-                        if ($field["mode"]=="extra") {
-                            $data.="<th nowrap>".$this->extra_fields[$n_field]["title"]."</th>";
-                        }
-                    }
+						if ($field["mode"]=="extra") {
+							$data.="<th nowrap>".$this->extra_fields[$n_field]["title"]."</th>";
+						}
+					}
                     //+2
 
                     if ($this->getActivateListing() == 1) {
@@ -484,42 +506,42 @@
 
                     //search columns
                     $ncolumns=sizeof($alldata[0]);
+					if (!$this->disable_searching){
+						$data.="<tr>";
+						$k=0;
+						foreach($all_fields_array as $field) {
+							$n_field=$field["index"];
+							//verify to be only the first column with text search.
+							if ($k!=0) {
+								$no_url_data="<td class='noborder'>&nbsp;</td>";
+							}else{
+								$no_url_data.="<td class='noborder small'>".LANG_ADMIN_SEARCH."</td>";
+							};
+							if ($field["mode"]=="field"){
+								$field_name=$this->field_results[$k];
+								if (in_array($field_name,$this->disable_search_columns)){
+									$data.=$no_url_data;
+								}else{
+									$data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+								}
+								$k=$k+1;
+							}else{
+								$data.=$no_url_data;
+							};
 
-                    $data.="<tr>";
-                     $k=0;
-                     foreach($all_fields_array as $field) {
-                         $n_field=$field["index"];
-						//verify to be only the first column with text search.
-						if ($k!=0) {
-							$no_url_data="<td class='noborder'>&nbsp;</td>";
-						}else{
-							$no_url_data.="<td class='noborder small'>".LANG_ADMIN_SEARCH."</td>";
-						};
-                        if ($field["mode"]=="field"){
-                            $field_name=$this->field_results[$k];
-                            if (in_array($field_name,$this->disable_search_columns)){
-                                $data.=$no_url_data;
-                            }else{
-                                $data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
-                            }
-                            $k=$k+1;
-                        }else{
-                            $data.=$no_url_data;
-                        };
-                        
-                    }
-                    $data.="<td class='noborder'>
-					<input name=\"".LANG_ADMIN_SEARCH."\" type=\"image\" value=\"".LANG_ADMIN_SEARCH."\" src=\"".CONF_INDEX_URL."images/admin/search.ico\" style=\"border:0\" alt=\"".LANG_ADMIN_SEARCH."\" />
-					</td>";
-					// colomns at the end to close the search.
-					if ($this->getActivateListing() == 1) {
-					$data.="<td class='noborder'>&nbsp;</td><td class='noborder'>&nbsp;</td>";
-					}
-					else {
-					$data.="<td class='noborder'>&nbsp;</td>";
-					} 
-					$data.="</tr>";
-
+						}
+						$data.="<td class='noborder'>
+							<input name=\"".LANG_ADMIN_SEARCH."\" type=\"image\" value=\"".LANG_ADMIN_SEARCH."\" src=\"".CONF_INDEX_URL."images/admin/search.ico\" style=\"border:0\" alt=\"".LANG_ADMIN_SEARCH."\" />
+							</td>";
+						// colomns at the end to close the search.
+						if ($this->getActivateListing() == 1) {
+							$data.="<td class='noborder'>&nbsp;</td><td class='noborder'>&nbsp;</td>";
+						}
+						else {
+							$data.="<td class='noborder'>&nbsp;</td>";
+						} 
+						$data.="</tr>";
+					};
                     $item_k=1;
                     foreach($alldata as $datarow) {
                         $normal_fields=array();
