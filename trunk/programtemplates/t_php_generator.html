@@ -176,10 +176,10 @@ case "mod":
         //$ft->assign("{FORM_ELEMSUPPER}",$util->formatDataWithSelect({VARR}->get{FORM_ELEMS},"DBTABLE","DBFIELD1_ID","DBFIELD2_WHATTOSHOW")    )());
         <!-- ENDIF --> 
         <!-- IFDEF: ISTEXTFIELD -->
-		$ft->assign("{FORM_ELEMSUPPER}",{VARR}->get{FORM_ELEMS}());
+		$ft->assign("{FORM_ELEMSUPPER}",htmlspecialchars_decode({VARR}->get{FORM_ELEMS}()));
         <!-- ENDIF --> 
         <!-- IFDEF: ISTEXTAREA -->
-		$ft->assign("{FORM_ELEMSUPPER}",{VARR}->get{FORM_ELEMS}());
+		$ft->assign("{FORM_ELEMSUPPER}",htmlspecialchars_decode({VARR}->get{FORM_ELEMS}()));
         <!-- ENDIF --> 
         <!-- IFDEF: ISBROWSE -->
 		$labels = array();
@@ -240,10 +240,10 @@ case "save":
             {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
             <!-- IFDEF: ISTEXTFIELD_SAVE -->
-            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            {VARR}->set{FORM_ELEMS}(htmlspecialchars($all_url_vars["{FORM_ELEMS}"]));
             <!-- ENDIF --> 
             <!-- IFDEF: ISTEXTAREA_SAVE -->
-            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            {VARR}->set{FORM_ELEMS}(htmlspecialchars($all_url_vars["{FORM_ELEMS}"]));
             <!-- ENDIF --> 
             <!-- IFDEF: ISBROWSE_SAVE -->
             if ($util->is_image_file('{FORM_ELEMS}')) {
