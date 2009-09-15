@@ -46,7 +46,7 @@ else
 		$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 		$ft->define(array("main"=>"template_firstpage.html", "content"=>"login.html"));
 		$ft->assign("ADMIN_URL", ADMIN_URL);
-		$ft->assign("MESSAGE", LANG_ADMIN_FAILED_LOGIN);
+		$ft->assign("MESSAGE", "<p class=\"mError\">".LANG_ADMIN_FAILED_LOGIN."</p>";
 		$ft->multiple_assign_define("LANG_");
 		$ft->multiple_assign_define("CONF_");
 		$ft->parse("BODY", array("content","main"));
