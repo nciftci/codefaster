@@ -8,8 +8,8 @@ define("ERROR_DEBUG","2");
 define("SESSION_ID","SID");
 // 1|LANG_CONF_D_AUTH_TYPE_BASE64|2|LANG_CONF_D_AUTH_TYPE_SESSION
 define("AUTH_TYPE","2");
-define("USER","demo");
-define("PASSWORD","demo");
+define("USER","admin");
+define("PASSWORD","setup");
 define("CONF_SITE_NAME","Site Demo");
 define("MAX_FILE_SIZE","409600");
 define("TIMEOUTINMILLISECONDS","10000");
