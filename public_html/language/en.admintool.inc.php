@@ -29,6 +29,9 @@ define("LANG_ADMIN_THUMBIMAGE_CREATE","Create Thumbnail");
 define("LANG_ADMIN_THUMBIMAGE_PREVIEW","Thumbnail Preview");
 define("LANG_ADMIN_IMAGE_SAVE","Save final picture");
 define("LANG_ADMIN_THUMBIMAGE","Create Thumbnail");
+define("LANG_ADMIN_SEARCH","Search");
+define("LANG_ADMIN_INSTALLER","Please ensure that the /installer/ directory is deleted!");
+define("LANG_ADMIN_SETUPPASSWORD","Please ensure that you have changed the default password!");
 
 /****** AUTENTICATION *****/
 define("LANG_ADMIN_AUTHENTICATION","Authentification");
