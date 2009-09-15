@@ -22,10 +22,10 @@ $configType = (isset($_SERVER['SERVER_NAME']) & in_array($_SERVER['SERVER_NAME']
             error_reporting(E_ALL ^ E_NOTICE);
 
 			define("DB_USR", "root"); //
-			define("DB_PWD", "123456"); //
+			define("DB_PWD", ""); //
 			define("DB_NAME", "codefaster");
 			define("DB_HOST", "localhost");
-			define("CONF_INDEX_URL", "http://localhost/codefaster/public_html/");
+			define("CONF_INDEX_URL", "http://localhost/PHP-JAVA-Class-code-generator/trunk/public_html/");
 
         break;
     } 
@@ -34,6 +34,8 @@ $configType = (isset($_SERVER['SERVER_NAME']) & in_array($_SERVER['SERVER_NAME']
 define("DB_PREFIX", "");
 
 $license= "INST_KEY";
+
+$_SERVER['PHP_SELF'] = parse_url(CONF_INDEX_URL,PHP_URL_SCHEME)."://".parse_url(CONF_INDEX_URL,PHP_URL_HOST).$_SERVER['PHP_SELF'];
 
 @include_once("defines.inc.php");
 @include_once(INDEX_PATH."tmp/extraconfig.inc.php");

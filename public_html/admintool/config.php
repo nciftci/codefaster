@@ -119,6 +119,11 @@ else if ($all_url_vars['action']=="form")
 		$ft->assign("NR_ROWS",$nr);
 		$ft->parse("CONF_LIST",".conf_list");
 	}
+	if (CONF_PASSWORD=="setup")
+	{
+		$errormessage="<div class=\"mError\">".LANG_ADMIN_SETUPPASSWORD."</div>";
+	}		
+	$ft->assign("MESSAGE", $errormessage);
 	$ft->assign("INDEX_PATH", INDEX_PATH);
 	$ft->clear_dynamic("conf_list");
 	//sidebar

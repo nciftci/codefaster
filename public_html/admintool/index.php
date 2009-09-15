@@ -40,6 +40,16 @@ $ft->multiple_assign_define ( "CONF_" );
 
 $sb = new Sidebar ( );
 
+
+if (file_exists('../installer') && CONF_INDEX_URL !== "INST_URL" && ERROR_DEBUG==0)
+{
+	$errormessage="<div class=\"mError\">".LANG_ADMIN_INSTALLER."</div>";
+}
+if (CONF_PASSWORD=="setup")
+{
+	header ("Location: config.php"); exit;
+}	
+$ft->assign("MESSAGE", $errormessage);
 $ft->assign ( "SIDEBAR", $sb->getSideBar () );
 $ft->parse ( "BODY", array ("content", "main" ) );
 $ft->showDebugInfo ( ERROR_DEBUG );
