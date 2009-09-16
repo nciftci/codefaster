@@ -140,12 +140,8 @@ legend {
 label {
 	cursor:pointer;
 	display: block;
-	float: left;
 	width: 125px;
-	}
-	
-label.editor {
-	float: none; }	
+	}	
  
 /***** Links *****/
 a, a:link, a:visited {
