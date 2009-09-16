@@ -23,7 +23,6 @@ if(empty($all_url_vars['action']))
 	$sess->set('session_url_before',$url);
 	$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 	$ft->define(array("main"=>"template_firstpage.html", "content"=>"login.html"));
-	$ft->assign("ADMIN_URL", ADMIN_URL);
 	$ft->assign("MESSAGE", $all_url_vars['message']);
 	$ft->multiple_assign_define("LANG_");
 	$ft->multiple_assign_define("CONF_");
@@ -39,14 +38,13 @@ else
 		if ($sess->get('session_url_before'))
 			header("Location: ".$sess->get('session_url_before'));
 		else
-			header("Location: ".ADMIN_URL);
+			header("Location: ".CONF_ADMIN_URL);
 	}
 	else
 	{
 		$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 		$ft->define(array("main"=>"template_firstpage.html", "content"=>"login.html"));
-		$ft->assign("ADMIN_URL", ADMIN_URL);
-		$ft->assign("MESSAGE", "<p class=\"mError\">".LANG_ADMIN_FAILED_LOGIN."</p>";
+		$ft->assign("MESSAGE", "<p class=\"mError\">" . LANG_ADMIN_FAILED_LOGIN . "</p>");
 		$ft->multiple_assign_define("LANG_");
 		$ft->multiple_assign_define("CONF_");
 		$ft->parse("BODY", array("content","main"));

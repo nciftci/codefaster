@@ -16,7 +16,7 @@ include_once (INCLUDE_LANGUAGE_PATH . $LANG . ".admintool.inc.php");
 include_once (INCLUDE_PATH . "connection.php");
 include_once (INCLUDE_PATH . "cls_sidebar.php");
 
-$stringutil = new String ( "nope" );
+$stringutil = new String ( "" );
 $all_url_vars = array ();
 $all_url_vars = $stringutil->parse_all ();
 
