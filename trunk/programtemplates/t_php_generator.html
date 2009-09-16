@@ -447,7 +447,7 @@ $ft->multiple_assign_define("CONF_");
 //sidebar
 $sb = new Sidebar ( );
 $ft->assign ( "SIDEBAR", $sb->getSideBar () );
-
+$ft->assign ( "COPYRIGHT", CONF_SITE_NAME );
 $ft->parse("BODY", array("content","main"));
 $ft->showDebugInfo(ERROR_DEBUG);
 $ft->FastPrint();	

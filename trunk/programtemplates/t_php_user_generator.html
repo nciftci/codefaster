@@ -62,6 +62,7 @@ $ft -> define(array("main" => "template_index.html", "content" => "{FILENAME}"))
 <!-- END DYNAMIC BLOCK: formelements -->
 // static part
 $ft->assign("TITLE_TAG","");
+$ft->assign ( "COPYRIGHT", CONF_SITE_NAME );
 $ft->multiple_assign_define("LANG_");
 $ft->multiple_assign_define("CONF_");
 $ft->parse("BODY", array("content","main"));
