@@ -45,7 +45,8 @@ define("INCLUDE_LANGUAGE_PATH", INDEX_PATH."language/");
 // define where you admin programtemplates
 define("ADMIN_TEMPLATE_CONTENT_PATH", INDEX_PATH."admintool/programtemplates/");
 // define where you admin path
-define("ADMIN_URL", CONF_INDEX_URL."admintool/");
+define("CONF_ADMIN_URL", CONF_INDEX_URL."admintool/");
+define("ADMIN_URL", CONF_ADMIN_URL);
 // some include file need from inlude directorysame as, but you can change it,
 // if you copy include dir into admin directory
 define("INCLUDE_ADMIN_PATH", INDEX_PATH."include/");
