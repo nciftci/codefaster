@@ -32,6 +32,19 @@ define("LANG_ADMIN_THUMBIMAGE","Create Thumbnail");
 define("LANG_ADMIN_SEARCH","Search");
 define("LANG_ADMIN_INSTALLER","Please ensure that the /installer/ directory is deleted!");
 define("LANG_ADMIN_SETUPPASSWORD","Please ensure that you have changed the default password!");
+define("LANG_ADMIN_TEMPLATE_EDITOR","Template editor");
+define("LANG_ADMIN_LANGUAGE_EDITOR","Language editor");
+define("LANG_ADMIN_TEMPLATE_SELECTTEMPLATE","Please select a template file");
+define("LANG_ADMIN_TEMPLATE_NAME","Template/File"); 
+define("LANG_ADMIN_TEMPLATE_SELECTTEMPLATE_NAME","Selected file");
+define("LANG_ADMIN_TEMPLATE_SELECTTEMPLATE_SOURCE","Source code");
+define("LANG_ADMIN_TEMPLATE_VARIABLE","Please see under the editor some examples of variables usage.");
+define("LANG_ADMIN_TEMPLATE_LEGEND","Legend");
+define("LANG_ADMIN_LANGEDITOR_VALUE","Value");
+define("LANG_ADMIN_LANGEDITOR_TEXT","Text");
+define("LANG_ADMIN_LANGEDITOR_EDITOR","Language editor");
+define("LANG_ADMIN_LANGEDITOR_EDITOR_HELP","Here you can select the text you wish to edit and then edit on the next page. Text will be replaced in en.extra.inc.php");
+
 
 /****** AUTENTICATION *****/
 define("LANG_ADMIN_AUTHENTICATION","Authentification");
