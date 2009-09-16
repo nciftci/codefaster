@@ -172,7 +172,7 @@ foreach ( $fields as $field ) {
 		}
 		// FCK editor selection
 		if ($all_url_vars ["item_textarea"] [$field] == "with_editor" || $all_url_vars ["item_textarea"] [$field] == "with_advanced_editor") {
-			$class_value .= " fck";
+			$class_value .= " editor";
 		}
 		
 		if ($class_value) {
@@ -214,14 +214,33 @@ foreach ( $fields as $field ) {
 				if ($all_url_vars ["item_textarea"] [$field] != "without_editor")
 					$fck_toolbar = "";
 				if ($all_url_vars ["item_textarea"] [$field] == "with_editor")
-					$fck_toolbar = "{toolbar:'Basic'}";
+					$fck_toolbar = "
+					<script type=\"text/javascript\">
+						//<![CDATA[
+							CKEDITOR.replace( '$field')
+						//]]>
+					</script>
+					";
 				if ($all_url_vars ["item_textarea"] [$field] == "with_advanced_editor")
-					$fck_toolbar = "{toolbar:'Default'}";			
-				$fthtml->assign ( "FCK_FIELD", $field );
-				$fthtml->assign ( "FCK_TOOLBAR", $fck_toolbar );
+					$fck_toolbar = "
+					<script type=\"text/javascript\">
+						//<![CDATA[
+							CKEDITOR.replace( '$field',
+							{
+							toolbar : 'Advanced',
+							filebrowserUploadUrl : '{CONF_INDEX_URL}javascript/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+							filebrowserImageUploadUrl : '{CONF_INDEX_URL}javascript/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+							filebrowserFlashUploadUrl : '{CONF_INDEX_URL}javascript/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+							});
+						//]]>
+				</script>
+					";			
+				//$fthtml->assign ( "FCK_FIELD", $field );
+				//$fthtml->assign ( "FCK_TOOLBAR", $fck_toolbar );
 				$fthtml->parse ( "FCKELEMENTS", ".fckelements" );
+				//$textareaclass = " class=\"editor\"";
 				
-				$fielddata = $divstart . "<textarea name=\"" . $field . "\" id=\"" . $field . "\" " . $class_value . " title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" cols=\"50\" rows=\"6\" style=\"width:600px;\">#_" . $strupperfield . "_#</textarea>" . $divend;
+				$fielddata = $divstart . "<textarea name=\"" . $field . "\" id=\"" . $field . "\" " . $class_value . " title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" cols=\"50\" rows=\"6\" style=\"width:600px;\">#_" . $strupperfield . "_#</textarea>" . $fck_toolbar . $divend;
 				break;
 			
 			// generate form browse (upload) element
