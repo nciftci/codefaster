@@ -4,7 +4,6 @@ include_once(INCLUDE_PATH.'cls_image_crop.php');
 
 class Util{
 	function make_left_menu($ft,$menuleft,$menuleft,$menuright,$addon_menu,$all_url_vars){
-		$ft->assign("ADMIN_URL", ADMIN_URL);
 		$ft->multiple_assign_define("LANG_");
 		$ft->multiple_assign_define("CONF_");
 	}

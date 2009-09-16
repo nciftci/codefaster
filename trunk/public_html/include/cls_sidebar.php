@@ -54,7 +54,6 @@ class Sidebar{
 		{
 			$ft->assign("MODULE_NAME",constant($module_name[$i]));
 			$ft->assign("FILENAME",$filename[$i]);
-			$ft->assign("ADMIN_URL",ADMIN_URL);
 			
 			
 			

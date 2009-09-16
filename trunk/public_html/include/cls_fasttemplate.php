@@ -775,7 +775,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			//if ( !$this->STRICT && ($this->STRICT && !$this->STRICT_DEBUG))
 			if (! $this->STRICT || ($this->STRICT && ! $this->STRICT_DEBUG)) { //Fixed error ^^ // by Voituk Vadim
 				// Silently remove anything not already found
-				$template = str_replace ( "{([A-Za-z0-9_\.]+)}", "", $template ); // by Voituk Vadim correct using str_replace insted ereg_replace, small addition a-z, thanx to Gabe Alack, the regex used in the line to remove unset variables only checked for all caps, while lowercase variables are allowed by the class. (1.6.2)
+				$template = preg_replace ( "/{([A-Za-z0-9_\.]+)}/", "", $template ); // by Voituk Vadim correct using str_replace insted ereg_replace, small addition a-z, thanx to Gabe Alack, the regex used in the line to remove unset variables only checked for all caps, while lowercase variables are allowed by the class. (1.6.2)
 				// by Alex Tonkov: paste each define block in one line
 				$template = preg_replace ( "/(<!--\s*IFDEF:\s*([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)?([a-zA-Z_][a-zA-Z0-9_]+)?\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\s*-->)/i", "\n$0\n", $template );
 				$template = preg_replace ( "/(<!--\s*IFNDEF:\s*([a-zA-Z_][a-zA-Z0-9_]+)(\.|\-\>)?([a-zA-Z_][a-zA-Z0-9_]+)?\(?(\s*\,?\".*?\"\s*\,?|\s*\,?[a-z0-9\_]*\s*\,?)\)?\s*-->)/i", "\n$0\n", $template );
