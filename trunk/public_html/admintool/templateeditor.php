@@ -1,7 +1,9 @@
 <?php
 
-define("TEMPLATE_DIRECTORY","programtemplates/");
-define("TEMPLATE_CSS","css/");
+$scanned_directories=array("programtemplates/","css/");
+
+$allowed_extensions="html|htm|css|bak";
+
 
 include_once ("../config.inc.php");
 include_once (INCLUDE_PATH . "cls_fast_template.php");
@@ -29,37 +31,29 @@ $template_name = $all_url_vars["template_name"];
 
 if($action != "mod")
 {
+	$files_array=array();
 	//kiolvassuk a template directoryt
-	$i=0;
-	$d = dir(INDEX_PATH.TEMPLATE_DIRECTORY);
-	while (false !== ($entry = $d->read())) {
-		$templ[$i] = TEMPLATE_DIRECTORY.$entry; 
-		$i++;
-	}
-	$d->close();	
-
-	sort($templ);// rendezes
-	$templ = array_slice($templ, 2);// kidobjuk a . es .. elemeket
-
-	//kiolvassuk a css directoryt
-	$i=0;
-	$d = dir(INDEX_PATH.TEMPLATE_CSS);
-	while (false !== ($entry = $d->read())) {
-		$css_file[$i] = TEMPLATE_CSS.$entry; 
-		$i++;
-	}
-	$d->close();	
-
-	sort($css_file);// rendezes
-	$css_file = array_slice($css_file, 2);// kidobjuk a . es .. elemeket
+	foreach ($scanned_directories as $dir){
+		$i=0;
+		$d = dir(INDEX_PATH.$dir);
+		while (false !== ($entry = $d->read())) {
+			$templ[$i] = $dir.$entry; 
+			$i++;
+		}
+		$d->close();	
+		sort($templ);// rendezes			
+		$files_array=array_merge($files_array,$templ);
+	};
 	
-	$files_array = array_merge($templ,$css_file);// a ket tomb egyesitese
-
 	$size = sizeof($files_array);	
 
 	$buffer = "";
-	for($i=0;$i<$size;$i++)
-		$buffer .= "<option value=\"".$i."\">".$files_array[$i]."</option>\n";
+	for($i=0;$i<$size;$i++){
+		$filename=$files_array[$i];
+		
+		if (preg_match("/(".$allowed_extensions.")$/i",$filename)==0) continue;
+		$buffer .= "<option value=\"".$i."\">".$filename."</option>\n";
+	};
 
 	if($template_name!="")
 		$temp_source = @file_get_contents(INDEX_PATH.$files_array[$template_name]);
