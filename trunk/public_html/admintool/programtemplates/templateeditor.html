@@ -1,0 +1,54 @@
+<script  type="text/javascript" src="{CONF_INDEX_URL}javascript/editor/fckeditor.js"></script>
+<script type="text/JavaScript" language="javascript1.2">
+function MM_jumpMenu(targ,selObj,restore)
+{
+	eval(targ+".location='{CONF_ADMIN_URL}templateeditor.php?template_name="+selObj.options[selObj.selectedIndex].value+"'");
+	if (restore) selObj.selectedIndex=0;
+}
+</script>
+
+<fieldset>
+<legend>{LANG_ADMIN_TEMPLATE_MODIFY}</legend>
+<div class="mHelp">{LANG_ADMIN_TEMPLATE_VARIABLE} </div>
+{ERROR}
+<form action="{CONF_ADMIN_URL}templateeditor.php" method="post" name="form_template" id="form_template" >
+  <input type="hidden" name="action" id="action" value="mod" />
+  <input type="hidden" name="t_name" id="t_name" value="{TEMPLATE_NAME}" />
+  <!-- IFDEF: SAVED_MSG -->
+  {LANG_ADMIN_TEMPLATE_SAVED}
+  <!-- ENDIF -->
+  <!-- IFDEF: BAK_FILE -->
+  {LANG_ADMIN_TEMPLATE_BAK}
+  <!-- ENDIF -->
+  <div>
+    <label for='template_name'>{LANG_ADMIN_TEMPLATE_NAME}</label>
+    <select name="template_name" id="template_name" onChange="MM_jumpMenu('parent',this,1)">
+      <option value="">{LANG_ADMIN_TEMPLATE_SELECTTEMPLATE}</option>
+			{TEMPLATE_NAMES}
+		</select>
+  </div>
+  <div>
+    <label for='template_selectedname'> {LANG_ADMIN_TEMPLATE_SELECTTEMPLATE_NAME}</label>
+    {TEMPLATE_NAME}</div>
+  <div>
+    <label for='template_selectedsource'> {LANG_ADMIN_TEMPLATE_SELECTTEMPLATE_SOURCE} </label>
+    <textarea name="template_source" id="template_source" class="editor">{TEMPLATE_DESCRIPTION}</textarea>
+    <script type="text/javascript">
+		//<![CDATA[
+		CKEDITOR.replace( 'template_source',
+		{
+		toolbar : 'Advanced',
+		filebrowserUploadUrl : '{CONF_INDEX_URL}javascript/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+		filebrowserImageUploadUrl : '{CONF_INDEX_URL}javascript/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+		filebrowserFlashUploadUrl : '{CONF_INDEX_URL}javascript/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+		});
+	//]]>
+	</script><br />
+    {LANG_ADMIN_TEMPLATE_LEGEND}<br />
+    <pre>{VARIABLE_TEXT}</pre>
+  </div>
+  <div>
+    <input type="submit" name="Submit" value="{LANG_ADMIN_MODIFY}" class="button" />
+  </div>
+</form>
+</fieldset>

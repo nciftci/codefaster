@@ -39,7 +39,6 @@ if ($all_url_vars['action']=="index")
 	}
 	else $ft->assign("MESSAGE", "");
 
-	$ft->assign("ADMIN_URL", ADMIN_URL);
 	$ft->assign("INDEX_PATH", INDEX_PATH);
 	//sidebar
 	$sb = new Sidebar ( );
@@ -54,7 +53,6 @@ else if ($all_url_vars['action']=="form")
 {
 	$ft = new FastTemplate(ADMIN_TEMPLATE_CONTENT_PATH);
 	$ft->define(array("main"=>"template_index.html", "leftmenu"=>"left_menu.html", "content"=>"config.html"));
-	$ft->assign("ADMIN_URL", ADMIN_URL);
 
 	if(!strstr(PHP_OS, 'WIN'))
 	{

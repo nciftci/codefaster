@@ -1,0 +1,24 @@
+<fieldset>
+<legend>{LANG_ADMIN_LANGUAGE_EDITOR}</legend>
+<div class="mHelp">{LANG_ADMIN_LANGEDITOR_EDITOR_HELP}</div>
+{ERROR}
+
+<form action="{CONF_ADMIN_URL}languageeditor.php" method="post" enctype="multipart/form-data" name="form" id="form">
+<table width="99%" cellspacing="0" align="center" id="listingtable">
+  <tr class="theader">
+    <th width="5" nowrap>{LANG_ADMIN_LANGEDITOR_VALUE}</th>
+    <th nowrap>{LANG_ADMIN_LANGEDITOR_TEXT}</th>
+    <th width="10" nowrap>&nbsp;</th>
+  </tr>
+  <!-- BEGIN DYNAMIC BLOCK: row -->
+  <tr>
+    <td><strong>{LANGUAGE_KEY}</strong></td>
+    <td>{LANGUAGE_VALUE}</td>
+    <td>{LANGUAGE_CHECKBOX}</td>
+  </tr>
+  <!-- END DYNAMIC BLOCK: row -->
+</table>
+    <input type="submit" value="Send" class="button" />
+</form>
+
+</fieldset>

@@ -1,0 +1,6 @@
+#_ ==> {
+_# ==> }
+(ex: #_VARIABLENAME_#)
+textarea# ==> textarea
+BDYB ==> BEGIN DYNAMIC BLOCK
+EDYB ==> END DYNAMIC BLOCK
