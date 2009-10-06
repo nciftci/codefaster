@@ -38,18 +38,19 @@ $ft->define ( array ("main" => "template_index.html", "content" => "index.html" 
 $ft->multiple_assign_define ( "LANG_" );
 $ft->multiple_assign_define ( "CONF_" );
 
-$sb = new Sidebar ( );
-
-
+//verify if installer directory exist, give back alert
 if (file_exists('../installer') && CONF_INDEX_URL !== "INST_URL" && ERROR_DEBUG==0)
 {
 	$errormessage="<div class=\"mError\">".LANG_ADMIN_INSTALLER."</div>";
 }
-if (CONF_PASSWORD=="setup")
+//verify the password for admin, if setup, redirect to change.
+if (PASSWORD=="setup")
 {
 	header ("Location: config.php"); exit;
 }	
 $ft->assign("MESSAGE", $errormessage);
+
+$sb = new Sidebar ( );
 $ft->assign ( "SIDEBAR", $sb->getSideBar () );
 $ft->parse ( "BODY", array ("content", "main" ) );
 $ft->showDebugInfo ( ERROR_DEBUG );

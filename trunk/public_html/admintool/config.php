@@ -117,7 +117,7 @@ else if ($all_url_vars['action']=="form")
 		$ft->assign("NR_ROWS",$nr);
 		$ft->parse("CONF_LIST",".conf_list");
 	}
-	if (CONF_PASSWORD=="setup")
+	if (PASSWORD=="setup")
 	{
 		$errormessage="<div class=\"mError\">".LANG_ADMIN_SETUPPASSWORD."</div>";
 	}		
