@@ -44,7 +44,9 @@ define("LANG_ADMIN_LANGEDITOR_VALUE","Value");
 define("LANG_ADMIN_LANGEDITOR_TEXT","Text");
 define("LANG_ADMIN_LANGEDITOR_EDITOR","Language editor");
 define("LANG_ADMIN_LANGEDITOR_EDITOR_HELP","Here you can select the text you wish to edit and then edit on the next page. Text will be replaced in en.extra.inc.php");
-
+define("LANG_ADMIN_SEARCH","Search");
+define("LANG_ADMIN_INSTALLER","Please ensure that the /installer/ directory is deleted!");
+define("LANG_ADMIN_SETUPPASSWORD","Please ensure that you have changed the default password!");
 
 /****** AUTENTICATION *****/
 define("LANG_ADMIN_AUTHENTICATION","Authentification");
