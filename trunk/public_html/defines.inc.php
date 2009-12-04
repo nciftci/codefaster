@@ -93,9 +93,10 @@ function __autoload($class_name) {
 	}
 }
 
-include_once( INCLUDE_PATH . 'FirePHPCore/FirePHP.class.php' );
-$firephp = new FirePHP();
-$firephp->setEnabled(false);
-//$firephp->error('Error Message');
+//debugging
+define("DEBUG_MODE","errorlog");//firephp
+define("DEBUG_ALLOWED_IPS","127.0.0.1,::1,194.102.155.189");
+
+include_once( INCLUDE_PATH . 'debug/debug.php' );
 
 ?>
