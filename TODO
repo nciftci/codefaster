@@ -1,0 +1,9 @@
+Need to add IF file upload and is picture.
+This will help to open a larger modal windows to preview the picture.
+
+function showDialog(){
+   $("#bigpicture").dialog({ height: 570, width: 760  });
+   return false;
+}
+
+
