@@ -1,3 +1,14 @@
+1.2.0 - 7.12.2009
+
+- cls_listing search module
+- cls_listing sort table by columns
+- IE=EmulateIE7 as a meta tag, to be keeped more compatibility between IE7 and IE8.
+- new CKEditor
+- changed default admin user and pass to admin/setup and if not changed, redirect will happening.
+- /installer/ directory exist, admin will be alerted.
+- ADMIN_URL was renamed to CONF_ADMIN_URL
+- FireBug PHP debugger, with lock to IP
+
 1.1.0 - 17.07.2009
 
 - cls_listing working with objects, SQL and array
