@@ -13,9 +13,9 @@ class Util{
 	/**************************************************************/
 
 
-	public function formatDataWithSelect($id_selected,$table,$id_column,$data_column)
+	public function formatDataWithSelect($id_selected,$table,$id_column,$data_column,$where_clause="")
 	{
-		$SQL = "SELECT `$id_column`,`$data_column` FROM `".DB_PREFIX."$table` ORDER BY `$data_column` ASC";
+		$SQL = "SELECT `$id_column`,`$data_column` FROM `".DB_PREFIX."$table` $where_clause ORDER BY `$data_column` ASC";
 		$retid = mysql_query($SQL);
 		if (!$retid) { echo( mysql_error()); }
 		$i=0;
