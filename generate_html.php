@@ -97,6 +97,7 @@ if ($action == "continue_selection") {
 	}
 	$ft->define ( array ("main" => "template_body.html", "content" => "html3.html" ) );
 	$fthtml->define ( array ("main" => "t_html_generator.html", "content" => "t_html_generator.html", "main_user" => "t_html_user_generator.html" ) );
+	$fthtml->define_dynamic ( "dateelements", "main" );
 	$fthtml->define_dynamic ( "formelements", "main" );
 
 } else {
@@ -253,6 +254,12 @@ foreach ( $fields as $field ) {
 			case 'checkbox' :
 				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" type=\"checkbox\" value=\"1\"title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" " . $class_value . " #_SELCHBOX_" . strtoupper ( $field ) . "_# />" . $divend;
 				break;
+			case 'date' :
+				$fielddata = $divstart . "<input name=\"" . $field . "\" id=\"" . $field . "\" type=\"text\" value=\"#_" . strtoupper ( $field ) . "_#\" title=\"#_LANG_ADMIN_" . $NAMEUPPER . "_VERIF_" . $strupperfield . "_#\" " . $class_value . " />" . $divend;
+
+				$fthtml->assign("DATEELEMENT",$field);
+				$fthtml->parse ( "DATEELEMENTS", ".dateelements" );
+				break;				
 		}
 		// end form elements
 		
@@ -299,6 +306,9 @@ foreach ( $fields as $field ) {
 				";
 				break;
 			case 'browse' :
+				$data = "";
+				break;
+			case 'date' :
 				$data = "";
 				break;
 		}
@@ -349,6 +359,9 @@ foreach ( $fields as $field ) {
                                 break;
                             case 'browse':
                                 $ft->assign("BROWSE_SELECTED"," selected ");
+                                break;
+                            case 'date':
+                                $ft->assign("DATE_SELECTED"," selected ");
                                 break;
 
                             default:
