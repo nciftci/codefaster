@@ -338,6 +338,7 @@ foreach ( $fields as $field ) {
                         $ft->assign("RADIO_SELECTED","");
                         $ft->assign("CHECKBOX_SELECTED","");
                         $ft->assign("BROWSE_SELECTED","");
+                        $ft->assign("DATA_SELECTED","");
                         switch ($itemdata['type']) {
                             case 'hidden':
                                 $ft->assign("HIDDEN_SELECTED"," selected ");
@@ -581,6 +582,7 @@ if ($action == "generate_html") {
 	// for required fields in PHP error.
 	$tmp_required = $session->get ( "required" );
 
+
 	$k=0;	
 	foreach ( $items as $key => $it ) {
 		if ($it == "hidden" || $it == "checkbox" || $it == "radio" || $it == "select") {
@@ -592,6 +594,7 @@ if ($action == "generate_html") {
 			$ftphp->assign ( "IS" . strtoupper ( $it2 ), ($it2 == $it) ? 1 : 0 );
 			$ftphp->assign ( "IS" . strtoupper ( $it2 ) . "_SAVE", ($it2 == $it) ? 1 : 0 );
 		}
+
 		// for required fields in PHP error.
 		if (isset ( $tmp_required [$key] )) {
 			

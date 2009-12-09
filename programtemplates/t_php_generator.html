@@ -186,6 +186,9 @@ case "mod":
  		array_push($labels, LANG_ADMIN_UPLOAD);       
         $ft->assign("BROWSE_{FORM_ELEMSUPPER}",$util->getUploadImagesHtml(1,{VARR}->get{FORM_ELEMS}(),$labels,FU_CONF_UPLOADURL,"{FORM_ELEMS}"));
         <!-- ENDIF --> 
+		<!-- IFDEF: ISDATE -->
+		$ft->assign("{FORM_ELEMSUPPER}",{STR_HEX_START}{VARR}->get{FORM_ELEMS}(){STR_HEX_END});
+        <!-- ENDIF --> 
 		<!-- END DYNAMIC BLOCK: get_elements -->
 		$ft->assign("{".strtoupper("{FUNC_NAME1ELEMENT}")."}",$all_url_vars["{FUNC_NAME1ELEMENT}"]);
 	}
@@ -259,6 +262,9 @@ case "save":
             if (!empty($all_url_vars["{FORM_ELEMS}_delete"])){
                 {VARR}->set{FORM_ELEMS}("");
             };
+            <!-- ENDIF --> 
+            <!-- IFDEF: ISDATE_SAVE -->
+            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
             <!-- END DYNAMIC BLOCK: set_elements -->
             {VARR}->save();
