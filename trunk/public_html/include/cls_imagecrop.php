@@ -206,7 +206,8 @@ class ImageCrop {
 			if (isset ( $tmp_gd ["GIF Create Support"] ) && $tmp_gd ["GIF Create Support"] == 1 && function_exists ( "imagecreatefromgif" ))
 				$this->mime_allowed ["image/gif"] = "gif";
 			
-			if (isset ( $tmp_gd ["JPG Support"] ) && $tmp_gd ["JPG Support"] == 1 && function_exists ( "imagecreatefromjpeg" )) {
+			//XXX: in php 5.3.0 function gd_info returns JPEG Suppor instead of JPG Support in the earlier versions
+			if (((isset ( $tmp_gd ["JPG Support"] ) && $tmp_gd ["JPG Support"] == 1) || ($tmp_gd ["JPEG Support"]) && $tmp_gd ["JPEG Support"] == 1) && function_exists ( "imagecreatefromjpeg" )) {
 				$this->mime_allowed ["image/jpg"] = "jpg";
 				$this->mime_allowed ["image/jpeg"] = "jpg";
 				$this->mime_allowed ["image/pjpeg"] = "jpg";
@@ -222,7 +223,6 @@ class ImageCrop {
 
 			//Split the source image into path name and ext	
 			$this->image = $image;
-
 			
 			if (file_exists ( $this->image )) {
 				
@@ -245,10 +245,8 @@ class ImageCrop {
 				$this->save_path = $this->image_path;
 				$this->del_old_file = false;
 				$this->image_size = getimagesize ( $this->image );
-			} else {
+			} else
 				$this->error_messages [] = IC_MESSAGE_FILE_NOT_EXISTS;
-
-                        };
 		
 		}
 	
@@ -304,21 +302,18 @@ class ImageCrop {
 	 * @Mod vers -
 	 **/
 	function doResize() {
-
+		
 		if (sizeof ( $this->error_messages ) > 0)
 			return false;
-                
+		
 		$imageMime = image_type_to_mime_type ( $this->image_size [2] );
 		
 		if (! $this->checkMime ( $imageMime ))
 			return false;
-
-
+		
 		$image_width = ceil ( $this->save_width * $this->save_scale );
 		$image_height = ceil ( $this->save_height * $this->save_scale );
-
-               
-
+		
 		$save_image = imagecreatetruecolor ( $image_width, $image_height );
 		
 		switch ($this->image_size [2]) {
@@ -334,9 +329,7 @@ class ImageCrop {
 			default :
 				$src_im = false;
 		}
-
-
-
+		
 		if (! $src_im) {
 			
 			$this->error_messages [] = IC_MESSAGE_FILE_NEW_IMAGE_COULD_NOT_BE_CREATED;
@@ -345,45 +338,36 @@ class ImageCrop {
 		}
 		
 		//error_log($this->start_width." ".$this->start_height." ".$image_width." ".$image_height." ".$this->save_width." ".$this->save_height);
+		$save_name=$this->save_path.$this->save_name;
 
 		//TODO:gd >2 imagecopyresampled imagecopyresized
-		if (empty ( $this->start_width ) && empty ( $this->start_height )) {
-			//error_log ( "hhhh" );
+		if (empty ( $this->start_width ) && empty ( $this->start_height )) 
 			imagecopyresampled ( $save_image, $src_im, 0, 0, 0, 0, $image_width, $image_height, $this->save_width, $this->save_height );
-		} 
-
 		else
 			imagecopyresampled ( $save_image, $src_im, 0, 0, $this->start_width, $this->start_height, $image_width, $image_height, $this->save_width, $this->save_height );
-
-
-                $save_filename=$this->save_name;
-
-                
-                
+		
 		switch ($this->image_size [2]) {
 			case IMAGETYPE_GIF :
-				$res = @imagegif ( $save_image, $save_filename );
+				$res = @imagegif ( $save_image, $save_name );
 				break;
 			case IMAGETYPE_JPEG :
-				$res = @imagejpeg ( $save_image, $save_filename, $this->save_jpg_quality );
+				$res = @imagejpeg ( $save_image, $save_name, $this->save_jpg_quality );
 				break;
 			case IMAGETYPE_PNG :
-				$res = @imagepng ( $save_image, $save_filename );
+				$res = @imagepng ( $save_image, $save_name );
 				break;
 			default :
 				$res = false;
 		}
-                
-
+		
 		if (! $res) {
 			$this->error_messages [] = IC_MESSAGE_FILE_NEW_IMAGE_COULD_NOT_BE_CREATED;
-
-                        
 			return false;
 		
 		}
-		chmod ( $save_filename, 0777 );
-                
+		
+		chmod ( $save_name, 0777 );
+		
 		if ($this->del_old_file)
 			if (! $this->deleteFile ()) {
 				$this->error_messages [] = IC_MESSAGE_FILE_OLD_IMAGE_COULD_NOT_BE_DELETED;
