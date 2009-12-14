@@ -92,6 +92,11 @@ case "list":
 	 **/	
     $ft->define(array("main"=>"template_index.html","content"=>"{FILENAME}"));
 	$Obj=new Listing();
+    
+    //if (empty($all_url_vars["sort_column"])){
+	//  $Obj->set_sort("___DEFAULT_SORT_COLUMN_REPLACE_HERE___",true); //default sort order.
+	//};
+    
 	$Obj->init_mysql(DB_PREFIX . '{TBL_NAME}', array({SELECT_WHAT}));
     
     // replace data from listing from other table
