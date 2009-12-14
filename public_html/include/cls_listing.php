@@ -531,7 +531,7 @@
 
 						}
 						$data.="<td class='noborder'>
-							<input name=\"".LANG_ADMIN_SEARCH."\" type=\"image\" value=\"".LANG_ADMIN_SEARCH."\" src=\"".CONF_INDEX_URL."images/admin/search.ico\" style=\"border:0\" alt=\"".LANG_ADMIN_SEARCH."\" />
+							<input name=\"".LANG_ADMIN_SEARCH."\" type=\"image\" value=\"".LANG_ADMIN_SEARCH."\" src=\"".CONF_INDEX_URL."images/admin/search.gif\" style=\"border:0\" alt=\"".LANG_ADMIN_SEARCH."\" />
 							</td>";
 						// colomns at the end to close the search.
 						if ($this->getActivateListing() == 1) {
@@ -609,20 +609,20 @@
                         // TODO: activ
                         if ($this->getActivateListing() == 1) {
                             if ( $datarow[$max-1] == 1) { //if is active, green
-                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.ico\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
+                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.gif\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
                             }
                             else { //if inactive red
-                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.ico\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
+                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.gif\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
                             }
                         }
 
                         if ($this->enableMod == 0) {
-                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"mod\"  href=\"".$_SERVER['PHP_SELF']."?do=mod&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/mod.ico\" title=\"".LANG_ADMIN_MODIFY."\"></a></td>";
+                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"mod\"  href=\"".$_SERVER['PHP_SELF']."?do=mod&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/mod.gif\" title=\"".LANG_ADMIN_MODIFY."\"></a></td>";
                         }
 
 
                         if ($this->enableDel == 0) {
-                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"del\"  href=\"".$_SERVER['PHP_SELF']."?do=del&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDELETE."')\"><img src=\"".CONF_INDEX_URL."images/admin/del.ico\" title=\"".LANG_ADMIN_DELETE."\" ></a></td>";
+                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"del\"  href=\"".$_SERVER['PHP_SELF']."?do=del&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDELETE."')\"><img src=\"".CONF_INDEX_URL."images/admin/del.gif\" title=\"".LANG_ADMIN_DELETE."\" ></a></td>";
                         }
 
 
