@@ -13,4 +13,5 @@ Scripts Home:           http://www.grafxsoftware.com
 //print DB_HOST."=".DB_USR."=".DB_PWD;
 $cid = mysql_connect(DB_HOST,DB_USR,DB_PWD) or die ("I cannot open a connection to database. If this is a new site, please <a href='installer/'> use installer</a>");
 mysql_select_db(DB_NAME) or die("I cannot select the database! If this is a new site, please <a href='installer/'> use installer</a>");
+mysql_query("SET NAMES '".CONF_CHARSET."'");
 ?>
