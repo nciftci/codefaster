@@ -46,7 +46,7 @@ if (file_exists('../installer') && CONF_INDEX_URL !== "INST_URL" && ERROR_DEBUG=
 //verify the password for admin, if setup, redirect to change.
 if (PASSWORD=="setup")
 {
-	header ("Location: config.php"); exit;
+	header ("Location: config.php?action=form&pagenr=1"); exit;
 }	
 $ft->assign("MESSAGE", $errormessage);
 
