@@ -127,7 +127,7 @@ if (!empty($all_url_vars['table'])) {
 		$example="";
 		foreach ($xmlarray['data'] as $item) {
 			if (!empty($fields)) $fields.=";";
-			$fields.=$item['name'];
+			$fields.=$item['function'];
 			if (!empty($example)) $example.=";";
 			$example.=$item['function'];
 		};
@@ -138,14 +138,13 @@ if (!empty($all_url_vars['table'])) {
 		$ft->assign("VAR_NAME",$xmlarray['varname']);
 		$ft->assign("TABLE", $xmlarray['tablename']);
 		$ft->assign("DISABLE_SOME_FIELDS",' ');
-		$ft->assign("DBFIELDS_EN",$fields);
+		$ft->assign("DBFIELDS_EN",strtolower($fields));
 
 		$fields_noen=str_replace("_en","",$fields);
 		$ft->assign("DBFIELDS",$fields_noen);
 
 		$tokexample = explode(";", $fields_noen);
 		$tokenr     = sizeof($tokexample);
-
 		$ft->assign("EXAMPLE",$example);
 
 	}else{

@@ -75,7 +75,7 @@ class Xml {
             $p = xml_parser_create();
             xml_parse_into_struct($p, $xmlstring, $vals, $index);
             xml_parser_free($p);
-			print_r ($vals);exit;
+			//print_r ($vals);exit;
             $array_functions=array();
             $k=0;
             foreach ($index['FUNCTION'] as $id) {
