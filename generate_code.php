@@ -87,7 +87,6 @@ $fields_en =explode(";",$all_url_vars['fieldnames_en']);
 foreach($fields as $key=>$value)
  $tmp_fields[$value]=$fields_en[$key];
 
-//print_r($tmp_fields);exit;
 $session->set("language_fields", $tmp_fields);
 
 $all_url_vars['funct_name']=str_replace(" ","",$all_url_vars['funct_name']);

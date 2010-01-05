@@ -47,7 +47,7 @@ $projectname = $session->get ( "projectname" );
 $author = $session->get ( "author" );
 $date = $session->get ( "date" );
 $name = $session->get ( "name" );
-$classvar = $session->get ( "classvar" );
+$classvar = $session->get ( "variable" );
 
 /**
  * @author   - Valics Lehel
@@ -663,8 +663,12 @@ if ($action == "generate_html") {
 	 * @desc     - XML Generation, SCHEMA fles
 	 * @vers     - 1.0
 	 **/
-	$xml_data = array ('classname' => $name, 'projectname' => $projectname, 'developername' => $author, 'date' => $date, 'varname' => $classvar, 'modules' => $modules, 'functions' => $functions ,'tablename'=>$tablename);
-	
+	$tablename=$session->get ( "tablename" );
+	$xml_data = array ('classname' => $name, 'projectname' => $projectname, 'developername' => $author, 'date' => $date, 'varname' => $classvar, 'modules' => $modules, 'functions' => $functions ,'tablename' => $tablename);
+
+
+
+
 	foreach ( $fields as &$field ) {
 		$field = array ('name' => $field, 'type' => isset ( $items [$field] ) ? $items [$field] : '', 'required' => isset ( $required_all [$field] ) ? $required_all [$field] : '', 'requiredset' => isset ( $requiredset_all [$field] ) ? $requiredset_all [$field] : '', 'listing' => isset ( $listing [$field] ) ? $listing [$field] : '' );
 	}
