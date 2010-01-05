@@ -663,7 +663,7 @@ if ($action == "generate_html") {
 	 * @desc     - XML Generation, SCHEMA fles
 	 * @vers     - 1.0
 	 **/
-	$xml_data = array ('name' => $name, 'projectname' => $projectname, 'author' => $author, 'date' => $date, 'classvar' => $classvar, 'modules' => $modules, 'functions' => $functions );
+	$xml_data = array ('classname' => $name, 'projectname' => $projectname, 'developername' => $author, 'date' => $date, 'varname' => $classvar, 'modules' => $modules, 'functions' => $functions ,'tablename'=>$tablename);
 	
 	foreach ( $fields as &$field ) {
 		$field = array ('name' => $field, 'type' => isset ( $items [$field] ) ? $items [$field] : '', 'required' => isset ( $required_all [$field] ) ? $required_all [$field] : '', 'requiredset' => isset ( $requiredset_all [$field] ) ? $requiredset_all [$field] : '', 'listing' => isset ( $listing [$field] ) ? $listing [$field] : '' );
@@ -672,6 +672,11 @@ if ($action == "generate_html") {
 	
 	if ($fpxml = fopen ( XML_PATH . $NAME . ".xml", 'w' )) {
 		fwrite ( $fpxml, $xml->saveArray ( $xml_data ) );
+		fclose ( $fpxml );
+	}
+	//test
+	if ($fpxml = fopen ( XML_PATH . $NAME . ".xml.data", 'w' )) {
+		fwrite ( $fpxml, print_r($xml_data ,true) );
 		fclose ( $fpxml );
 	}
 	

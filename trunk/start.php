@@ -131,11 +131,12 @@ if (!empty($all_url_vars['table'])) {
 			if (!empty($example)) $example.=";";
 			$example.=$item['function'];
 		};
-		$ft->assign("DEV_NAME",$xmlarray['name']);
-		$ft->assign("PROJECT_NAME",$xmlarray['project_name']);
-		$ft->assign("CLASS_NAME",$xmlarray['class_name']);
-		$ft->assign("VAR_NAME",$xmlarray['var_name']);
-		$ft->assign("TABLE", $xmlarray['table_name']);
+//		print_r($xmlarray);exit;
+		$ft->assign("DEV_NAME",$xmlarray['developername']);
+		$ft->assign("PROJECT_NAME",$xmlarray['projectname']);
+		$ft->assign("CLASS_NAME",$xmlarray['classname']);
+		$ft->assign("VAR_NAME",$xmlarray['varname']);
+		$ft->assign("TABLE", $xmlarray['tablename']);
 		$ft->assign("DISABLE_SOME_FIELDS",' ');
 		$ft->assign("DBFIELDS_EN",$fields);
 

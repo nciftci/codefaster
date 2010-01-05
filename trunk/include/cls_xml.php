@@ -75,16 +75,16 @@ class Xml {
             $p = xml_parser_create();
             xml_parse_into_struct($p, $xmlstring, $vals, $index);
             xml_parser_free($p);
+			print_r ($vals);exit;
             $array_functions=array();
             $k=0;
             foreach ($index['FUNCTION'] as $id) {
                 $array_functions[$k++]=$vals[$id]['value'];
             };
-
             $array_name=array();
             $k=0;
             $name_first=-1;
-            foreach ($index['NAME'] as $id) {
+            foreach ($index['DEVELOPERNAME'] as $id) {
                 if ($vals[$id]['level']!=4) {
                     if ($name_first<0) {
                         $name_first=$vals[$id]['value'];
@@ -132,11 +132,11 @@ class Xml {
             };
 
             $result=array();
-            $result['name']=$name_first;
-            $result['project_name']=$vals[$index['PROJECTNAME'][0]]['value'];
-            $result['class_name']="TestClass";
-            $result['var_name']="TestVar";
-            $result['table_name']="";
+            $result['developername']=$name_first;
+            $result['projectname']=$vals[$index['PROJECTNAME'][0]]['value'];
+            $result['classname']="TestClass";
+            $result['varname']="TestVar";
+            $result['tablename']=$vals[$index['TABLENAME'][0]]['value'];;
 
             $result['data']=$data;
 
