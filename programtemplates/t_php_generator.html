@@ -282,7 +282,7 @@ case "save":
                 foreach ($cropping_files_array as $filebase) {
                 $input_post_filename=$filebase.'_imagefile_0';
                 $fu = new FileUpload( $_FILES[ $input_post_filename ] );
-                $fu -> setSave_name( 'TestProduct_'.substr( md5( '0_'.$k . date( 'Y-m-d H:i:s' ) . $_FILES[ $input_post_filename ][ 'name' ] ), 0, 12 ) );
+                $fu -> setSave_name( $filebase.'_'.substr( md5( '0_'.$k . date( 'Y-m-d H:i:s' ) . $_FILES[ $input_post_filename ][ 'name' ] ), 0, 12 ) );
                 $fu->setSave_path(FU_CONF_UPLOADDIR);
 
                 //pre_resize start
