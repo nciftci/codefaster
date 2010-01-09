@@ -178,7 +178,7 @@ case "mod":
         <!-- IFDEF: ISDROPDOWN -->
 		$ft->assign("{FORM_ELEMSUPPER}",$util->getDataWithSelectFromArray({VARR}->get{FORM_ELEMS}(),$d_{FORM_ELEMS}));
         //If is from database, use below. $id_selected,$table,$id_column,$data_column
-        //$ft->assign("{FORM_ELEMSUPPER}",$util->formatDataWithSelect({VARR}->get{FORM_ELEMS},"DBTABLE","DBFIELD1_ID","DBFIELD2_WHATTOSHOW"));
+        //$ft->assign("{FORM_ELEMSUPPER}",$util->formatDataWithSelect({VARR}->get{FORM_ELEMS}(),"DBTABLE","DBFIELD1_ID","DBFIELD2_WHATTOSHOW"));
         <!-- ENDIF --> 
         <!-- IFDEF: ISTEXTFIELD -->
 		$ft->assign("{FORM_ELEMSUPPER}",htmlspecialchars_decode({VARR}->get{FORM_ELEMS}()));
