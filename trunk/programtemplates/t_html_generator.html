@@ -12,7 +12,7 @@ $(document).ready(function() {
 	$("#form_{PROJECT_BASE_FILENAME}").validate();
 	$("#listingtable").colorize({hiliteColor:'none'});
 <!-- BEGIN DYNAMIC BLOCK: dateelements -->
-	$('#{DATEELEMENT}').datepicker({dateFormat: 'yy-mm-dd',showOn: 'button', buttonImage: '../images/icons/calendar.gif', buttonImageOnly: true});
+	$('#{DATEELEMENT}').datepicker({dateFormat: 'yy-mm-dd',showOn: 'button', buttonImage: '{CONF_INDEX_URL}images/icons/calendar.gif', buttonImageOnly: true});
 <!-- END DYNAMIC BLOCK: dateelements -->
 });
 
