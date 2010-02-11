@@ -265,6 +265,9 @@ case "save":
                 {VARR} -> set{FORM_ELEMS}( $util -> uploadAllFiles( '{CLS}', FU_CONF_UPLOADDIR, '{FORM_ELEMS}' ) );
             };
             if (!empty($all_url_vars["{FORM_ELEMS}_delete"])){
+				$imagename={VARR}->get{FORM_ELEMS}();
+				@unlink(FU_CONF_UPLOADDIR.$imagename);
+				@unlink(FU_CONF_UPLOADDIR."thumb_".$imagename);
                 {VARR}->set{FORM_ELEMS}("");
             };
             <!-- ENDIF --> 
