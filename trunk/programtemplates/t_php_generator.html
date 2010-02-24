@@ -108,7 +108,7 @@ case "list":
 	$limit= 15;
        //the number of page in the pagination bar
 	$max=4;
-	$gpos = (isset ( $_GET ["page"] ) ? $_GET["page"]/$limit : 0);
+	$gpos = (isset ( $_GET ["page"] ) ? $_GET["page"] : 0);
 
 	$Obj->setLimit($limit);
 	$field= {FLDS}
