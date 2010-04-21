@@ -17,11 +17,21 @@ include_once(INCLUDE_PATH."cls_string.php");
 include_once(INCLUDE_PATH."cls_session.php");
 include_once(INCLUDE_PATH."PhpBeautifier.inc.php");
 
+function process_lang_item($name,$replacement_lang){
+	$remain=strlen( $name ) - strlen( "_en" );
+	if (substr( $name, $remain ) === "_en"){
+		$name=substr($name,0,$remain).'_'.$replacement_lang;
+		return $name;
+	}else{
+		return $name;
+	};
+}
+
+
 $session      = new MYSession();
 $stringutil   = new String();
 $all_url_vars = $stringutil->parse_all();
 // basic values
-
 if(!isset($all_url_vars['type'])) {
 	$all_url_vars['type']="php";
 }
@@ -117,15 +127,17 @@ $buffer_insert="";
 
 for ($i = 1; $i < $nr; $i ++) {
   if($fields[$i]==$fields_en[$i])
-  {
-	$buffer .= "`" . $fields[$i] . "`";
-	$buffer_insert .= "`" . $fields[$i] . "`";
-  }
-  else
-  {
-    $buffer_insert .= "`" . $fields[$i] . "_{\$this->lang}` ";
-	$buffer .= "`" . $fields[$i] . "_{\$this->lang}` AS `" . $fields[$i] ."`";
-	}	
+	  $f=$fields[$i];
+      $f=process_lang_item($f,'$this->lang');
+//  {
+	$buffer .= "`" . $f . "`";
+	$buffer_insert .= "`" . $f . "`";
+//  }
+//  else
+//  {
+//    $buffer_insert .= "`" . $fields[$i] . "_{\$this->lang}` ";
+//	$buffer .= "`" . $fields[$i] . "_{\$this->lang}` AS `" . $fields[$i] ."`";
+//	}	
 		
 	if($i <> $nr-1) {
 		$buffer.=",";
@@ -170,6 +182,7 @@ if($all_url_vars['type'] == "php") {
 
 	for ($i=1;$i<$nr;$i++) {
 		$ft->assign("FIELD_NAME",$fields[$i]);
+		$ft->assign("FIELD_NAME_LANG",process_lang_item($fields[$i],'$this->lang'));
 		$ft->parse("VALUE",".value");
 	}
 
@@ -211,15 +224,17 @@ if($all_url_vars['type'] == "php") {
 	$buffer="";
 
 	for ($i=1;$i<$nr;$i++) {
+	  	$f=$fields[$i];
+      	$f=process_lang_item($f,'$this->lang');
 		$buffer .= "`";
-		if($fields[$i]==$fields_en[$i])
-		{
-		$buffer .= "$fields[$i]`=";
-		}
-		else
-		{
-		$buffer .= "$fields[$i]_{\$this->lang}`=";
-		}
+		//if($fields[$i]==$fields_en[$i])
+		//{
+		$buffer .= "$f`=";
+		//}
+		//else
+		//{
+		//$buffer .= "$fields[$i]_{\$this->lang}`=";
+		//}
 		$buffer .= "'\"."; 
 		$buffer .= "\$this->slashes(\$this->".$fields[$i];
 		$buffer .= ").\"'";
