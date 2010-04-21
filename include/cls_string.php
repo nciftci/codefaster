@@ -611,7 +611,7 @@ function process_lang_item($name,$replacement_lang){
 	}else{
 		return $name;
 	};
-};
+}
 
 }
 ?>
