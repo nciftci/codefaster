@@ -603,5 +603,15 @@ function unhtmlentities ($string) {
 	  return $new_date;
 	}
 
+function process_lang_item($name,$replacement_lang){
+	$remain=strlen( $name ) - strlen( "_en" );
+	if (substr( $name, $remain ) === "_en"){
+		$name='"'.substr($name,0,$remain).'_".'.$replacement_lang;
+		return $name;
+	}else{
+		return $name;
+	};
+};
+
 }
 ?>
