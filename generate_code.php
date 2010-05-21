@@ -37,6 +37,7 @@ if(!isset($all_url_vars['type'])) {
 }
 //print  $all_url_vars['genfromsql'];
 
+
 $session->set("name", $all_url_vars['name']);
 
 // classname not specified
@@ -525,15 +526,15 @@ $fp = fopen(GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']), 'w');
 if ($fp){
 	fwrite($fp, $result_php);
 	fclose($fp);
-	
-	$beautify = new PhpBeautifier();
-	$beautify -> tokenSpace = true;//put space between tokens
-	$beautify -> blockLine = true;//put empty lines between blocks of code (if, while etc)
-	//$beautify -> optimize = true;//optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
-	$beautify -> file( GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']), GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']));
-	// write phps
-	//fwrite($fps, $result_php);
-	//fclose($fps);	
+////////////////		
+////////////////	$beautify = new PhpBeautifier();
+////////////////	$beautify -> tokenSpace = true;//put space between tokens
+////////////////	$beautify -> blockLine = true;//put empty lines between blocks of code (if, while etc)
+////////////////	//$beautify -> optimize = true;//optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
+////////////////	$beautify -> file( GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']), GEN_INCLUDE_PATH.strtolower($all_url_vars['classname']));
+////////////////	// write phps
+////////////////	//fwrite($fps, $result_php);
+////////////////	//fclose($fps);	
 };
 header('Location: generate_html.php');
 ?>
