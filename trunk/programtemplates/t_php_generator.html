@@ -236,22 +236,22 @@ case "save":
                 {VARR} = new {CLS}($all_url_vars["{FUNC_NAME1ELEMENT}"],$LANG);
             <!-- BEGIN DYNAMIC BLOCK: set_elements -->
             <!-- IFDEF: ISHIDDEN_SAVE -->
-            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            {VARR}->set{FORM_ELEMSUPPER1}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
              <!-- IFDEF: ISRADIO_SAVE -->
-            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            {VARR}->set{FORM_ELEMSUPPER1}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF -->  
             <!-- IFDEF: ISCHECKBOX_SAVE -->
-            {VARR}->set{FORM_ELEMS}(isset($all_url_vars["{FORM_ELEMS}"])?1:0);
+            {VARR}->set{FORM_ELEMSUPPER1}(isset($all_url_vars["{FORM_ELEMS}"])?1:0);
             <!-- ENDIF --> 
             <!-- IFDEF: ISDROPDOWN_SAVE -->
-            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            {VARR}->set{FORM_ELEMSUPPER1}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
             <!-- IFDEF: ISTEXTFIELD_SAVE -->
-            {VARR}->set{FORM_ELEMS}(htmlspecialchars($all_url_vars["{FORM_ELEMS}"]));
+            {VARR}->set{FORM_ELEMSUPPER1}(htmlspecialchars($all_url_vars["{FORM_ELEMS}"]));
             <!-- ENDIF --> 
             <!-- IFDEF: ISTEXTAREA_SAVE -->
-            {VARR}->set{FORM_ELEMS}(htmlspecialchars($all_url_vars["{FORM_ELEMS}"]));
+            {VARR}->set{FORM_ELEMSUPPER1}(htmlspecialchars($all_url_vars["{FORM_ELEMS}"]));
             <!-- ENDIF --> 
             <!-- IFDEF: ISBROWSE_SAVE -->
             if ($util->is_image_file('{FORM_ELEMS}')) {
@@ -259,20 +259,20 @@ case "save":
                 if ($upload_image_check) {
                     array_push($cropping_files_array,"{FORM_ELEMS}");
                 }else{
-                    {VARR}->set{FORM_ELEMS}($util->uploadAllImages('{CLS}' ,FU_CONF_UPLOADDIR,"{FORM_ELEMS}"));
+                    {VARR}->set{FORM_ELEMSUPPER1}($util->uploadAllImages('{CLS}' ,FU_CONF_UPLOADDIR,"{FORM_ELEMS}"));
                 };
             }else{
-                {VARR} -> set{FORM_ELEMS}( $util -> uploadAllFiles( '{CLS}', FU_CONF_UPLOADDIR, '{FORM_ELEMS}' ) );
+                {VARR} -> set{FORM_ELEMSUPPER1}( $util -> uploadAllFiles( '{CLS}', FU_CONF_UPLOADDIR, '{FORM_ELEMS}' ) );
             };
             if (!empty($all_url_vars["{FORM_ELEMS}_delete"])){
-				$imagename={VARR}->get{FORM_ELEMS}();
+				$imagename={VARR}->get{FORM_ELEMSUPPER1}();
 				@unlink(FU_CONF_UPLOADDIR.$imagename);
 				@unlink(FU_CONF_UPLOADDIR."thumb_".$imagename);
                 {VARR}->set{FORM_ELEMS}("");
             };
             <!-- ENDIF --> 
             <!-- IFDEF: ISDATE_SAVE -->
-            {VARR}->set{FORM_ELEMS}($all_url_vars["{FORM_ELEMS}"]);
+            {VARR}->set{FORM_ELEMSUPPER1}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF --> 
             <!-- END DYNAMIC BLOCK: set_elements -->
             {VARR}->save();

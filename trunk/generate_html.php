@@ -582,7 +582,6 @@ if ($action == "generate_html") {
 	// for required fields in PHP error.
 	$tmp_required = $session->get ( "required" );
 
-
 	$k=0;	
 	foreach ( $items as $key => $it ) {
 		if ($it == "hidden" || $it == "checkbox" || $it == "radio" || $it == "select") {
@@ -602,10 +601,12 @@ if ($action == "generate_html") {
 			$ftphp->assign ( "FORM_ELEMS_REQ_UPPER", strtoupper ( $key ) );
 			$ftphp->parse ( "LANGFORMELEMENTS", ".langerrformelements" );
 		}
-		
+			
 		$ftphp->assign ( "FORM_ELEMS", $key );
 		$ftphp->assign ( "FORM_ELEMSUPPER", strtoupper ( $key ) );
-
+		$keyupper1=str_replace("_en","",ucfirst($key));
+		$ftphp->assign ( "FORM_ELEMSUPPER1", $keyupper1 );
+		
 		$str_hex_start="";
 		$str_hex_end="";
 		if ($k==0){
