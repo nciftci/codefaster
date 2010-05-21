@@ -21,17 +21,17 @@ $testproduct->getId();
 
 
 
-$testproduct->getNametry();
+$testproduct->getName();
 
 
 
 
-$testproduct->getDescriptionshorttry();
+$testproduct->getDescriptionshort();
 
 
 
 
-$testproduct->getDescriptiontry();
+$testproduct->getDescription();
 
 
 
@@ -70,17 +70,17 @@ $testproduct->setId();
 
 
 
-$testproduct->setNametry();
+$testproduct->setName();
 
 
 
 
-$testproduct->setDescriptionshorttry();
+$testproduct->setDescriptionshort();
 
 
 
 
-$testproduct->setDescriptiontry();
+$testproduct->setDescription();
 
 
 
@@ -141,17 +141,17 @@ protected  $id;
 
 
 
-protected  $nametry;
+protected  $name_en;
 
 
 
 
-protected  $descriptionshorttry;
+protected  $descriptionshort_en;
 
 
 
 
-protected  $descriptiontry;
+protected  $description;
 
 
 
@@ -212,7 +212,7 @@ $this->where_clause=" WHERE `id`='".$this->id."'";
 $this->where_mode=false;
 }
 
-$SQL = " SELECT `nametry`,`descriptionshorttry`,`descriptiontry`,`categoryid`,`isthisreal`,`termsagree`,`fileupload`,`active` FROM `".DB_PREFIX."product` ".$this->where_clause;
+$SQL = " SELECT `name_$this->lang`,`descriptionshort_$this->lang`,`description`,`categoryid`,`isthisreal`,`termsagree`,`fileupload`,`active` FROM `".DB_PREFIX."product` ".$this->where_clause;
 $retid = mysql_query($SQL) or die(mysql_error());
 
 if ($row = mysql_fetch_array($retid))
@@ -221,17 +221,17 @@ $this->valid=true;
 
 
 
-$this->nametry = $row["nametry"];
+$this->name_en = $row["name_$this->lang"];
 
 
 
 
-$this->descriptionshorttry = $row["descriptionshorttry"];
+$this->descriptionshort_en = $row["descriptionshort_$this->lang"];
 
 
 
 
-$this->descriptiontry = $row["descriptiontry"];
+$this->description = $row["description"];
 
 
 
@@ -270,17 +270,17 @@ $this->valid=false;
 
 
 
-$this->nametry = "";
+$this->name_en = "";
 
 
 
 
-$this->descriptionshorttry = "";
+$this->descriptionshort_en = "";
 
 
 
 
-$this->descriptiontry = "";
+$this->description = "";
 
 
 
@@ -338,16 +338,16 @@ return $this->id;
 /**
 * @author   - Test Developer
 * @type     - public
-* @desc     - get $this->nametry
+* @desc     - get $this->name_en
 * @return   - string
 * @vers     - 1.0
 * @Mod  	-
 **/
-public function getNametry()
+public function getName()
 {
-return $this->nametry;
+return $this->name_en;
 
-} // end getNametry()
+} // end getName()
 
 
 
@@ -356,16 +356,16 @@ return $this->nametry;
 /**
 * @author   - Test Developer
 * @type     - public
-* @desc     - get $this->descriptionshorttry
+* @desc     - get $this->descriptionshort_en
 * @return   - string
 * @vers     - 1.0
 * @Mod  	-
 **/
-public function getDescriptionshorttry()
+public function getDescriptionshort()
 {
-return $this->descriptionshorttry;
+return $this->descriptionshort_en;
 
-} // end getDescriptionshorttry()
+} // end getDescriptionshort()
 
 
 
@@ -374,16 +374,16 @@ return $this->descriptionshorttry;
 /**
 * @author   - Test Developer
 * @type     - public
-* @desc     - get $this->descriptiontry
+* @desc     - get $this->description
 * @return   - string
 * @vers     - 1.0
 * @Mod  	-
 **/
-public function getDescriptiontry()
+public function getDescription()
 {
-return $this->descriptiontry;
+return $this->description;
 
-} // end getDescriptiontry()
+} // end getDescription()
 
 
 
@@ -505,16 +505,16 @@ $this->id=$id;
 /**
 * @author   - Test Developer
 * @type     - public
-* @desc     - set $this->nametry to $nametry
-* @param    - string $nametry
+* @desc     - set $this->name_en to $name_en
+* @param    - string $name_en
 * @return   - void
 * @vers     - 1.0
 * @Mod  	-
 **/
-public function setNametry($nametry)
+public function setName($name_en)
 {
-$this->nametry=$nametry;
-} // end setNametry()
+$this->name_en=$name_en;
+} // end setName()
 
 
 
@@ -524,16 +524,16 @@ $this->nametry=$nametry;
 /**
 * @author   - Test Developer
 * @type     - public
-* @desc     - set $this->descriptionshorttry to $descriptionshorttry
-* @param    - string $descriptionshorttry
+* @desc     - set $this->descriptionshort_en to $descriptionshort_en
+* @param    - string $descriptionshort_en
 * @return   - void
 * @vers     - 1.0
 * @Mod  	-
 **/
-public function setDescriptionshorttry($descriptionshorttry)
+public function setDescriptionshort($descriptionshort_en)
 {
-$this->descriptionshorttry=$descriptionshorttry;
-} // end setDescriptionshorttry()
+$this->descriptionshort_en=$descriptionshort_en;
+} // end setDescriptionshort()
 
 
 
@@ -543,16 +543,16 @@ $this->descriptionshorttry=$descriptionshorttry;
 /**
 * @author   - Test Developer
 * @type     - public
-* @desc     - set $this->descriptiontry to $descriptiontry
-* @param    - string $descriptiontry
+* @desc     - set $this->description to $description
+* @param    - string $description
 * @return   - void
 * @vers     - 1.0
 * @Mod  	-
 **/
-public function setDescriptiontry($descriptiontry)
+public function setDescription($description)
 {
-$this->descriptiontry=$descriptiontry;
-} // end setDescriptiontry()
+$this->description=$description;
+} // end setDescription()
 
 
 
@@ -683,8 +683,8 @@ return;
 
 if ((($this->id) == 0)&&(!$this->where_mode))
 {
-$SQL = "INSERT INTO `".DB_PREFIX."product` (`nametry`,`descriptionshorttry`,`descriptiontry`,`categoryid`,`isthisreal`,`termsagree`,`fileupload`,`active`)";
-$SQL .= " VALUES('".$this->slashes($this->nametry)."','".$this->slashes($this->descriptionshorttry)."','".$this->slashes($this->descriptiontry)."','".$this->slashes($this->categoryid)."','".$this->slashes($this->isthisreal)."','".$this->slashes($this->termsagree)."','".$this->slashes($this->fileupload)."','".$this->slashes($this->active)."')";
+$SQL = "INSERT INTO `".DB_PREFIX."product` (`name_$this->lang`,`descriptionshort_$this->lang`,`description`,`categoryid`,`isthisreal`,`termsagree`,`fileupload`,`active`)";
+$SQL .= " VALUES('".$this->slashes($this->name_en)."','".$this->slashes($this->descriptionshort_en)."','".$this->slashes($this->description)."','".$this->slashes($this->categoryid)."','".$this->slashes($this->isthisreal)."','".$this->slashes($this->termsagree)."','".$this->slashes($this->fileupload)."','".$this->slashes($this->active)."')";
 
 $retid = mysql_query($SQL);
 if (!$retid) {
@@ -700,7 +700,7 @@ else
 if ($this->enable_undo){
 $this->write_update_undo();
 }
-$SQL = "UPDATE `".DB_PREFIX."product` SET `nametry`='".$this->slashes($this->nametry)."',`descriptionshorttry`='".$this->slashes($this->descriptionshorttry)."',`descriptiontry`='".$this->slashes($this->descriptiontry)."',`categoryid`='".$this->slashes($this->categoryid)."',`isthisreal`='".$this->slashes($this->isthisreal)."',`termsagree`='".$this->slashes($this->termsagree)."',`fileupload`='".$this->slashes($this->fileupload)."',`active`='".$this->slashes($this->active)."'";
+$SQL = "UPDATE `".DB_PREFIX."product` SET `name_$this->lang`='".$this->slashes($this->name_en)."',`descriptionshort_$this->lang`='".$this->slashes($this->descriptionshort_en)."',`description`='".$this->slashes($this->description)."',`categoryid`='".$this->slashes($this->categoryid)."',`isthisreal`='".$this->slashes($this->isthisreal)."',`termsagree`='".$this->slashes($this->termsagree)."',`fileupload`='".$this->slashes($this->fileupload)."',`active`='".$this->slashes($this->active)."'";
 $SQL .= $this->where_clause;
 $retid = mysql_query($SQL);
 if (!$retid) {

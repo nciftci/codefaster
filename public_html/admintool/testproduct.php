@@ -20,6 +20,8 @@ $stringutil = new String();
 * @vers     - 1.0
 **/
 $stringutil -> setIntVars( 'id' );
+$stringutil -> setIntVars( 'categoryid' );
+$stringutil -> setIntVars( 'isthisreal' );
 $stringutil -> setIntVars( 'termsagree' );
 $stringutil -> setIntVars( 'fileupload' );
 $stringutil -> setIntVars( 'active' );
@@ -74,7 +76,7 @@ case 'list':
 	$Obj = new Listing();//if (empty($all_url_vars["sort_column"])){
 	//  $Obj->set_sort("___DEFAULT_SORT_COLUMN_REPLACE_HERE___",true); //default sort order.
 	//};
-	$Obj -> init_mysql( DB_PREFIX . 'product', array( id, nametry, descriptionshorttry, descriptiontry, categoryid ) );// replace data from listing from other table
+	$Obj -> init_mysql( DB_PREFIX . 'product', array( * ) );// replace data from listing from other table
 	//$Obj->setReplaceColumnIdFromDatabase("DBfield","DBtable","TBid_column","TBdata_column");
 	// replace data from listing from array
 	//$Obj->setReplaceColumnIdFromArray("field",$d_field);
@@ -83,8 +85,7 @@ case 'list':
 	$max = 4;
 	$gpos = ( isset( $_GET [ 'page' ] ) ? $_GET[ 'page' ] : 0 );
 	$Obj -> setLimit( $limit );
-	$field = array( '{LANG_ADMIN_TESTPRODUCT_ID}', '{LANG_ADMIN_TESTPRODUCT_NAMETRY}', '{LANG_ADMIN_TESTPRODUCT_DESCRIPTIONSHORTTRY}', '{LANG_ADMIN_TESTPRODUCT_DESCRIPTIONTRY}', '{LANG_ADMIN_TESTPRODUCT_CATEGORYID}', );
-	$Obj -> setFields( $field );
+	$field = $Obj -> setFields( $field );
 	$offset = $Obj -> getOffset( ( $gpos+$limit )/$limit );//set link css
 	$Obj -> setFirstID( 'id' );
 	$Obj -> setStyle( 'gotopage' );//enable active column on listing
@@ -124,9 +125,9 @@ case 'mod':
 		if( $_SESSION[ 'err' ] )$ft -> assign( 'ERROR', '<div class="mError">' . $_SESSION[ 'err' ] . '</div>' );
 	}// TODO: here we need to add REQUIRED only to assign it. NOT ALL.
 	$ft -> assign( 'ID', $_SESSION[ 'id' ] );
-	$ft -> assign( 'NAMETRY', $_SESSION[ 'nametry' ] );
-	$ft -> assign( 'DESCRIPTIONSHORTTRY', $_SESSION[ 'descriptionshorttry' ] );
-	$ft -> assign( 'DESCRIPTIONTRY', $_SESSION[ 'descriptiontry' ] );
+	$ft -> assign( 'NAME_EN', $_SESSION[ 'name_en' ] );
+	$ft -> assign( 'DESCRIPTIONSHORT_EN', $_SESSION[ 'descriptionshort_en' ] );
+	$ft -> assign( 'DESCRIPTION', $_SESSION[ 'description' ] );
 	$ft -> assign( 'CATEGORYID', $_SESSION[ 'categoryid' ] );
 	$ft -> assign( 'ISTHISREAL', $_SESSION[ 'isthisreal' ] );
 	$ft -> assign( 'TERMSAGREE', $_SESSION[ 'termsagree' ] );
@@ -135,14 +136,11 @@ case 'mod':
 	{
 		$testproduct = new TestProduct( $all_url_vars[ 'id' ], $LANG );
 		$ft -> assign( 'ID', $stringutil -> str_hex( $testproduct -> getid() ) );
-		$ft -> assign( 'NAMETRY', htmlspecialchars_decode( $testproduct -> getname
-		try() ) );
-		$ft -> assign( 'DESCRIPTIONSHORTTRY', htmlspecialchars_decode( $testproduct -> getdescriptionshort
-		try() ) );
-		$ft -> assign( 'DESCRIPTIONTRY', htmlspecialchars_decode( $testproduct -> getdescription
-		try() ) );
-		$ft -> assign( 'CATEGORYID', htmlspecialchars_decode( $testproduct -> getcategoryid() ) );
-		$ft -> assign( 'ISTHISREAL', htmlspecialchars_decode( $testproduct -> getisthisreal() ) );
+		$ft -> assign( 'NAME_EN', htmlspecialchars_decode( $testproduct -> getname_en() ) );
+		$ft -> assign( 'DESCRIPTIONSHORT_EN', htmlspecialchars_decode( $testproduct -> getdescriptionshort_en() ) );
+		$ft -> assign( 'DESCRIPTION', htmlspecialchars_decode( $testproduct -> getdescription() ) );
+		$ft -> assign( 'CATEGORYID', $testproduct -> getcategoryid() );
+		$ft -> assign( 'ISTHISREAL', $testproduct -> getisthisreal() );
 		$ft -> assign( 'TERMSAGREE', $testproduct -> gettermsagree() );
 		$ft -> assign( 'FILEUPLOAD', $testproduct -> getfileupload() );
 		$ft -> assign( 'ACTIVE', $testproduct -> getactive() );
@@ -163,9 +161,9 @@ case 'save':
 	if( !empty( $err ) )
 	{
 		$_SESSION[ 'id' ] = $all_url_vars[ 'id' ];
-		$_SESSION[ 'nametry' ] = $all_url_vars[ 'nametry' ];
-		$_SESSION[ 'descriptionshorttry' ] = $all_url_vars[ 'descriptionshorttry' ];
-		$_SESSION[ 'descriptiontry' ] = $all_url_vars[ 'descriptiontry' ];
+		$_SESSION[ 'name_en' ] = $all_url_vars[ 'name_en' ];
+		$_SESSION[ 'descriptionshort_en' ] = $all_url_vars[ 'descriptionshort_en' ];
+		$_SESSION[ 'description' ] = $all_url_vars[ 'description' ];
 		$_SESSION[ 'categoryid' ] = $all_url_vars[ 'categoryid' ];
 		$_SESSION[ 'isthisreal' ] = $all_url_vars[ 'isthisreal' ];
 		$_SESSION[ 'termsagree' ] = $all_url_vars[ 'termsagree' ];
@@ -188,18 +186,15 @@ case 'save':
 			$testproduct = new TestProduct( $all_url_vars[ 'id' ], $LANG );
 		}
 		
-		$testproduct -> setid( $all_url_vars[ 'id' ] );
-		$testproduct -> setname
-		try( htmlspecialchars( $all_url_vars[ 'nametry' ] ) );
-		$testproduct -> setdescriptionshort
-		try( htmlspecialchars( $all_url_vars[ 'descriptionshorttry' ] ) );
-		$testproduct -> setdescription
-		try( htmlspecialchars( $all_url_vars[ 'descriptiontry' ] ) );
-		$testproduct -> setcategoryid( htmlspecialchars( $all_url_vars[ 'categoryid' ] ) );
-		$testproduct -> setisthisreal( htmlspecialchars( $all_url_vars[ 'isthisreal' ] ) );
-		$testproduct -> settermsagree( $all_url_vars[ 'termsagree' ] );
-		$testproduct -> setfileupload( $all_url_vars[ 'fileupload' ] );
-		$testproduct -> setactive( $all_url_vars[ 'active' ] );
+		$testproduct -> setId( $all_url_vars[ 'id' ] );
+		$testproduct -> setName( htmlspecialchars( $all_url_vars[ 'name_en' ] ) );
+		$testproduct -> setDescriptionshort( htmlspecialchars( $all_url_vars[ 'descriptionshort_en' ] ) );
+		$testproduct -> setDescription( htmlspecialchars( $all_url_vars[ 'description' ] ) );
+		$testproduct -> setCategoryid( $all_url_vars[ 'categoryid' ] );
+		$testproduct -> setIsthisreal( $all_url_vars[ 'isthisreal' ] );
+		$testproduct -> setTermsagree( $all_url_vars[ 'termsagree' ] );
+		$testproduct -> setFileupload( $all_url_vars[ 'fileupload' ] );
+		$testproduct -> setActive( $all_url_vars[ 'active' ] );
 		$testproduct -> save();
 		
 		if( !empty( $cropping_files_array ) )
@@ -260,9 +255,9 @@ case 'save':
 		;
 		unset( $_SESSION[ 'err' ] );
 		unset( $_SESSION[ 'id' ] );
-		unset( $_SESSION[ 'nametry' ] );
-		unset( $_SESSION[ 'descriptionshorttry' ] );
-		unset( $_SESSION[ 'descriptiontry' ] );
+		unset( $_SESSION[ 'name_en' ] );
+		unset( $_SESSION[ 'descriptionshort_en' ] );
+		unset( $_SESSION[ 'description' ] );
 		unset( $_SESSION[ 'categoryid' ] );
 		unset( $_SESSION[ 'isthisreal' ] );
 		unset( $_SESSION[ 'termsagree' ] );
