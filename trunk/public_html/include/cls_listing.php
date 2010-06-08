@@ -45,6 +45,7 @@
 			$this->enableDel = 0;
 			$this->enableMod = 0;
 			$this->replace_table=array();
+			$this->search_dropdown_table=array();
 			$this->extra_fields=array();
 			$this->rs=null;
 			$this->numrows=0;
@@ -308,7 +309,11 @@
                                     $name=$search_columns_names[$key];
                                     if (!empty($search_column)) {
                                         if (!empty($search_where)) $search_where.="AND ";
-                                        $search_where.="`$name` LIKE '%$search_column%' ";
+										if (is_numeric($search_column)) {
+											$search_where.="`$name` = '$search_column' ";
+										}else{
+                                        	$search_where.="LOWER(`$name`) LIKE LOWER('%$search_column%') ";
+										};
                                     }
                                 };
                                 if (!empty($search_where)) {
@@ -521,7 +526,21 @@
 								if (in_array($field_name,$this->disable_search_columns)){
 									$data.=$no_url_data;
 								}else{
-									$data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+									if (empty($this->search_dropdown_table[$field_name])){
+										$data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+									}else{
+										$data.="<td class='noborder'><select id='search_columns[$n_field]' name='search_columns[$n_field]' onchange='location'>";
+										$data.="<option value=''>".LANG_ADMIN_SELECT_DROPDOWN."</option>";
+										foreach($this->search_dropdown_table[$field_name]["array"] as $key=>$val){
+											$selected="";	
+											print_r($search_columns);
+											if (($search_columns[$n_field]==$key)&&($search_columns[$n_field]!="")) {
+												$selected="selected";
+											};
+											$data.="<option value='$key' $selected>$val</option>";
+										};
+										$data.="</input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+									};
 								}
 								$k=$k+1;
 							}else{
@@ -759,5 +778,18 @@
 			$this->extra_fields[$new_index]=$ef;
 		}
 
+
+		/**
+                 * Use search with dropdown on a column 
+                 * 
+                 * @param <string> $field The field from where data will be replaced
+                 * @param <array> $array The array which will be used to replace the $field data
+                 */
+		public function setSearchDropdownArray($field,$array){
+			$rpl=array();
+			$rpl["mode"]="array";
+			$rpl["array"]=$array;
+			$this->search_dropdown_table[$field]=$rpl;
+		}
 	}
 ?>
