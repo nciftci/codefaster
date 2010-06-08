@@ -393,12 +393,11 @@
 		}
 
 		public function listPages() {
-
                     $search_columns=$_REQUEST["search_columns"];
                     $search_columns_names=$_REQUEST["search_columns_name"];
                     $self_page=$_SERVER['REQUEST_URI'];
                     
-                    $search_session_name="search_".$_SERVER['SCRIPT_FILENAME'];
+                    $search_session_name="search_".$_SERVER['PHP_SELF'];
                                       
                     if ($search_columns==null) $search_columns=$_SESSION[$search_session_name]["columns"];
                         else $_SESSION[$search_session_name]["columns"]=$search_columns;
