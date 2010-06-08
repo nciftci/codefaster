@@ -328,8 +328,6 @@
 				$limited=$sql.$search_where;
                                 if ($this->sort_column) $limited.=$this->sql_sort_query;
                                 $limited.=" LIMIT ".$this->offset." , ".$this->limit;
-
-                                
 				$this->rs=mysql_query($limited) or die(mysql_error());
 
 				if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
@@ -449,17 +447,18 @@
 						$n_field=$field["index"];
 
 						//make sort url
-						$self_page_array=explode("&",$self_page);                        
+                                                $base_self_page=explode("?",$self_page);
+						$self_page_array=explode("&",$base_self_page[1]);
 						$new_self_page_array=array();
 						foreach($self_page_array as $item){
 							if (strstr($item,"sort_column=")) continue;
 							if (strstr($item,"sort_reverse=")) continue;
 							$new_self_page_array[]=$item;
 						}
-						$hrefurl=implode("&",$new_self_page_array);                        
-						if (strstr($hrefurl,"?")) $hrefurl.="&";
-						else $hrefurl.="?";
-						$hrefurl.="sort_column=".$this->field_results[$n_field];
+						$hrefurl=$base_self_page[0]."?".implode("&",$new_self_page_array);
+						//if (strstr($hrefurl,"?")) $hrefurl.="&";
+						//else $hrefurl.="?";
+						$hrefurl.="&sort_column=".$this->field_results[$n_field];
 						if ((!$sort_reverse)&&($this->field_results[$n_field]==$sort_column)) 
 						{ 
 							$hrefurl.="&sort_reverse=1";
@@ -478,7 +477,7 @@
 								if ($this->disable_sorting){
 									$data.="<th nowrap>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></th>";
 								}else{
-									$data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></a></th>";
+                                                                	$data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></a></th>";
 								};
 							};
 						};
