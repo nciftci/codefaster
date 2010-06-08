@@ -174,7 +174,6 @@
 			$this->mode="object";
 			$this->source_object=$source_object;
 
-			//print($method_name."   ".$parameter);
 			$result=call_user_func_array(array($source_object,$method_name),$method_arguments);
 			$this->object_results=$result;
                 }
@@ -203,7 +202,6 @@
                             $this->array_data[$outk]=$output_array;
                             $outk=$outk+1;
                         };
-                       // print_r($this->array_data);exit;
 
 
                 }
@@ -385,11 +383,9 @@
 					$k=$k+1;
 				};
 
-//				print("<pre>");print_r($result);print("</pre>");
 			};
 
                         if ($this->mode=="base64_array") return $this->array_data;
-		//	print("<pre>");print_r($result);print("</pre>");
 
 			return $result;
 
@@ -533,7 +529,6 @@
 										$data.="<option value=''>".LANG_ADMIN_SELECT_DROPDOWN."</option>";
 										foreach($this->search_dropdown_table[$field_name]["array"] as $key=>$val){
 											$selected="";	
-											print_r($search_columns);
 											if (($search_columns[$n_field]==$key)&&($search_columns[$n_field]!="")) {
 												$selected="selected";
 											};
