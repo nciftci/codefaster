@@ -305,7 +305,7 @@
                                 
                                 foreach($search_columns as $key=>$search_column){
                                     $name=$search_columns_names[$key];
-                                    if (!empty($search_column)) {
+                                    if ($search_column!="") {
                                         if (!empty($search_where)) $search_where.="AND ";
 										if (is_numeric($search_column)) {
 											$search_where.="`$name` = '$search_column' ";
@@ -331,6 +331,7 @@
 				$limited=$sql.$search_where;
                                 if ($this->sort_column) $limited.=$this->sql_sort_query;
                                 $limited.=" LIMIT ".$this->offset." , ".$this->limit;
+                                //print $limited;exit;
 				$this->rs=mysql_query($limited) or die(mysql_error());
 
 				if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
@@ -515,7 +516,7 @@
 							if ($k!=0) {
 								$no_url_data="<td class='noborder'>&nbsp;</td>";
 							}else{
-								$no_url_data.="<td class='noborder small'>".LANG_ADMIN_SEARCH."</td>";
+								$no_url_data.="<td class='noborder'>".LANG_ADMIN_SEARCH."</td>";
 							};
 							if ($field["mode"]=="field"){
 								$field_name=$this->field_results[$k];
