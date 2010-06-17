@@ -131,6 +131,8 @@ if($Obj->listPages()!= false){
        $ft->assign("CONTENT",$Obj->listPages());	
 
 		$tp = $_SERVER['PHP_SELF']."?do=list";
+        $ftp = new FastTemplate(TEMPLATE_PATH);
+	    $ftp->define(array("main"=>"pagination.html"));
 		$pagi = new Pagination ();
 		$pagi->setNumberItems ($limit);
 		$pagi->setNumberPages ( $max);
@@ -140,7 +142,11 @@ if($Obj->listPages()!= false){
 		// This is the url we want to use in the iteration
 		// Please be aweare of the other get variables that need to be kept.
 		$pagi->setUrl ($tp . "&page=");
-		$pagi->make ($Obj->getNumRows(), $gpos, $ft);
+		$pagi->make ($Obj->getNumRows(), $gpos, $ftp);
+        $ftp->multiple_assign_define("LANG_");
+        $ftp->parse("mainContent", "main");
+        $pagination=$ftp->fetch("mainContent");
+        $ft -> assign("pagination.html",$pagination);        
     }
 	else
 	$ft->assign("CONTENT",LANG_ADMIN_ERROR_INVALID_ID);
