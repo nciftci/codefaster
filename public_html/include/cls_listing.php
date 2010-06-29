@@ -57,6 +57,8 @@
 			$this->disable_search_columns=array();
 			$this->disable_sorting=false;
 			$this->disable_searching=false;
+			$this->disable_id_column=false;
+
 		}
 
 
@@ -86,6 +88,13 @@
                         $this->sort_reverse=false;
                         $this->sql_sort_query="";
                 }
+
+/*
+ * Disable id column
+ */
+				public function disable_id_column(){
+					$this->disable_id_column=true;
+				}
 
 /*
  * Disable sorting
@@ -141,7 +150,8 @@
                             $query="SELECT ".implode(",",$fields)." FROM $source_table_or_query ";
                             $query_sort="ORDER BY 1 DESC ";
                         };
-			$this->sql=$query;
+
+               		$this->sql=$query;
                         $this->sql_sort_query=$query_sort;
 			$this->fields[0]="";
 			$this->rs=mysql_query($this->sql);
@@ -153,7 +163,7 @@
                         for ($k=0;$k<$this->numfields;$k++){
                             $tmp=mysql_fetch_field($this->rs,$k);
                             $name=$tmp->name;
-                            if ($tmp->numeric) $this->disable_search_columns[]=$name;
+                            //if ($tmp->numeric) $this->disable_search_columns[]=$name;
                             $fields[$k]=$name;
                         };
 
@@ -300,42 +310,44 @@
 			$stringutil = new String();
 			$result=array();
 			if ($this->mode=="mysql"){
-                                $sql=$this->sql;
-                                $search_where="";
-                                
-                                foreach($search_columns as $key=>$search_column){
-                                    $name=$search_columns_names[$key];
-                                    if ($search_column!="") {
-                                        if (!empty($search_where)) $search_where.="AND ";
-										if (is_numeric($search_column)) {
-											$search_where.="`$name` = '$search_column' ";
-										}else{
-                                        	$search_where.="LOWER(`$name`) LIKE LOWER('%$search_column%') ";
-										};
-                                    }
-                                };
-                                if (!empty($search_where)) {
-                                    if (!stristr($this->sql," where ")) {
-                                        $search_where=" WHERE ".$search_where;
-                                    } else {
-                                        $split=preg_split('/ where /i',$this->sql);
-                                        if (sizeof($split)==2){
-                                            $split[1]="$search_where AND ".$split[1];
-                                            $sql=implode(" WHERE ",$split);
-                                        
-                                        }
-                                        $search_where="";
-                                    }
-                                }
+				$sql=$this->sql;
+				$search_where="";
+
+				foreach($search_columns as $key=>$search_column){
+					$name=$search_columns_names[$key];
+					if ($search_column!="") {
+						if (!empty($search_where)) $search_where.="AND ";
+						if (is_numeric($search_column)) {
+							$search_where.="$name = '$search_column' ";
+						}else{
+							$search_where.="LOWER(`$name`) LIKE LOWER('%$search_column%') ";
+						};
+					}
+				};
+				if (!empty($search_where)) {
+					if (!stristr($this->sql," where ")) {
+						$search_where=" WHERE ".$search_where;
+					} else {
+						$split=preg_split('/ where /i',$this->sql);
+						if (sizeof($split)==2){
+							$split[1]="$search_where AND ".$split[1];
+							$sql=implode(" WHERE ",$split);
+
+						}
+						$search_where="";
+					}
+				};
 
 				$limited=$sql.$search_where;
-                                if ($this->sort_column) $limited.=$this->sql_sort_query;
-                                $limited.=" LIMIT ".$this->offset." , ".$this->limit;
-                                //print $limited;exit;
+				if ($this->sort_column) $limited.=$this->sql_sort_query;
+                              //  print $limited;exit;
+				$allresult = mysql_query($limited) or die(mysql_error());
+				$this->numrows = mysql_num_rows($allresult);
+				$limited.=" LIMIT ".$this->offset." , ".$this->limit;
 				$this->rs=mysql_query($limited) or die(mysql_error());
+		//		if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
+		//			return false;
 
-				if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
-					return false;
 				if (mysql_num_rows($this->rs)==0) return false;
 
 				$k=0;
@@ -351,8 +363,7 @@
 					$result[$k]=$resultrow;
 					$k=$k+1;
 				}
-
-			};
+};
 
 			if ($this->mode=="object"){
 				$result=array();
@@ -398,13 +409,11 @@
                     $self_page=$_SERVER['REQUEST_URI'];
                     
                     $search_session_name="search_".$_SERVER['PHP_SELF'];
-                                      
+
                     if ($search_columns==null) $search_columns=$_SESSION[$search_session_name]["columns"];
                         else $_SESSION[$search_session_name]["columns"]=$search_columns;
                     if ($search_columns_names==null) $search_columns_names=$_SESSION[$search_session_name]["columns_name"];
                         else  $_SESSION[$search_session_name]["columns_name"]=$search_columns_names;
-
-
 
                     $sort_column=$_REQUEST["sort_column"];
                     $sort_reverse=!(empty($_REQUEST["sort_reverse"]));
@@ -444,7 +453,11 @@
                     };
                     ksort($all_fields_array);
 
+
+					$fk=0;
 					foreach($all_fields_array as $field) {
+						$fk+=1;
+						if (($fk==1) && ($this->disable_id_column)) continue;
 						$n_field=$field["index"];
 
 						//make sort url
@@ -509,7 +522,11 @@
 					if (!$this->disable_searching){
 						$data.="<tr>";
 						$k=0;
+						$fk=0;
 						foreach($all_fields_array as $field) {
+							$fk+=1;
+							if (($fk==1) && ($this->disable_id_column)) continue;
+
 							$n_field=$field["index"];
 							//verify to be only the first column with text search.
 							if ($k!=0) {
@@ -523,9 +540,9 @@
 									$data.=$no_url_data;
 								}else{
 									if (empty($this->search_dropdown_table[$field_name])){
-										$data.="<td class='noborder'><input type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+										$data.="<td class='noborder'><input class=\"clslisting\" type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
 									}else{
-										$data.="<td class='noborder'><select id='search_columns[$n_field]' name='search_columns[$n_field]' onchange='location'>";
+										$data.="<td class='noborder'><select class=\"clslisting\" id='search_columns[$n_field]' name='search_columns[$n_field]' onchange='location'>";
 										$data.="<option value=''>".LANG_ADMIN_SELECT_DROPDOWN."</option>";
 										foreach($this->search_dropdown_table[$field_name]["array"] as $key=>$val){
 											$selected="";	
@@ -585,7 +602,10 @@
 
                         $item_id=$stringutil->str_hex($datarow[0]);
 
+						$fk=0;
                         foreach($all_fields_array as $field) {
+							$fk+=1;
+							if (($fk==1) && ($this->disable_id_column)) continue;
                             $str="";
                             $n_field=$field["index"];
 
@@ -777,7 +797,7 @@
 		/**
                  * Use search with dropdown on a column 
                  * 
-                 * @param <string> $field The field from where data will be replaced
+                 * @param <string> $field The field for which the search textbox  will be replaced with the dropdown
                  * @param <array> $array The array which will be used to replace the $field data
                  */
 		public function setSearchDropdownArray($field,$array){
