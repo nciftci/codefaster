@@ -12,6 +12,7 @@ function showDialog(){
    return false;
 };
 </script>
+<script type="text/javascript" src="{CONF_INDEX_URL}javascript/jshandler.php?name=general_script&lang={LANG}""></script>
 <!-- IF##DEF: LISTING -->
 <fieldset>
 <legend>{PROJECT_NAME_HTML}</legend>
@@ -28,7 +29,7 @@ function showDialog(){
 <!-- BEGIN DYNAMIC BLOCK: formelements -->
 {FORMELEMENT}
 <!-- END DYNAMIC BLOCK: formelements -->
-<div><input name="submit" type="submit" value="{PROJECT_GO}" class="button" /></div>
+<div><input name="submit" type="submit" value="{PROJECT_GO}" class="button" onMouseDown="window.onbeforeunload=function(){}" /></div>
 </form> 
 </fieldset>
 {CONTENTEND}
