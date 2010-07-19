@@ -49,7 +49,7 @@ function preview(what,fieldName){
   if (i<fileTypes.length) globalPic.src=source;
   else {
     globalPic.src=defaultPic;
-    alert("THAT IS NOT A VALID IMAGE\nPlease load an image with an extention of one of the following:\n\n"+fileTypes.join(", "));
+    alert("{LANG_PICTURE_NOTVALID}"+fileTypes.join(", "));
   }
   applyChanges(mezo);
 }
@@ -73,6 +73,11 @@ function applyChanges(fieldName){
   field.width=x;
   field.height=y;
 }
+
+// do not allow to navigate away from page
+window.onbeforeunload = function() {
+          return "{LANG_REGISTER_UNLOADPAGE}";
+} 
 
 function externalLinks() {
  if (!document.getElementsByTagName) return;
