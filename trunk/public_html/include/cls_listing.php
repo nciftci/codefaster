@@ -2,7 +2,7 @@
 
 	class Listing {
 		protected $sql;
-                protected $sql_sort_query;
+        protected $sql_sort_query;
 		protected $rs;
 		protected $numrows;
 		protected $numfields;
@@ -37,6 +37,9 @@
 		private $mode;
 		private $disable_sorting;
 
+		private $editable_table_ajax_url;
+		private $editable_table_columns_array; 
+
 
 		public function __construct() {
 			$this->offset=0;
@@ -59,14 +62,29 @@
 			$this->disable_searching=false;
 			$this->disable_id_column=false;
 
+			$this->editable_table_ajax_url="";
+			$this->editable_table="";
+			$this->editable_table_columns_array=array();
 		}
 
+/**
+ *  Enable editable table 
+ *
+ *  @param string $ajax_url  The url of the AJAX
+ *  @param string $table the mysql table where edit takes place
+ *  @param array $columns_array the array which contains which columns are editable
+ */
+		public function enable_editable_table($ajax_url,$table,$columns_array){
+			$this->editable_table_ajax_url=$ajax_url;
+			$this->editable_table=$table;
+			$this->editable_table_columns_array=$columns_array;
+		}
 
 		/**
 		 * Set sort column
 		 *
- * @param string $sort_column The column
- * @param boolean $sort_reverse Sort order: (true for reverse)
+		 * @param string $sort_column The column
+		 * @param boolean $sort_reverse Sort order: (true for reverse)
  */
                 public function set_sort($sort_column,$sort_reverse=false){
                         $this->sort_column=$sort_column;
@@ -151,15 +169,16 @@
                             $query_sort="ORDER BY 1 DESC ";
                         };
 
-               		$this->sql=$query;
-                        $this->sql_sort_query=$query_sort;
-			$this->fields[0]="";
-			$this->rs=mysql_query($this->sql);
-			$this->numrows=mysql_num_rows($this->rs);
-			$this->numfields=mysql_num_fields($this->rs);
+						//error_log($query);
+						$this->sql=$query;
+						$this->sql_sort_query=$query_sort;
+						$this->fields[0]="";
+						$this->rs=mysql_query($this->sql);
+						$this->numrows=mysql_num_rows($this->rs);
+						$this->numfields=mysql_num_fields($this->rs);
 
 
-                        $fields=array();
+						$fields=array();
                         for ($k=0;$k<$this->numfields;$k++){
                             $tmp=mysql_fetch_field($this->rs,$k);
                             $name=$tmp->name;
@@ -310,6 +329,19 @@
 			$stringutil = new String();
 			$result=array();
 			if ($this->mode=="mysql"){
+
+				//find out the column types
+				$sql=$this->sql." LIMIT 1";
+				$tmprs= mysql_query($sql);
+				$nfields = mysql_num_fields($tmprs);
+				$field_types=array();
+				for ($i=0; $i < $nfields; $i++) {
+					$type  = mysql_field_type($tmprs, $i);
+					$name  = mysql_field_name($tmprs, $i);
+					$field_types[$name]=$type;
+				};
+
+				//get the data
 				$sql=$this->sql;
 				$search_where="";
 
@@ -317,13 +349,14 @@
 					$name=$search_columns_names[$key];
 					if ($search_column!="") {
 						if (!empty($search_where)) $search_where.="AND ";
-						if (is_numeric($search_column)) {
-							$search_where.="$name = '$search_column' ";
+						if ($field_types[$name]=="name") {
+							$search_where.="$name = '".mysql_real_escape_string($search_column)."' ";
 						}else{
-							$search_where.="LOWER(`$name`) LIKE LOWER('%$search_column%') ";
+							$search_where.="LOWER($name) LIKE LOWER('%".mysql_real_escape_string($search_column)."%') ";
 						};
 					}
 				};
+
 				if (!empty($search_where)) {
 					if (!stristr($this->sql," where ")) {
 						$search_where=" WHERE ".$search_where;
@@ -340,13 +373,17 @@
 
 				$limited=$sql.$search_where;
 				if ($this->sort_column) $limited.=$this->sql_sort_query;
-                              //  print $limited;exit;
+                                //error_log($limited);
 				$allresult = mysql_query($limited) or die(mysql_error());
 				$this->numrows = mysql_num_rows($allresult);
 				$limited.=" LIMIT ".$this->offset." , ".$this->limit;
+
+
+				//error_log($limited);
+
 				$this->rs=mysql_query($limited) or die(mysql_error());
 		//		if(strstr(mysql_field_flags($this->rs, 0),"primary_key")==false || mysql_field_type($this->rs,0)!="int")
-		//			return false;
+		//      	return false;
 
 				if (mysql_num_rows($this->rs)==0) return false;
 
@@ -424,7 +461,7 @@
                     $stringutil = new String();
 
 
-                    $data="<form action='$self_page' method='post' id='form'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
+                    $data="<form action='$self_page' method='post' id='form' name='form'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
                     $data.="<tr class=\"theader\">";
                     $n=0;
 
@@ -457,7 +494,8 @@
 					$fk=0;
 					foreach($all_fields_array as $field) {
 						$fk+=1;
-						if (($fk==1) && ($this->disable_id_column)) continue;
+						//nou
+						if (($fk==1) && ($this->disable_id_column)) $data.="<!--";
 						$n_field=$field["index"];
 
 						//make sort url
@@ -489,9 +527,9 @@
 								$data.="<th nowrap>&nbsp;</th>";
 							} else {
 								if ($this->disable_sorting){
-									$data.="<th nowrap>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></th>";
+									$data.="<th nowrap>".$this->fields[$n_field]."	<span class='".$ascdesc."'></span></th>";
 								}else{
-                                                                	$data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."&nbsp;<span class='".$ascdesc."'>&nbsp;</span></a></th>";
+                                                                	$data.="<th nowrap><a href='".$hrefurl."'>".$this->fields[$n_field]."<span class='".$ascdesc."'></span></a></th>";
 								};
 							};
 						};
@@ -499,6 +537,7 @@
 						if ($field["mode"]=="extra") {
 							$data.="<th nowrap>".$this->extra_fields[$n_field]["title"]."</th>";
 						}
+						if (($fk==1) && ($this->disable_id_column))$data.= "-->";
 					}
                     //+2
 
@@ -525,7 +564,7 @@
 						$fk=0;
 						foreach($all_fields_array as $field) {
 							$fk+=1;
-							if (($fk==1) && ($this->disable_id_column)) continue;
+							if (($fk==1) && ($this->disable_id_column))$data.= "<!--";
 
 							$n_field=$field["index"];
 							//verify to be only the first column with text search.
@@ -540,9 +579,9 @@
 									$data.=$no_url_data;
 								}else{
 									if (empty($this->search_dropdown_table[$field_name])){
-										$data.="<td class='noborder'><input class=\"clslisting\" type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+										$data.="<td class='noborder'><input onchange='document.form.submit()' class=\"clslisting\" type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
 									}else{
-										$data.="<td class='noborder'><select class=\"clslisting\" id='search_columns[$n_field]' name='search_columns[$n_field]' onchange='location'>";
+										$data.="<td class='noborder'><select class=\"clslisting\" id='search_columns[$n_field]' name='search_columns[$n_field]' onchange='document.form.submit()'>";
 										$data.="<option value=''>".LANG_ADMIN_SELECT_DROPDOWN."</option>";
 										foreach($this->search_dropdown_table[$field_name]["array"] as $key=>$val){
 											$selected="";	
@@ -551,7 +590,7 @@
 											};
 											$data.="<option value='$key' $selected>$val</option>";
 										};
-										$data.="</input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
+										$data.="</input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name' ></input></td>";
 									};
 								}
 								$k=$k+1;
@@ -559,10 +598,10 @@
 								$data.=$no_url_data;
 							};
 
+							if (($fk==1) && ($this->disable_id_column))$data.= "-->";
 						}
 						$data.="<td class='noborder'>
-							<input name=\"".LANG_ADMIN_SEARCH."\" type=\"image\" value=\"".LANG_ADMIN_SEARCH."\" src=\"".CONF_INDEX_URL."images/admin/search.gif\" style=\"border:0\" alt=\"".LANG_ADMIN_SEARCH."\" />
-							</td>";
+							&nbsp;</td>";
 						// colomns at the end to close the search.
 						if ($this->getActivateListing() == 1) {
 							$data.="<td class='noborder'>&nbsp;</td><td class='noborder'>&nbsp;</td>";
@@ -576,9 +615,11 @@
                     foreach($alldata as $datarow) {
                         $normal_fields=array();
                         if($col%2)
-                            $data.="<tr class=\"darkcolor\">";
+                            $data.="<tr class=\"darkcolor\" onmouseover=\"style.backgroundColor='#E0E5E9';\"
+onmouseout=\"style.backgroundColor='#F2F6F7'\">"; 
                         else
-                            $data.="<tr class=\"lightcolor\">";
+                            $data.="<tr class=\"lightcolor\" onmouseover=\"style.backgroundColor='#E0E5E9';\"
+onmouseout=\"style.backgroundColor='#F2F6F7'\">";
                         $i=0;
 
                         //$max=($this->activatelisting==1)?sizeof($rows)-1:sizeof($rows);
@@ -605,7 +646,7 @@
 						$fk=0;
                         foreach($all_fields_array as $field) {
 							$fk+=1;
-							if (($fk==1) && ($this->disable_id_column)) continue;
+							if (($fk==1) && ($this->disable_id_column)) $data.="<!--";
                             $str="";
                             $n_field=$field["index"];
 
@@ -632,30 +673,39 @@
                                 };
                             };
                             if($str != "") {
-                                $data.="<td class=\"bodytext\">".$stringutil->cleanDescription2(htmlspecialchars_decode($str))."</td>";
+								$editable="";
+								$columnname=$this->field_results[$n_field];
+								if (in_array($columnname,$this->editable_table_columns_array)){
+									$idname=$this->field_results[0];
+									$idvalue=$datarow[0];
+									$edittableurl=$this->editable_table_ajax_url."?do=change&table=".$this->editable_table."&idname=$idname&idvalue=$idvalue&columnname=$columnname&securestring=".md5("#$this->editable_table#$idname#$idvalue#$columnname#".USER."#".PASSWORD."#");
+									$editable="ondblclick='EditTableCell(this,\"$edittableurl\")'";
+								};
+                                $data.="<td class=\"bodytext\" $editable >".$stringutil->cleanDescription2(htmlspecialchars_decode($str))."</td>";
                             }else {
                                 $data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
                             };
 
+							if (($fk==1) && ($this->disable_id_column)) $data.="-->";
                         };
 
                         // TODO: activ
                         if ($this->getActivateListing() == 1) {
                             if ( $datarow[$max-1] == 1) { //if is active, green
-                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.gif\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
+                                $data.="<td class=\"bodytext\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDEACTIVATE."')\"><img src=\"".CONF_INDEX_URL."images/admin/activate1.gif\" title=\"".LANG_ADMIN_DEACTIVATE."\"></a></td>";
                             }
                             else { //if inactive red
-                                $data.="<td class=\"bodytext\" width=\"24\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.gif\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
+                                $data.="<td class=\"bodytext\"><a class=\"activate\"  href=\"".$_SERVER['PHP_SELF']."?do=activate&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMACTIVATE."')\"><img src=\"".CONF_INDEX_URL."images/admin/activate0.gif\" title=\"".LANG_ADMIN_ACTIVATE."\"></a></td>";
                             }
                         }
 
                         if ($this->enableMod == 0) {
-                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"mod\"  href=\"".$_SERVER['PHP_SELF']."?do=mod&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/mod.gif\" title=\"".LANG_ADMIN_MODIFY."\"></a></td>";
+                            $data.="<td class=\"bodytext\"><a class=\"mod\"  href=\"".$_SERVER['PHP_SELF']."?do=mod&".$this->getFirstID()."=".$item_id."\"><img src=\"".CONF_INDEX_URL."images/admin/mod.gif\" title=\"".LANG_ADMIN_MODIFY."\"></a></td>";
                         }
 
 
                         if ($this->enableDel == 0) {
-                            $data.="<td class=\"bodytext\" width=\"24\"><a class=\"del\"  href=\"".$_SERVER['PHP_SELF']."?do=del&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDELETE."')\"><img src=\"".CONF_INDEX_URL."images/admin/del.gif\" title=\"".LANG_ADMIN_DELETE."\" ></a></td>";
+                            $data.="<td class=\"bodytext\"><a class=\"del\"  href=\"".$_SERVER['PHP_SELF']."?do=del&".$this->getFirstID()."=".$item_id."\" onclick=\"return confirm('".LANG_ADMIN_CONFIRMDELETE."')\"><img src=\"".CONF_INDEX_URL."images/admin/del.gif\" title=\"".LANG_ADMIN_DELETE."\" ></a></td>";
                         }
 
 
