@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 include_once(dirname(__FILE__)."/config.inc.php");
 include_once(INCLUDE_PATH . "connection.php");
 
@@ -19,7 +20,7 @@ if ($all_url_vars['do']=="change"){
 	$securestringserver=md5("#$table#$idname#$idvalue#$columnname#".USER."#".PASSWORD."#");
 	if ($securestringserver!=$securestring){
 		print "0";
-		error_log("ERROR: Wrong secure string\n".print_r($all_url_vars,true));
+		error_log("ERROR: Wrong securestring\n".print_r($all_url_vars,true));
 		exit;
 	};
 
@@ -28,6 +29,9 @@ if ($all_url_vars['do']=="change"){
 	$idvalue=mysql_real_escape_string($idvalue);
 	$columnname=mysql_real_escape_string($columnname);
 	$value=mysql_real_escape_string($value);
+
+
+
 
 	$SQL="UPDATE `$table` SET `$columnname` = '$value' WHERE `$idname`='$idvalue' LIMIT 1";
 	
