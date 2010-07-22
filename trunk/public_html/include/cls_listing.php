@@ -2,7 +2,7 @@
 
 	class Listing {
 		protected $sql;
-        protected $sql_sort_query;
+                protected $sql_sort_query;
 		protected $rs;
 		protected $numrows;
 		protected $numfields;
@@ -672,18 +672,18 @@ onmouseout=\"style.backgroundColor='#F2F6F7'\">";
                                     $str="";//the function could not be called
                                 };
                             };
-                            if($str != "") {
-								$editable="";
-								$columnname=$this->field_results[$n_field];
-								if (in_array($columnname,$this->editable_table_columns_array)){
-									$idname=$this->field_results[0];
-									$idvalue=$datarow[0];
-									$edittableurl=$this->editable_table_ajax_url."?do=change&table=".$this->editable_table."&idname=$idname&idvalue=$idvalue&columnname=$columnname&securestring=".md5("#$this->editable_table#$idname#$idvalue#$columnname#".USER."#".PASSWORD."#");
-									$editable="ondblclick='EditTableCell(this,\"$edittableurl\")'";
-								};
-                                $data.="<td class=\"bodytext\" $editable >".$stringutil->cleanDescription2(htmlspecialchars_decode($str))."</td>";
+							$editable="";
+							$columnname=$this->field_results[$n_field];
+							if (in_array($columnname,$this->editable_table_columns_array)){
+								$idname=$this->field_results[0];
+								$idvalue=$datarow[0];
+								$edittableurl=$this->editable_table_ajax_url."?do=change&table=".$this->editable_table."&idname=$idname&idvalue=$idvalue&columnname=$columnname&securestring=".md5("#$this->editable_table#$idname#$idvalue#$columnname#".USER."#".PASSWORD."#");
+								$editable="ondblclick='EditTableCell(this,\"$edittableurl\")'";
+							};
+							if($str != "") {
+								$data.="<td class=\"bodytext\" $editable >".$stringutil->cleanDescription2(htmlspecialchars_decode($str))."</td>";
                             }else {
-                                $data.="<td class=\"bodytext\">"."&nbsp;"."</td>";
+                                $data.="<td class=\"bodytext\" $editable>"." "."</td>";
                             };
 
 							if (($fk==1) && ($this->disable_id_column)) $data.="-->";
