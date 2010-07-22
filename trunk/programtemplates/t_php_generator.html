@@ -99,6 +99,8 @@ case "list":
     
 	$Obj->init_mysql(DB_PREFIX . '{TBL_NAME}', array({SELECT_WHAT}));
     
+    // add editable cell in listing mode.
+    // $Obj->enable_editable_table(CONF_INDEX_URL."cls_listing_edittable_ajax.php",DB_PREFIX."DBtable",array("___EDITABLE_COLUMN_REPLACE_HERE___","___EDITABLE_COLUMN_REPLACE_HERE___","___EDITABLE_COLUMN_REPLACE_HERE___"));
     // replace data from listing from other table
     //$Obj->setReplaceColumnIdFromDatabase("DBfield","DBtable","TBid_column","TBdata_column");
     // replace data from listing from array
