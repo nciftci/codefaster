@@ -251,12 +251,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 */
 		var $IE_UTF_INCLUDE = true; //
 		
-		/**
-		 * @access private
-		 * @Desc - This var will hold a boolean value, containing the state of the loaded template with define       
-		 */
-		var $TEMPLATE_DEFINED = false;
-		
+
 		/**
 		 * @access public
 		 * @Desc - For visual editors, to be easy to work.
@@ -536,8 +531,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				}
 				
 				$block = array ("/<!--\s(BEGIN|END)\sDYNAMIC\sBLOCK:\s([a-zA-Z\_0-9]*)\s-->/" );
-				//$corrected = array ("\r\n <!-- \\1 DYNAMIC BLOCK: \\2 --> \r\n" );
-				$corrected = array ("<!-- \\1 DYNAMIC BLOCK: \\2 -->" );
+				$corrected = array ("\r\n <!-- \\1 DYNAMIC BLOCK: \\2 --> \r\n" );
 				$contents = preg_replace ( $block, $corrected, $contents );
 				
 				RETURN trim ( $contents );
@@ -650,8 +644,7 @@ if (! class_exists ( 'FastTemplate' )) {
 		 */
 		
 		function parse_defined($template) {
-            //$lines = explode ( "\n", $template );
-			$lines = explode ( "\r\n", $template );
+			$lines = explode ( "\n", $template );
 			$newTemplate = "";
 			$ifdefs = FALSE;
 			$depth = 0;
@@ -1530,7 +1523,7 @@ if (! class_exists ( 'FastTemplate' )) {
 					}
 					
 					if (($outside) and (! $start) and (! $end)) {
-						$newParent .= "$lineData";
+						$newParent .= "$lineData\n";
 					} // Restore linebreaks
 					
 
