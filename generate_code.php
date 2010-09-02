@@ -15,7 +15,7 @@ include_once("./config.inc.php");
 include_once(INCLUDE_PATH."cls_fast_template.php");
 include_once(INCLUDE_PATH."cls_string.php");
 include_once(INCLUDE_PATH."cls_session.php");
-include_once(INCLUDE_PATH."PhpBeautifier.inc.php");
+//include_once(INCLUDE_PATH."PhpBeautifier.inc.php");
 
 function process_lang_item($name,$replacement_lang){
 	$remain=strlen( $name ) - strlen( "_en" );

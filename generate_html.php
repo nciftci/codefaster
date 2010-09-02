@@ -18,7 +18,7 @@ include_once (INCLUDE_PATH . "cls_xml.php");
 include_once (INCLUDE_PATH . "cls_fast_template.php");
 include_once (INCLUDE_PATH . "cls_string.php");
 include_once (INCLUDE_PATH . "cls_session.php");
-include_once (INCLUDE_PATH . "PhpBeautifier.inc.php");
+//include_once (INCLUDE_PATH . "PhpBeautifier.inc.php");
 
 
 $stringutil = new String ( );
@@ -468,11 +468,11 @@ if ($action == "generate_html") {
 		fwrite ( $fp, $outhtmluser );
 		fclose ( $fp );
 		
-		$beautify = new PhpBeautifier ( );
-		$beautify->tokenSpace = true; //put space between tokens
-		$beautify->blockLine = true; //put empty lines between blocks of code (if, while etc)
-		//$beautify -> optimize = true;//optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
-		$beautify->file ( GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html", GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html" );
+		// $beautify = new PhpBeautifier ( );
+		// $beautify->tokenSpace = true; //put space between tokens
+		// $beautify->blockLine = true; //put empty lines between blocks of code (if, while etc)
+		// //$beautify -> optimize = true;//optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
+		// $beautify->file ( GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html", GEN_USER_PRGTEMPLATES_PATH . $NAME . ".html" );
 	
 	} // end HTML generation
 	
@@ -640,11 +640,11 @@ if ($action == "generate_html") {
 		fwrite ( $fp,  $outphp  );
 		fclose ( $fp );
 		
-		$beautify = new PhpBeautifier ( );
-		$beautify->tokenSpace = true; //put space between tokens
-		$beautify->blockLine = true; //put empty lines between blocks of code (if, while etc)
-		//$beautify->optimize = true; //optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
-		$beautify->file ( GEN_ADMIN_PATH . $NAME . ".php", GEN_ADMIN_PATH . $NAME . ".php" );
+		//$beautify = new PhpBeautifier ( );
+		//$beautify->tokenSpace = true; //put space between tokens
+		//$beautify->blockLine = true; //put empty lines between blocks of code (if, while etc)
+		////$beautify->optimize = true; //optimize strings (for now), if a double quoted string does not contain variables of special carachters transform it to a single quoted string to save parsing time
+		//$beautify->file ( GEN_ADMIN_PATH . $NAME . ".php", GEN_ADMIN_PATH . $NAME . ".php" );
 	
 	}
 	
