@@ -250,7 +250,7 @@ case "save":
             {VARR}->set{FORM_ELEMSUPPER1}($all_url_vars["{FORM_ELEMS}"]);
             <!-- ENDIF -->  
             <!-- IFDEF: ISCHECKBOX_SAVE -->
-            {VARR}->set{FORM_ELEMSUPPER1}(isset($all_url_vars["{FORM_ELEMS}"])?1:0);
+            {VARR}->set{FORM_ELEMSUPPER1}(($all_url_vars["{FORM_ELEMS}"]==1)?1:0);
             <!-- ENDIF --> 
             <!-- IFDEF: ISDROPDOWN_SAVE -->
             {VARR}->set{FORM_ELEMSUPPER1}($all_url_vars["{FORM_ELEMS}"]);
