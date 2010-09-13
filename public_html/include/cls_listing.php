@@ -2,7 +2,7 @@
 
 	class Listing {
 		protected $sql;
-                protected $sql_sort_query;
+        protected $sql_sort_query;
 		protected $rs;
 		protected $numrows;
 		protected $numfields;
@@ -40,6 +40,9 @@
 		private $editable_table_ajax_url;
 		private $editable_table_columns_array; 
 
+		private $search_howto_text;
+		private $secondary_sort;
+
 
 		public function __construct() {
 			$this->offset=0;
@@ -65,10 +68,87 @@
 			$this->editable_table_ajax_url="";
 			$this->editable_table="";
 			$this->editable_table_columns_array=array();
+			
+			$this->default_search_columns=array();
+			
+
+			//check if search is modified	
+			$this->search_columns_changed=false;	
+			$search_columns=serialize($_REQUEST["search_columns"]);
+			$search_columns_hash=md5($search_columns);
+			$search_session_name=$this->getSearchSessionName();
+			
+			if (($search_columns_hash!=$_SESSION[$search_session_name]['hash'])&&
+			!empty($_SESSION[$search_session_name]['hash'])&& !empty($_REQUEST["search_columns"])){
+				$this->search_columns_changed=true;	
+			};
+			$_SESSION[$search_session_name]['hash']=$search_columns_hash;
+
+			//search special modes
+
+			$this->special_modes_search=array();
+
+			//other search info
+			
+			$this->search_howto_text=LANG_SEARCH_HOWTO;
+			
+			$this->secondary_sort=array("ORDER" => array(), "REVERSE" => array());
 		}
 
-/**
- *  Enable editable table 
+
+
+		/**
+		 *
+		 * Set search text howto
+		 *
+		 * @param array $howto
+		 *
+		 */
+
+		function setSearchHowto($howto){
+			$this->search_howto_text=$howto;
+		}
+
+		/**
+		 * Set special modes of searching (date mode, age range,etc)
+		 * 
+		 * @param array $modes
+		 * the format of the array is 
+		 * array( $n_column => "mode1",...)
+		 *
+		 * modes are:
+		 * "DATE_DDMMYYYY","AGE_RANGE"
+		 * "LIKE", "LIKE_LEFT","LIKE_RIGHT","LIKE_BOTH"
+		 *
+		 */
+
+		function setSpecialSearchModes($special_modes){
+			$this->special_modes_search=$special_modes;
+		}
+
+		/**
+		 * Verifies if search filter is modified
+		 */
+
+		public function isSearchModified(){
+			return $this->search_columns_changed;
+		}
+
+
+		/**
+		 * Set default search columns
+		 *
+		 * @param array $search_columns
+		 *
+		 */
+
+		public function setDefaultSearchColumns($search_columns){
+			$this->default_search_columns=$search_columns;
+		}
+
+
+		/**
+		 *  Enable editable table 
  *
  *  @param string $ajax_url  The url of the AJAX
  *  @param string $table the mysql table where edit takes place
@@ -89,13 +169,74 @@
                 public function set_sort($sort_column,$sort_reverse=false){
                         $this->sort_column=$sort_column;
                         $this->sort_reverse=$sort_reverse;
+
+			if ($this->mode=="mysql")
+                        {
+                            //find out the column types
+                            $sql=$this->sql." LIMIT 1";
+                            $tmprs= mysql_query($sql);
+                            $nfields = mysql_num_fields($tmprs);
+                            $field_types=array();
+
+                            for ($i=0; $i < $nfields; $i++) {
+                                    $type  = mysql_field_type($tmprs, $i);
+                                    $name  = mysql_field_name($tmprs, $i);
+                                    $field_types[$name]=$type;
+                            };
+                        }
                         if ($this->mode=="mysql"){
-                            $this->sql_sort_query="ORDER BY `$sort_column` ";
-                            if ($sort_reverse) $this->sql_sort_query.="DESC ";
-                        
+							$this->sql_sort_query="";
+							if (!empty($this->sort_column)){
+                                if ($field_types[$sort_column] == "string")
+                                {
+                                    $this->sql_sort_query="ORDER BY LOWER($sort_column)";
+                                }
+                                else
+                                {
+                                    $this->sql_sort_query="ORDER BY $sort_column";
+                                }
+                            	if ($sort_reverse) $this->sql_sort_query.=" DESC ";
+							}
+							$secondary_sort_order=$this->secondary_sort["ORDER"];
+							$secondary_sort_reverse=$this->secondary_sort["REVERSE"];
+							if (!empty($secondary_sort_order)){
+								foreach ($secondary_sort_order as $column){
+									if ($column==$this->sort_column) continue;
+									if (empty($this->sql_sort_query)) {
+										$this->sql_sort_query="ORDER BY ";
+									}else{
+										$this->sql_sort_query.=", ";
+									};
+                                                                        if ($field_types[$column] == "string")
+                                                                        {
+                                                                            $this->sql_sort_query.="LOWER($column) ";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $this->sql_sort_query.="$column ";
+                                                                        }
+									if (in_array($column,$secondary_sort_reverse)) $this->sql_sort_query.=" DESC ";
+								};
+							};
                         };
 
                 }
+
+		/**
+		 *
+		 * Set secondary sort columns
+		 *
+		 * @param array secondary_columns_order
+		 * @param array secondary_columns_reverse - which columns from 'secondary_columns' are reverse
+		 *
+		 *
+		 * example: $obj->set_secondary_sort_columns(array("name","state"),array("state"))
+		 *
+		 */
+
+		public function setSecondarySortColumns($secondary_columns_order=array(),$secondary_columns_reverse=array()){
+			$this->secondary_sort=array("ORDER" => $secondary_columns_order, "REVERSE" => $secondary_columns_reverse);
+		}
 
 /**
  * Reset sorting
@@ -146,6 +287,7 @@
  * Disable searching
  */
 				public function disable_searching(){
+					$this->setSearchHowto("");
 					$this->disable_searching=true;
 				}
 
@@ -347,12 +489,47 @@
 
 				foreach($search_columns as $key=>$search_column){
 					$name=$search_columns_names[$key];
-					if ($search_column!="") {
+					if ($search_column!=="") {
 						if (!empty($search_where)) $search_where.="AND ";
-						if ($field_types[$name]=="name") {
-							$search_where.="$name = '".mysql_real_escape_string($search_column)."' ";
+						$special_mode=$this->special_modes_search[$key];
+						if (!empty($special_mode)){
+							$srch=$search_column;
+							if ($special_mode=="DATE_DDMMYYYY"){
+								$srch=date("Y-m-d",strtotime($srch));
+								$search_where.="$name = '".mysql_real_escape_string($srch)."' ";
+							};
+							if ($special_mode=="AGE_RANGE"){
+								$ages_array=explode("-",$srch);
+								if (count($ages_array)==1){
+									$ages_array[1]=$ages_array[0];
+								};
+								$min=$ages_array[0];
+								if (!is_numeric($min)) $min=0;
+								$max=$ages_array[1];
+								if (!is_numeric($max)) $max=0;
+
+								$search_where=" (CAST(DATEDIFF(now(),date_of_birth)/365.25 AS UNSIGNED)) >= '$min' " ;
+								$search_where.=" AND (CAST(DATEDIFF(now(),date_of_birth)/365.25 AS UNSIGNED)) <= '$max' " ;
+								
+							};
+							if ($special_mode=="LIKE"){
+								$search_where.="LOWER($name) LIKE LOWER('".mysql_real_escape_string($search_column)."') ";
+							};
+							if ($special_mode=="LIKE_LEFT"){
+								$search_where.="LOWER($name) LIKE LOWER('%".mysql_real_escape_string($search_column)."') ";
+							};
+							if ($special_mode=="LIKE_RIGHT"){
+								$search_where.="LOWER($name) LIKE LOWER('".mysql_real_escape_string($search_column)."%') ";
+							};
+							if ($special_mode=="LIKE_BOTH"){
+								$search_where.="LOWER($name) LIKE LOWER('%".mysql_real_escape_string($search_column)."%') ";
+							};
 						}else{
-							$search_where.="LOWER($name) LIKE LOWER('%".mysql_real_escape_string($search_column)."%') ";
+							if ($field_types[$name]=="name") {
+								$search_where.="$name = '".mysql_real_escape_string($search_column)."' ";
+							}else{
+								$search_where.="LOWER($name) LIKE LOWER('".mysql_real_escape_string($search_column)."%') ";
+							};
 						};
 					}
 				};
@@ -372,7 +549,7 @@
 				};
 
 				$limited=$sql.$search_where;
-				if ($this->sort_column) $limited.=$this->sql_sort_query;
+				if (!empty($this->sql_sort_query)) $limited.=$this->sql_sort_query;
                                 //error_log($limited);
 				$allresult = mysql_query($limited) or die(mysql_error());
 				$this->numrows = mysql_num_rows($allresult);
@@ -393,7 +570,11 @@
 					$i=0;
 					while($i<$max) {
 						$field_name=mysql_field_name($this->rs,$i);
-						$resultrow[$i]=$stringutil->clean_value($this->getRealValue($rows[$i],$field_name));
+						$val=$this->getRealValue($rows[$i],$field_name,$rows[0]);
+						if ($this->replace_table[$field_name]["mode"]!="function"){
+							$stringutil->clean_value($val);
+						};
+						$resultrow[$i]=$val;
 						$i=$i+1;
 					};
 					//////+++++++++++++++++++
@@ -440,28 +621,59 @@
 
 		}
 
+
+		private function getSearchSessionName(){
+			return "search_".$_SERVER['PHP_SELF'];
+		}
+
 		public function listPages() {
                     $search_columns=$_REQUEST["search_columns"];
                     $search_columns_names=$_REQUEST["search_columns_name"];
                     $self_page=$_SERVER['REQUEST_URI'];
                     
-                    $search_session_name="search_".$_SERVER['PHP_SELF'];
+                    $search_session_name=$this->getSearchSessionName();
+
+					if (!empty($this->default_search_columns)){
+						foreach ($this->default_search_columns as $name=>$value){
+							if (!in_array($name,$_SESSION[$search_session_name]["columns_name"])){
+								$_SESSION[$search_session_name]["columns_name"][]=$name;
+								$_SESSION[$search_session_name]["columns"][]=$value;
+							};
+						};
+					};
 
                     if ($search_columns==null) $search_columns=$_SESSION[$search_session_name]["columns"];
                         else $_SESSION[$search_session_name]["columns"]=$search_columns;
                     if ($search_columns_names==null) $search_columns_names=$_SESSION[$search_session_name]["columns_name"];
                         else  $_SESSION[$search_session_name]["columns_name"]=$search_columns_names;
 
+
+					if ($this->isSearchModified()){
+						$this->offset=0;
+					};
+
+
                     $sort_column=$_REQUEST["sort_column"];
                     $sort_reverse=!(empty($_REQUEST["sort_reverse"]));
-                    if (!empty($sort_column)) $this->set_sort($sort_column,$sort_reverse);
+					if (empty($sort_column)) {
+						$sort_column=$this->sort_column;
+						$sort_reverse=$this->sort_reverse;
+					};	
+					$this->set_sort($sort_column,$sort_reverse);
 
                     $alldata=$this->get_data($search_columns,$search_columns_names);
+//					if (empty($alldata)){
+//						return "<p class=\"mWarning\">".LANG_NO_DATA_IN_DATABASE."</p>";
+//					};
 
                     $stringutil = new String();
 
 
-                    $data="<form action='$self_page' method='post' id='form' name='form'><table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
+					$data="<form action='$self_page' method='post' id='form' name='form'>";
+					if (!empty($this->search_howto_text)) {
+						$data.="<div class='mInfo'>".$this->search_howto_text."</div><br class='clearBoth' />";
+					};
+					$data.="<table width=\"99%\" cellspacing=\"0\" align=\"center\" id=\"listingtable\">";
                     $data.="<tr class=\"theader\">";
                     $n=0;
 
@@ -545,7 +757,7 @@
                         $data.="<th nowrap>&nbsp;</th>";
                     }
                     if ($this->enableMod == 0) {
-                        $data.="<th nowrap>&nbsp;</th>";
+                        $data.="<th nowrap>".LANG_EDIT."</th>";
                     }
                     if ($this->enableDel == 0) {
                         $data.="<th nowrap>&nbsp;</th>";
@@ -582,11 +794,18 @@
 										$data.="<td class='noborder'><input onchange='document.form.submit()' class=\"clslisting\" type=text size=10 id='search_columns[$n_field]' name='search_columns[$n_field]' value='".$search_columns[$n_field]."'></input><input type=hidden id='search_columns_name[$n_field]' name='search_columns_name[$n_field]' value='$field_name'></input></td>";
 									}else{
 										$data.="<td class='noborder'><select class=\"clslisting\" id='search_columns[$n_field]' name='search_columns[$n_field]' onchange='document.form.submit()'>";
-										$data.="<option value=''>".LANG_ADMIN_SELECT_DROPDOWN."</option>";
+										$selected=($search_columns[$n_field]=="")?"selected":"";
+										$data.="<option value='' $selected>".LANG_ADMIN_SELECT_ALL_DROPDOWN."</option>";
+
 										foreach($this->search_dropdown_table[$field_name]["array"] as $key=>$val){
 											$selected="";	
 											if (($search_columns[$n_field]==$key)&&($search_columns[$n_field]!="")) {
 												$selected="selected";
+											};
+											
+											$pos=array_search($field_name,$_SESSION[$search_session_name]["columns_name"]);
+											if ($pos!==False){
+												if ($key==$_SESSION[$search_session_name]["columns"][$pos] && ($key!="")) $selected="selected";
 											};
 											$data.="<option value='$key' $selected>$val</option>";
 										};
@@ -614,11 +833,28 @@
                     $item_k=1;
                     foreach($alldata as $datarow) {
                         $normal_fields=array();
+                         $max=sizeof($datarow);
+                       $inactive = "";
+                        if ( $datarow[$max-1] == 0 || $datarow[$max-1] == 4 || $datarow[$max-1] == 5 || $datarow[$max-1] == 7)
+                        {
+                            $inactive = "inactive";
+                        }
+                        if ( $datarow[$max-1] == 2)
+                        {
+                            $inactive = "p_freeze";
+                        }
+                        if ( $datarow[$max-1] == 3)
+                        {
+                            $inactive = "freezed";
+                        }
+						if (strpos($datarow[$max-2],"Active")!==False){
+							$inactive="";
+						};
                         if($col%2)
-                            $data.="<tr class=\"darkcolor\" onmouseover=\"style.backgroundColor='#E0E5E9';\"
+                            $data.="<tr class=\"darkcolor $inactive\" onmouseover=\"style.backgroundColor='#E0E5E9';\"
 onmouseout=\"style.backgroundColor='#F2F6F7'\">"; 
                         else
-                            $data.="<tr class=\"lightcolor\" onmouseover=\"style.backgroundColor='#E0E5E9';\"
+                            $data.="<tr class=\"lightcolor $inactive\" onmouseover=\"style.backgroundColor='#E0E5E9';\"
 onmouseout=\"style.backgroundColor='#F2F6F7'\">";
                         $i=0;
 
@@ -763,13 +999,21 @@ onmouseout=\"style.backgroundColor='#F2F6F7'\">";
                  * Convert the data according to the replace rules
                  *
                  * @param <string> $id_data
-                 * @param <string> $field_name
+				 * @param <string> $field_name
+				 * @param <id> $id
                  * @return <string>
                  */
-		protected function getRealValue($id_data,$field_name){
+		protected function getRealValue($id_data,$field_name,$id_0){
 
 
 			if (isset($this->replace_table[$field_name])){
+				if (($this->replace_table[$field_name]["mode"]=="function")){
+					 $f=$this->replace_table[$field_name];
+					 $str=call_user_func_array($f['function'],array($id_0,$id_data,$field_name));
+					 return $str;
+
+				};
+
 				if (($this->replace_table[$field_name]["mode"]=="database")){
 					$id_column=$this->replace_table[$field_name]["id_column"];
 					$data_column=$this->replace_table[$field_name]["data_column"];
@@ -793,6 +1037,17 @@ onmouseout=\"style.backgroundColor='#F2F6F7'\">";
 			return $id_data;
 		}
 
+                /**
+                 * Makes cls_listing to replace the column with data from a function 
+                 */
+
+		public function setReplaceColumnIdFromFunction($field,$function){
+			$rpl=array();
+			$rpl["mode"]="function";
+			$rpl["function"]=$function;
+
+			$this->replace_table[$field]=$rpl;
+		}
                 /**
                  * Makes cls_listing to replace the column with data from a database
                  * If you use file as a database, you must call this function before init_base64_array_from_file()
@@ -837,7 +1092,8 @@ onmouseout=\"style.backgroundColor='#F2F6F7'\">";
 			$new_index=0;
 			if (!empty($this->extra_fields)) $new_index=sizeof($this->extra_fields);
 			$ef["pos"]=$position;
-			$ef["title"]=$title;
+			if ($title=="") $ef["title"]="&nbsp;";
+			else $ef["title"]=$title;
 			$ef["function"]=array("class_or_object" => $class_or_object,
 								  "function" => $function_or_method);
 			$this->extra_fields[$new_index]=$ef;
