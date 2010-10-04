@@ -1,6 +1,6 @@
 <?php
 /**
- *Version. 1.6.5
+ *Version. 1.6.6
     $Id: cls_fast_template.php 12712 2009-06-23 08:44:07Z lvalics $
  *
  * Original Perl module CGI::FastTemplate by Jason Moore jmoore@sober.com
