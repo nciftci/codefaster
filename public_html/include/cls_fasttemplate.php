@@ -142,6 +142,12 @@ if (! class_exists ( 'FastTemplate' )) {
 		
 		/**
 		 * @access private
+		 * @Desc - Cache Key
+		 */
+		var $CACHE_KEY = "";
+
+		/**
+		 * @access private
 		 * @Desc -  Enable caching mode. Default: FALSE
 		 */
 		var $DELETE_CACHE = FALSE;
@@ -1061,6 +1067,29 @@ if (! class_exists ( 'FastTemplate' )) {
 		
 
 		/**
+		 * @type     - public
+		 * @desc     - Set up the cache key
+		 * @param    - (string) cache key
+		 * @return   - None
+		 */
+		function set_cache_key($key = "") {
+			$this->CACHE_KEY=$key;
+		}
+
+		/**
+		 * @type     - private
+		 * @desc     - Get processed key
+		 * @return   - string
+		 */
+		function get_cache_processed_key() {
+			if ($this->CACHE_KEY=="") return "";
+			$result="_".md5($this->CACHE_KEY);
+			return $result;
+		}
+
+
+
+		/**
 		 * @author   - Allyson Francisco de Paula Reis ragen@oquerola.com
 		 * @type     - public
 		 * @desc     - Set up the cache file..
@@ -1143,9 +1172,9 @@ if (! class_exists ( 'FastTemplate' )) {
 		function verify_cached_files() {
 			if (($this->USE_CACHE) && ($this->cache_file_is_updated ())) {
 				if (! $this->CACHING) {
-					include $this->self_script () . ".ft";
+					include $this->self_script () . $this->get_cache_processed_key().".ft";
 				} else {
-					include $this->CACHING . ".ft";
+					include $this->CACHING . $this->get_cache_processed_key().".ft";
 				}
 				
 				exit ( 0 );
@@ -1239,7 +1268,7 @@ if (! class_exists ( 'FastTemplate' )) {
 				$fname = $this->CACHING;
 			}
 			
-			if (! file_exists ( $fname . ".ft" )) {
+			if (! file_exists ( $fname . $this->get_cache_processed_key().".ft" )) {
 				RETURN FALSE;
 			}
 			
@@ -1248,7 +1277,7 @@ if (! class_exists ( 'FastTemplate' )) {
 			//		    time() -> RETURN unix time
 			
 
-			$expire_time = time () - filemtime ( $fname . ".ft" );
+			$expire_time = time () - filemtime ( $fname . $this->get_cache_processed_key().".ft" );
 			
 			if ($expire_time >= $this->UPDT_TIME) {
 				RETURN FALSE;
@@ -1276,7 +1305,8 @@ if (! class_exists ( 'FastTemplate' )) {
 					$fname = $this->CACHING;
 				}
 				
-				$fname = $fname . ".ft";
+				$fname = $fname . $this->get_cache_processed_key().".ft";
+				
 				// Opening $fname in writing only mode
 				if (! $fp = fopen ( $fname, 'w' )) {
 					$this->error ( "Error WHILE opening cache file ($fname)", 0 );
