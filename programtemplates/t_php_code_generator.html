@@ -77,12 +77,13 @@ public function __construct($id = 0,$lang="en")
 			$this->where_mode=false;
 		}
             
-		$SQL = " SELECT {LIST} FROM `".DB_PREFIX."{DBNAME}` ".$this->where_clause;
+		$SQL = " SELECT {IDCLASS},{LIST} FROM `".DB_PREFIX."{DBNAME}` ".$this->where_clause;
 		$retid = mysql_query($SQL) or die(mysql_error());
 
 		if ($row = mysql_fetch_array($retid))
 		{
 			$this->valid=true;
+//			$this->{IDCLASS} = $row["{IDCLASS}"];
 			
 		 <!-- BEGIN DYNAMIC BLOCK: value -->
  	 	  $this->{FIELD_NAME} = $row["{FIELD_NAME_LANG}"];
